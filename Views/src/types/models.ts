@@ -1,4 +1,9 @@
-export interface User {
+export interface Account {
+    email : string,
+    password : string
+} 
+
+export interface User extends Account{
     id ?: number,
     firstname ?: string,
     surname ?: string,
@@ -8,14 +13,12 @@ export interface User {
     address ?: string,
     phone ?: string,
     id_card ?: string,
-    email : string,
-    password : string
     birth_day ?: string,
-    gender : 'MALE' | 'FEMALE' | 'OTHER',
+    gender ?: 'MALE' | 'FEMALE' | 'OTHER',
     position : 'CUSTOMER' | 'ADMIN' | 'HOUSEKEEPER' | 'RECEPTIONIST'
     salary ?: number,
     image ?: string,
-    booked_rooms : Room[]
+    booked_rooms ?: Room[]
 }
 
 export interface Room {

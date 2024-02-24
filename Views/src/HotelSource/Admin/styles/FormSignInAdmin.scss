@@ -1,0 +1,53 @@
+@import '../../../styles/variables';
+
+.bl_signInPageAdmin{
+    background-image: url(https://hotel.citgroup.vn/public/images/login_bg.jpg);
+    display: flex;
+    height: 100vh;
+    
+    &_wrapper{
+        margin: auto;
+        background: #004873;
+        padding: 12px;
+        border-radius: 6px;
+        width: $width-admin-login-form;
+    }
+
+    &_ttl{
+        text-align: center;
+        text-shadow: 0 1px 0 #fff;
+        color: $color-ttl-admin-login-form;
+        letter-spacing: -0.05em;
+        position: relative;
+
+        &::after,
+        &::before {
+            content: "";
+            height: 1px;
+            position: absolute;
+            top: 26px;
+            width: 20%;
+            background: $color-ttl-admin-login-form;
+        }
+
+        &::before{
+            left: 0;
+        }
+        
+        &::after{
+            right: 0;
+        }
+
+    }
+
+    .bl_btn__login{
+        display: flex;
+        justify-content: center;  
+        
+        button{
+            background: #fff;
+        }
+    }
+    
+}
+

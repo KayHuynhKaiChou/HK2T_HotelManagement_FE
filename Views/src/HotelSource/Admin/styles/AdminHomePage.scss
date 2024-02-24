@@ -1,0 +1,43 @@
+@import '../../../styles/variables';
+
+.css-19z1ozs-MuiPaper-root-MuiAppBar-root {
+    width: calc(100% - 65px) !important;
+}
+
+.un_menuAdmin{
+
+    .css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+        color: #fff !important;
+    }
+
+    & > .MuiPaper-root{
+        background: $background-color-menu-admin;
+    }
+
+    .css-1r9jet7{
+        justify-content: flex-start !important;
+        padding: 0 20px !important;
+    
+        .un_hotelIcon__custom{
+            width: 1.5em;
+            height: 1.5em;
+            padding: 5px;
+            border: 1px solid;
+            border-radius: 50%;
+        }
+    
+        .un_hotelIcon__customClose{
+            margin-left: -5px;
+        }   
+    }
+
+    svg , .fa-paw{
+        color: #fff;
+    }
+}
+
+
+.css-ag7rrr-MuiTypography-root{
+    font-size: 1.3rem !important;
+    margin-left: 12px !important;
+}
