@@ -1,15 +1,6 @@
-import HouseIcon from '@mui/icons-material/House';
-import PersonIcon from '@mui/icons-material/Person';
+import { v4 as uuidv4 } from 'uuid';
 
-export const listMenuAdmin = [
-    {
-        name : 'Bảng điều khiển',
-        endpoint : 'dashboard',
-        Icon : HouseIcon
-    },
-    {
-        name : 'Người dùng',
-        endpoint : 'users',
-        Icon : PersonIcon
-    }
-]
+export const uuid = () => {
+    const id = uuidv4().replace(/-/g, '')
+    return id
+}

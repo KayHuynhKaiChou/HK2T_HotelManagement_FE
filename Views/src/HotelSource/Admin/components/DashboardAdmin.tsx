@@ -1,8 +1,9 @@
+import CalenderHotel from "./CalenderHotel";
 
 export default function DashboardAdmin() {
   return (
     <div>
-      Dashboard
+      <CalenderHotel/>
     </div>
   )
 }

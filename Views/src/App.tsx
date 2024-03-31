@@ -1,5 +1,4 @@
 import { BrowserRouter , Routes, Route } from "react-router-dom";
-import PrivateRoute from "./routes/PrivateRoute";
 import SigninPage from "./HotelSource/Customer/pages/SigninPage";
 import SignupPage from "./HotelSource/Customer/pages/SignupPage";
 import AdminSigninPage from "./HotelSource/Admin/pages/AdminSigninPage";

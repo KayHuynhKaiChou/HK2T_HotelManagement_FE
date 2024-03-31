@@ -1,6 +1,6 @@
 import { Divider, Typography } from "@mui/material";
 import List from '@mui/material/List';
-import { listMenuAdmin } from '../../../utils';
+import { listMenuAdmin } from '../../../utils/constants';
 import { Icon } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
