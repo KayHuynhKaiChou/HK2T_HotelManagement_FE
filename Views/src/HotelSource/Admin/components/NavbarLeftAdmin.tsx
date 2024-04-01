@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 interface NavbarLeftAdminProps {
     open : boolean,
-    DrawerHeader : StyledComponent<{} , React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, {}>
+    DrawerHeader : StyledComponent<object , React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, object>
 }
 
 const drawerWidth = 240;

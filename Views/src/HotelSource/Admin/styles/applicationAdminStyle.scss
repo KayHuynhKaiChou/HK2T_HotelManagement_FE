@@ -1,0 +1,27 @@
+.un_itemReport{
+    display: flex;
+    &_info{
+        flex-basis: 70%;
+        text-align: left;
+        font-weight: 700;
+        &__total{
+            font-size: 38px;
+            line-height: 1;
+        }
+        &__ttl{
+            color: #BAB8B8;
+            font-size: 24px;
+            margin-top: 10px;
+        }
+    }
+
+    &_icon{
+        flex-basis: 30%;
+        display: flex;
+        justify-content: flex-end;
+
+        span{
+            width: inherit !important;
+        }
+    }
+}
