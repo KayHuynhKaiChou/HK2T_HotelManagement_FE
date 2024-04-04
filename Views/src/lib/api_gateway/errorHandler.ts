@@ -1,3 +1,4 @@
+import { ResponseError } from ".";
 
 const abortController = new AbortController();
 
@@ -11,6 +12,20 @@ export function errorHandler(
             return defaultHandler;
         case 404:
             return defaultHandler;
+        case 422:
+            return defaultHandler;
+        case 401:
+            abortController.abort();
+            alert('xác thực đã hết hạn . Làm mới trang');
+            window.document.location.reload();
+            return defaultHandler;
+        case 403:
+            abortController.abort();
+            return defaultHandler;
+        default:
+            return (response: Response, path: string, params: object) => {
+                throw new ResponseError('Something went wrong', path, response.status, params)
+            }
     }
 }
 
