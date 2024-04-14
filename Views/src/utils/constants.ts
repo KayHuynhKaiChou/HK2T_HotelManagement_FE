@@ -46,3 +46,53 @@ export const listReports = [
 ]
 
 export const drawerWidth = 240;
+
+export const colorsBtnCustom = {
+    primary : {
+        background: "#337ab7",
+        borderColor: "#2e6da4",
+        hover: {
+            backgroundColor: "#1565c0",
+            borderColor: "#204d74"
+        }
+    },
+    success : {
+        background: "#26B99A",
+        borderColor: "#169F85",
+        hover: {
+            backgroundColor: "#1b5e20",
+            borderColor: "#398439"
+        }
+    },
+    warning : {
+        background: "#f0ad4e",
+        borderColor: "#eea236",
+        hover: {
+            backgroundColor: "#e65100",
+            borderColor: "#d58512"
+        }
+    },
+    danger : {
+        background: "#d9534f",
+        borderColor: "#d43f3a",
+        hover: {
+            backgroundColor: "#c62828",
+            borderColor: "#ac2925"
+        }
+    }
+    
+}
+
+export const iconsSort = {
+    normal : {
+        className : "fa-arrows-up-down"
+    },
+    asc : {
+        className : "fa-arrow-up-short-wide"
+    },
+    desc : {
+        className : "fa-arrow-down-wide-short"
+    }
+}
+
+export const typesSort = ['normal' , 'asc' , 'desc']

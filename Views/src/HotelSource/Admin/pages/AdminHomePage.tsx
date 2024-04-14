@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import '../styles/AdminHomePage.scss';
 import { useParams } from 'react-router-dom';
 import DashboardAdmin from '../components/DashboardAdmin';
 import UserAdmin from '../components/UserAdmin';

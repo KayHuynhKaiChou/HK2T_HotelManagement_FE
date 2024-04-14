@@ -1,17 +1,19 @@
 import * as React from 'react';
 import Icon from '@mui/material/Icon';
 
-type PropsFontAwesomeIcon = React.ComponentProps<typeof Icon>
+type CustomIconType = Omit<React.ComponentProps<typeof Icon> , 'fontSize'>
+interface PropsFontAwesomeIcon extends Partial<CustomIconType> {
+    fontSizeCustom : number
+}
 
-export default function FontAwesomeIconHk2t({className , fontSize = 'large' , color = 'inherit'} : PropsFontAwesomeIcon) {
+export default function FontAwesomeIconHk2t({className , fontSizeCustom = 50 , color = 'inherit'} : PropsFontAwesomeIcon) {
 
     return (
         <Icon 
             baseClassName="fas" 
             className={className}
-            fontSize={fontSize}
             color={color}
-            sx={{ fontSize: 50 }}
+            sx={{ fontSize: fontSizeCustom }}
         />
     )
 }

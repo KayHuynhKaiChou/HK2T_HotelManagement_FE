@@ -1,0 +1,254 @@
+@import 'variables';
+@import 'mixins';
+
+// input common
+.un_input{
+    input{
+        background: #fff;
+        padding: 10.5px 14px;
+        text-overflow: ellipsis;
+        transition: border 0.4s;
+        width: 100%;
+        height: 100%;
+        border-radius: 6px;
+    }
+
+    p{
+        color: $color-error-msg-input !important;
+        font-size: 1rem;
+        margin-left: 0;
+    }
+
+    .Mui-error fieldset{
+        border-color: $color-error-msg-input !important;
+    }
+} 
+
+// radio btn common
+.un_radio_wrap{
+    padding: 7px;
+
+    input.un_radio{
+        display: none;
+
+        & + label{
+            cursor: pointer;
+            @include flex-center;
+            position: relative;
+
+            &::before{
+                content: '';
+                border-radius: 50%;
+                border-color: $brand-primary-second;
+                display: inline-block;
+                height: 20px;
+                width: 20px;
+                border-width: 3px;
+                border-style: solid;
+                vertical-align: middle;
+            }
+
+            &::after{
+                content: '';
+                border-radius: 50%;
+                background-color: $brand-primary;
+                height: 6px;
+                width: 6px;
+                left: 10px;
+                position: absolute;
+                opacity: 0.3;
+                top: 50%;
+                transform: translate(-50% , -50%) scale(0);
+                transition: all 0.25s ease-in-out 0s;
+            }
+
+            &:hover{
+                &::after{
+                    transform: translate(-50% , -50%) scale(1);
+                }
+            }
+        }
+
+        &:checked + label{
+            color: $brand-primary;
+            cursor: pointer;
+
+            &::before {
+                animation: ripple 0.5s linear forwards;
+                background-color: $brand-primary;
+                border-color: $brand-primary-second;
+                transform: scale(1);
+            }
+        }
+
+        &:disabled + label{
+            color: #ebebeb;
+            cursor: not-allowed;
+
+            &::before{
+                background-color: unset;
+                border-color: #ebebeb;
+            }
+
+            &::after{
+                background-color: unset;
+            }
+        }
+    }
+}
+
+// checkbox common
+
+.un_checkbox_wrap{
+
+    @include flex-center;
+    gap: 3px;
+    input.un_checkbox{
+        display: none;
+
+        & + label{
+            height: 20px;
+            width: 20px;
+            border-radius: 4px;
+            border: 2px solid #ebebeb;
+            cursor: pointer;
+            transition: border-color ease 0.2s;
+        }
+
+        &:checked + label{
+            border-color: #ff7872;
+        }
+    }
+    .un_checkbox_labelText{
+
+    }
+}
+
+// table common
+
+.un_tableCell_wrap{
+    position: relative;
+    
+    .un_iconSort{
+        position: absolute;
+        right: 10px;
+        bottom: 15px;
+        cursor: pointer;
+    }
+}
+
+.bl_tableContainer{
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .bl_tableContainer_header{
+        display: flex;
+        justify-content: space-between;
+        @include fontsize-color-default;
+    
+        .bl_selectLimit{
+            @include flex-center;
+
+            .bl_select_wrap{
+
+            }
+        }
+        .bl_searchTable{
+            @include flex-center;
+
+            .bl_searchTable_label{
+            
+            }
+
+            .bl_searchTable_input{
+                margin: 0;
+
+                input{
+                    padding: 5px 14px;
+                }
+            }
+
+            .bl_searchTable_select{
+                width: 160px;
+            }
+        }
+    }
+    
+    .bl_tableContainer_body{
+        border: 1px solid rgba(224, 224, 224, 1);
+
+        th,td{
+            color: $color-text-default;
+            font-size: $font-size-default;
+        }
+
+        thead{
+            border-bottom: 2px solid #bfbfbf;
+            tr th{
+                font-size: 18px;
+                text-transform: capitalize;
+            }
+        } 
+    }
+    
+    .bl_tableContainer_footer{
+        @include flex-center;
+        justify-content: space-between;
+
+        .bl_numberPageLimit{
+        
+        }
+    
+        .bl_paginationPage{
+            @include flex-center;
+            gap: 20px;
+            margin: 2px 0;
+            border-radius: 4px;
+            background-color: rgb(210 210 210);
+            padding: 10px;
+
+            &_btn{
+                // delete default css button
+                border: none;
+                background: none;
+                color: $color-text-pagination;
+                cursor: pointer;
+                &:hover{
+                    color: $color-text-pagination-hover;
+                }
+
+                &:disabled{
+                    color: #777;
+                    cursor: not-allowed;
+                }
+            }
+    
+            .bl_listNumberPage{
+                @include flex-center;
+                .bl_numberPage{
+                    color: $color-text-pagination;
+                    cursor: pointer;
+                    &__selected{
+                        color: #ffff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//select common
+
+.un_select{
+
+    .MuiInputBase-root{
+        font-size: inherit;
+    }
+
+    .MuiInputBase-input{
+        padding: 5px 14px;
+    }
+}
+

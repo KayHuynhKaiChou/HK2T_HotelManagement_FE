@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Account } from "../../../types/models";
 import { CssBaseline } from "@mui/material";
 import FormSignInAdmin from "../components/FormSignInAdmin";
-import '../styles/FormSignInAdmin.scss'
 
 export default function AdminSigninPage() {
   const navigate = useNavigate();

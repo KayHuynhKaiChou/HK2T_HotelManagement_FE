@@ -1,3 +1,58 @@
+@import '../../../styles/variables';
+
+// scss form sign in for admin
+.bl_signInPageAdmin{
+    background-image: url(https://hotel.citgroup.vn/public/images/login_bg.jpg);
+    display: flex;
+    height: 100vh;
+    
+    &_wrapper{
+        margin: auto;
+        background: #004873;
+        padding: 12px;
+        border-radius: 6px;
+        width: $width-admin-login-form;
+    }
+
+    &_ttl{
+        text-align: center;
+        text-shadow: 0 1px 0 #fff;
+        color: $color-ttl-admin-login-form;
+        letter-spacing: -0.05em;
+        position: relative;
+
+        &::after,
+        &::before {
+            content: "";
+            height: 1px;
+            position: absolute;
+            top: 26px;
+            width: 20%;
+            background: $color-ttl-admin-login-form;
+        }
+
+        &::before{
+            left: 0;
+        }
+        
+        &::after{
+            right: 0;
+        }
+
+    }
+
+    .bl_btn__login{
+        display: flex;
+        justify-content: center;  
+        
+        button{
+            background: #fff;
+        }
+    }
+    
+}
+
+// scss item report (4 items)
 .un_itemReport{
     display: flex;
     &_info{
@@ -24,4 +79,53 @@
             width: inherit !important;
         }
     }
+}
+
+// custom css calender
+.fc-event-time{
+    display: none;
+}
+
+// scss admin home page
+
+.css-19z1ozs-MuiPaper-root-MuiAppBar-root {
+    width: calc(100% - 65px) !important;
+}
+
+.un_menuAdmin{
+
+    .css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+        color: #fff !important;
+    }
+
+    & > .MuiPaper-root{
+        background: $background-color-menu-admin;
+    }
+
+    .css-1r9jet7{
+        justify-content: flex-start !important;
+        padding: 0 20px !important;
+    
+        .un_hotelIcon__custom{
+            width: 1.5em;
+            height: 1.5em;
+            padding: 5px;
+            border: 1px solid;
+            border-radius: 50%;
+        }
+    
+        .un_hotelIcon__customClose{
+            margin-left: -5px;
+        }   
+    }
+
+    svg , .fa-paw{
+        color: #fff;
+    }
+}
+
+
+.css-ag7rrr-MuiTypography-root{
+    font-size: 1.3rem !important;
+    margin-left: 12px !important;
 }
