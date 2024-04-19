@@ -5,7 +5,7 @@ import { uuid } from "../../../utils";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { colorsBtnCustom } from "../../../utils/constants";
-import { columnType } from "../../../types/supportUI";
+import { ColumnTypeProps } from "../../../types/supportUI";
 import CheckboxHk2t from "../../../common/CheckboxHk2t";
 
 export default function UserAdmin() {
@@ -31,50 +31,74 @@ const rows = [
   createData("Juice lomen", 116, 6.0, 19, 3.4 , <ButtonHk2t />)
 ];
 
-const columns : columnType[] = [
+const columns : ColumnTypeProps[] = [
   {
     id : '1',
     nameCol : "name",
-    isSorted : true,
-    typeSort : 'normal'
+    isSorted : true
   },
   {
     id : '2',
     nameCol : "calories",
     isSorted : true,
-    typeSort : 'normal'
+    criteria : [
+      {
+        label : 'Từ 100 đến 300',
+        condition : [100,300]
+      },
+      {
+        label : 'Từ 300 đến 600',
+        condition : [300,600]
+      }
+    ]
   },
   {
     id : '3',
     nameCol : "fat",
-    isSorted : true,
-    typeSort : 'normal'
+    isSorted : true
   },
   {
     id : '4',
     nameCol : "carbs",
-    isSorted : true,
-    typeSort : 'normal'
+    isSorted : true
   },
   {
     id : '5',
     nameCol : "protein",
-    isSorted : true,
-    typeSort : 'normal'
-
+    isSorted : true
   },
   {
     id : '6',
     nameCol : "action"
   }
 ]
-
+// test radio
 const options = ['month' , 'year']
 const [value , setValue] = useState('month');
 const handleChangeValue = (value : string ) => {
   console.log(value)
   setValue(value)
 }
+// test checkbox
+const checkbox = [
+  {
+    label : 'abcd',
+    checked : true
+  },
+  {
+    label : 'efgh',
+    checked : false
+  }
+]
+const handleCheckbox = (c : {label : string , checked : boolean}) => {
+  const eee = checkbox.find(ch => ch.label == c.label)
+  if(eee){
+    eee.checked = !c.checked
+  }
+  console.log({checkbox})
+}
+
+const Width = ({ children }) => children(500)
   return (
     <div>
       <TableHk2t
@@ -106,7 +130,21 @@ const handleChangeValue = (value : string ) => {
           onChange={() => handleChangeValue(o)}
         />
       ))}
-      <CheckboxHk2t/>
+      {checkbox.map((c,i) => (
+        <CheckboxHk2t
+          id={i+''}
+          disabled={false}
+          checked={c.checked}
+          label={c.label}
+          onChange={() => handleCheckbox(c)}
+        />
+      ))}
+      <Width>
+        {width => <div>window is {width}</div>}
+      </Width>
+      <div>
+        {["Hello ", <span>World</span>, "!"]}
+      </div>
     </div>
   )
 }

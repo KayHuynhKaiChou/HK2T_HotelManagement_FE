@@ -9,30 +9,41 @@ import { uuid } from "../../utils";
 import { useEffect, useMemo, useState } from "react";
 import { iconsSort } from "../../utils/constants";
 import SelectHk2t from "../SelectHk2t";
-import { optionSelect , columnType } from "../../types/supportUI";
-import { CustomTable, CustomTableRow, getLimitRowsPerPage, mapColumnsToOptions } from "./table_helper";
+import { OptionSelect , ColumnType , CriteriaType, TypeSort } from "../../types/supportUI";
+import { 
+    CustomTable, 
+    CustomTableRow, 
+    getLimitRowsPerPage, 
+    initSelectedIdColumnDetail, 
+    mapColumnsToOptions, 
+    mapCriteriaToOptionSelect
+} from "./table_helper";
 import InputHk2t from "../InputHk2t";
 
-interface propsTableHk2t {
-    rows: unknown[];
-    columns: columnType[];
-    pageSizeOptions : optionSelect[]; 
+interface propsTable {
+    rows: { [key : string] : any}[];
+    columns: ColumnType[];
+    pageSizeOptions : OptionSelect[]; 
 }
 
 type selectTypeCurrentPage = 'NORMAL' | 'PREVIOUS' | 'NEXT';
 
-export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: propsTableHk2t) {
+export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: propsTable) {
     // state ===================================================================
-    const [columnsDetail , setColumnsDetail] = useState<columnType[]>(columns);
-    const [selectedColumn , setSelectedColumn] = useState<optionSelect['value']>(columns[0].nameCol);
-    const [rowsDetail , setRowsDetail] = useState<unknown[]>(rows); // limit rows per page (1 page phải có bao nhiêu data)
-    const [rowsFilter , setRowsFilter] = useState<unknown[]>(rows); // filter rows by search
+    const [selectedIdColumnDetail , setSelectedIdColumnDetail] = useState<OptionSelect['value']>(
+        initSelectedIdColumnDetail(columns)
+    );
+    const [rowsDetail , setRowsDetail] = useState<propsTable['rows']>(rows); // limit rows per page (1 page phải có bao nhiêu data)
+    const [rowsFilter , setRowsFilter] = useState<propsTable['rows']>(rows); // filter rows by search
     const [searchText , setSearchText] = useState<string>('');
-    const [pageSizeOption , setPageSizeOption] = useState<optionSelect['value']>(
+    const [pageSizeOption , setPageSizeOption] = useState<OptionSelect['value']>(
         getLimitRowsPerPage(rows , pageSizeOptions)
     ); // limit length rows per page
     const [listNumberPage , setListNumberPage] = useState<number[]>([]); // ex : Previous 1 2 3 4 Next
     const [currentPage , setCurrentPage] = useState<number>(1);
+    const [selectedCriteria , setSelectedCriteria] = useState<CriteriaType['condition'] | null>(null);
+    const [sortedColumn , setSortedColumn] = useState<{id : ColumnType['id'] , type : TypeSort}>({id : '' , type : 'NORMAL'});
+    //const [sortedTable , setSortedTable] = useState<boolean>(false);
 
     // useMemo ==================================================================
     const lengthRows = useMemo(() => rowsFilter.length ,[rowsFilter.length])
@@ -61,6 +72,18 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
     // thêm 1 dependency listNumberPage với 1 case đặt biệt : Prev(disabled) |1| 2 3 ... Next => Prev(disabled) |1| Next(disabled)
     const isDisabledBtnNext = useMemo(() => currentPage === listNumberPage.length, [currentPage , listNumberPage])
 
+    const columnDetail = useMemo(() => {
+        const foundColumn = columns.find(col => col.id === selectedIdColumnDetail);
+        return foundColumn!
+    },[selectedIdColumnDetail]) // ta có thể gộp columnDetail với selectedIdColumnDetail để có kiểu là ColumnType giống với columnsDetail state
+
+    const getIconSortByColumn = useMemo(() => {
+        return (idCol : ColumnType['id']) => {
+            const keyIconSort = sortedColumn.id === idCol ? sortedColumn.type : 'NORMAL'
+            return iconsSort[keyIconSort]
+        }
+    },[sortedColumn])
+
     // useEffect =================================================================
     useEffect(() => {
         setCurrentPage(1)
@@ -75,7 +98,36 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
         setRowsDetail(rowsFilter.slice(fromRow , toRow))       
     },[currentPage , pageSizeOption , lengthRows])
 
+    // track sort asc / desc by column
     useEffect(() => {
+        const foundSortedCol = columns.find(col => col.id === sortedColumn?.id);
+        if(foundSortedCol){
+            const keyRow = foundSortedCol.nameCol
+            const rowsDetailSorted = rowsFilter.sort((eleBefore , eleAfter) => {
+                return sortedColumn?.type === 'ASC'
+                    ? eleBefore[keyRow] - eleAfter[keyRow]
+                    : eleAfter[keyRow] - eleBefore[keyRow]
+            })
+            rows = rows.sort((eleBefore , eleAfter) => {
+                return sortedColumn?.type === 'ASC'
+                    ? eleBefore[keyRow] - eleAfter[keyRow]
+                    : eleAfter[keyRow] - eleBefore[keyRow]
+            })
+            setRowsFilter([
+                ...rowsDetailSorted
+            ])
+            // cần update thêm row detail với fromRow và toRow hiện tại
+            setRowsDetail([
+                ...rowsDetailSorted.slice(fromRow,toRow)
+            ])
+        }
+    },[sortedColumn])
+
+    // when change search text , rows will filter by text
+    useEffect(() => {
+        if(columnDetail?.criteria){
+            return;
+        }
         let limitRows = 0;
         let resultFilter = [];
         if(searchText == ''){
@@ -83,16 +135,39 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
             limitRows = getLimitRowsPerPage(resultFilter , pageSizeOptions);
         }else{
             resultFilter = rows.filter(row => {
-                const originalValue = row[selectedColumn].toLowerCase() as string;
+                const originalValue = row[columnDetail?.nameCol].toLowerCase() as string;
                 return originalValue.includes(searchText.toLowerCase())
             })
             limitRows = getLimitRowsPerPage(resultFilter, pageSizeOptions);
         }
         setPageSizeOption(limitRows);
         setRowsFilter(resultFilter);
-    },[searchText])
+    },[searchText , columnDetail])
 
-    // func handle event ================================================================
+    // when change criteria , rows will filter by criteria
+    useEffect(() => {
+        if(columnDetail?.criteria && selectedCriteria){
+            const condition = selectedCriteria
+            const compareFirst = condition![0];
+            const compareLast = condition![1];
+            const resultFilter = rows.filter(row => {
+                return row[columnDetail?.nameCol] >= compareFirst && row[columnDetail?.nameCol] <= compareLast
+            })
+            const limitRows = getLimitRowsPerPage(resultFilter, pageSizeOptions);
+            setPageSizeOption(limitRows);
+            setRowsFilter(resultFilter);
+        }
+    },[selectedCriteria , columnDetail])
+
+    useEffect(() => {
+        if(columnDetail?.criteria){
+            setSelectedCriteria(columnDetail.criteria[0].condition)
+        }else{
+            setSearchText('')
+        }
+    },[columnDetail])
+
+    // func handle event to change state ================================================================
     const handleSelectCurrentPage = (typeSelect : selectTypeCurrentPage , numPage : number = 0) => { 
         switch(typeSelect){
             case "NORMAL":
@@ -110,44 +185,29 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
         }
     }
     
-    const handleChangePageSizeOption = (value : optionSelect['value']) => {
+    const handleChangePageSizeOption = (value : OptionSelect['value']) => {
         setPageSizeOption(value);
     }
 
-    const handleChangeSelectedColumn = (value : optionSelect['value']) => {
-        setSelectedColumn(value);
+    const handleChangeSelectedColumn = (value : OptionSelect['value']) => {
+        setSelectedIdColumnDetail(value);
     }
 
     const handleChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(e.target.value);
     }
 
-    const handleSortByColumnName = (idCol : columnType['id']) => {
-        let columnsDetailClone = [...columnsDetail]
-        columnsDetailClone = columnsDetailClone
-            .map(col => {
-                if(col.id === idCol || !col.isSorted){
-                    return col
-                }else{
-                    return {...col , typeSort: 'normal'}
-                }
-            })
-        const foundCol = columnsDetailClone.find(col => col.id === idCol);
-        if(foundCol){
-            foundCol.typeSort = foundCol.typeSort === 'asc' ? 'desc' : 'asc'
-            const keyRow = foundCol.nameCol
-            const rowsDetailSorted = rowsFilter.sort((eleBefore , eleAfter) => {
-                return foundCol.typeSort === 'asc'
-                    ? eleBefore[keyRow] - eleAfter[keyRow]
-                    : eleAfter[keyRow] - eleBefore[keyRow]
-            })
-            setRowsDetail([
-                ...rowsDetailSorted
-            ])
-            setColumnsDetail([
-                ...columnsDetailClone
-            ])
-        }
+    const handleChangeSelectedCriteria = (value : OptionSelect['value']) => {
+        const stringCondition = value as string
+        const formatArrayCondition = stringCondition.split('-').map(limit => Number(limit))
+        setSelectedCriteria(formatArrayCondition)
+    }
+
+    const handleChangeSortedColumn = (idCol : ColumnType['id']) => {
+        setSortedColumn({
+            id : idCol,
+            type : sortedColumn?.type === 'ASC' ? 'DESC' : 'ASC'
+        })
     }
 
     return (
@@ -169,17 +229,28 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
                 ) }
                 <div className="bl_searchTable">
                     <div className="bl_searchTable_label">Search: </div>
-                    <InputHk2t
-                        className="bl_searchTable_input"
-                        name="search"
-                        placeholder="Bạn cần tìm gì ?"
-                        value={searchText}
-                        onChange={handleChangeSearchText}
-                    />
+                    {
+                        !columnDetail?.criteria ? (
+                            <InputHk2t
+                                className="bl_searchTable_input"
+                                name="search"
+                                placeholder="Bạn cần tìm gì ?"
+                                value={searchText}
+                                onChange={handleChangeSearchText}
+                            />
+                        ) : (
+                            <SelectHk2t
+                                className="bl_searchTable_select"
+                                options={mapCriteriaToOptionSelect(columnDetail.criteria)}
+                                value={selectedCriteria ? selectedCriteria.join('-') : ''}
+                                onChange={handleChangeSelectedCriteria}
+                            />
+                        )
+                    }
                     <SelectHk2t
                         className="bl_searchTable_select"
                         options={mapColumnsToOptions(columns)}
-                        value={selectedColumn}
+                        value={selectedIdColumnDetail}
                         onChange={handleChangeSelectedColumn}
                     />
                 </div>
@@ -190,7 +261,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
                 aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        {columnsDetail.map(col => (
+                        {columns.map(col => (
                             <TableCell 
                                 key={col.id} 
                                 className="un_tableCell_wrap" 
@@ -201,11 +272,11 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
                                 {col.isSorted && (
                                     <div 
                                         className="un_iconSort"
-                                        onClick={() => handleSortByColumnName(col.id)}
+                                        onClick={() => handleChangeSortedColumn(col.id)}
                                     >
                                         <FontAwesomeIconHk2t
                                             fontSizeCustom={15}
-                                            {...iconsSort[col.typeSort || 'normal']}
+                                            {...getIconSortByColumn(col.id)}
                                         />
                                     </div>
                                 )}

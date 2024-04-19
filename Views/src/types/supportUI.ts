@@ -7,16 +7,23 @@ export interface ColorButtonCustom {
     }
 }
 
-export interface columnType {
+export interface CriteriaType {
+    label : string;
+    condition : number[]; 
+}
+
+export type TypeSort = 'NORMAL' | 'ASC' | 'DESC' ; 
+export interface ColumnType {
     id : string;
     nameCol : string;
     width ?: number;
     isSorted ?: boolean;
-    typeSort ?: 'normal' | 'asc' | 'desc';
-    criteria ?: string[];
+    criteria ?: CriteriaType[];
 }
 
-export interface optionSelect {
+export type ColumnTypeProps = Omit<ColumnType , 'typeSort'>
+
+export interface OptionSelect {
     label : string; 
     value : string | number;
 }

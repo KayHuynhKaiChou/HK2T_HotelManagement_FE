@@ -84,15 +84,13 @@ export const colorsBtnCustom = {
 }
 
 export const iconsSort = {
-    normal : {
+    NORMAL : {
         className : "fa-arrows-up-down"
     },
-    asc : {
+    ASC : {
         className : "fa-arrow-up-short-wide"
     },
-    desc : {
+    DESC : {
         className : "fa-arrow-down-wide-short"
     }
 }
-
-export const typesSort = ['normal' , 'asc' , 'desc']

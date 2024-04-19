@@ -25,6 +25,7 @@
 } 
 
 // radio btn common
+
 .un_radio_wrap{
     padding: 7px;
 
@@ -104,7 +105,7 @@
     @include flex-center;
     gap: 3px;
     input.un_checkbox{
-        display: none;
+        
 
         & + label{
             height: 20px;
@@ -113,10 +114,26 @@
             border: 2px solid #ebebeb;
             cursor: pointer;
             transition: border-color ease 0.2s;
+            position: relative;
         }
 
         &:checked + label{
             border-color: #ff7872;
+
+            & + .un_checkbox_labelText{
+                color: #ff7872;
+            }
+
+            &::after,
+            &::before{
+                content: '';
+                width: 4px;
+                position: absolute;
+                height: 10px;
+                background: #ff7872;
+                transform: rotate(-45deg);
+                transform-origin: left top;
+            }
         }
     }
     .un_checkbox_labelText{

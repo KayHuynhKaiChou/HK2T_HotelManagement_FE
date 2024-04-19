@@ -1,11 +1,11 @@
 import {Select , MenuItem , FormControl} from '@mui/material'
-import { optionSelect } from '../types/supportUI';
+import { OptionSelect } from '../types/supportUI';
 
 interface propsSelect {
-    options : optionSelect[];
+    options : OptionSelect[];
     value : number | string;
     className ?: string;
-    onChange : (value: optionSelect['value']) => void;
+    onChange : (value: OptionSelect['value']) => void;
 }
 
 export default function SelectHk2t({

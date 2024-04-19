@@ -1,7 +1,7 @@
 import { Table, TableRow, styled } from "@mui/material";
-import { columnType, optionSelect } from "../../types/supportUI";
+import { ColumnType, OptionSelect , ColumnTypeProps } from "../../types/supportUI";
 
-export const getLimitRowsPerPage = (rows : unknown[] , pageSizeOptions : optionSelect[]) => {
+export const getLimitRowsPerPage = (rows : unknown[] , pageSizeOptions : OptionSelect[]) => {
     const lengthRows = rows.length;
     let initValue = 0;
     const minOpt = +pageSizeOptions[0]?.value;
@@ -28,6 +28,17 @@ export const CustomTableRow = styled(TableRow)(({ theme }) => ({
     }
 }));
 
-export const mapColumnsToOptions = (columns : columnType[]) : optionSelect[] => {
-    return columns.map(col => ({label: col.nameCol , value: col.nameCol}))
+export const mapColumnsToOptions = (columns : ColumnType[]) : OptionSelect[] => {
+    return columns.map(col => ({
+        label: col.nameCol , 
+        value: col.id
+    }))
+}
+
+export const initSelectedIdColumnDetail = (columns : ColumnType[]) : ColumnType['id'] => {
+    return columns[0].id
+}
+
+export const mapCriteriaToOptionSelect = (criteria : ColumnType['criteria']) : OptionSelect[] => {
+    return criteria!.flatMap(cri => ({label : cri.label , value : cri.condition.join('-')}))
 }
