@@ -1,6 +1,5 @@
 import { Icon } from "@mui/material"
 import FontAwesomeIconHk2t from "../../../common/FontAwesomeIconHk2t"
-import '../styles/applicationAdminStyle.scss'
 
 interface PropItemReport {
     total : number,
@@ -20,7 +19,7 @@ export default function ItemReport({ total , title , icon } : PropItemReport) {
         </div>
       </div>
       <div className="un_itemReport_icon">
-        <FontAwesomeIconHk2t {...icon}/>
+        <FontAwesomeIconHk2t {...icon} />
       </div>
     </div>
   )

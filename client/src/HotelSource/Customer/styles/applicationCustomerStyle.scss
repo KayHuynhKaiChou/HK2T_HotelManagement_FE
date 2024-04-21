@@ -1,0 +1,41 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.bl_navbarCustomer_container{
+    padding: 0 $padding-home-page-default;
+
+    @media screen and (max-width: 768px) {
+        padding: 0 $padding-home-page-768px;
+    }
+
+    @media screen and (max-width: 480px) {
+        padding: 0 $padding-home-page-480px;
+    }
+
+    .bl_navbarCustomer_wrap{
+        @include flex-center;
+        justify-content: space-between;
+    }
+}
+
+.bl_navbarRightCustomer_wrap{
+    @include flex-center;
+    gap: $gap-menu-home-page;
+
+    .bl_navbarRightCustomer_act{
+        display: flex;
+    }
+}
+
+.bl_navbarLeftCustomer_wrapper{
+    @include flex-center;
+    gap: $gap-menu-home-page;
+
+    .bl_navbarLeftCustomer_logo {
+
+        img {
+            max-width: 162px;
+            max-height: 55px;
+        }
+    }
+}

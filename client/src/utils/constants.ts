@@ -94,3 +94,5 @@ export const iconsSort = {
         className : "fa-arrow-down-wide-short"
     }
 }
+
+export const defaultPages = ["Home", "About", "Contact"] as const;

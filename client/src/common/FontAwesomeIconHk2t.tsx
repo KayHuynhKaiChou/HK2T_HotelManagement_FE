@@ -3,7 +3,7 @@ import Icon from '@mui/material/Icon';
 
 type CustomIconType = Omit<React.ComponentProps<typeof Icon> , 'fontSize'>
 interface PropsFontAwesomeIcon extends Partial<CustomIconType> {
-    fontSizeCustom : number
+    fontSizeCustom ?: number
 }
 
 export default function FontAwesomeIconHk2t({className , fontSizeCustom = 50 , color = 'inherit'} : PropsFontAwesomeIcon) {

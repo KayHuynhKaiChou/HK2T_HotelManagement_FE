@@ -3,7 +3,9 @@ import App from './App.tsx'
 import './styles/index.scss'
 import {CssBaseline , ThemeProvider , createTheme, StyledEngineProvider} from '@mui/material'
 import '@fortawesome/fontawesome-free/css/all.css';
-import '../src/styles/applicationCommonStyle.scss'
+import '../src/styles/applicationCommonStyle.scss';
+import './HotelSource/Admin/styles/applicationAdminStyle.scss';
+import './HotelSource/Customer/styles/applicationCustomerStyle.scss'
 
 const theme = createTheme({
   palette: {
