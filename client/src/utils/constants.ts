@@ -96,3 +96,5 @@ export const iconsSort = {
 }
 
 export const defaultPages = ["Home", "About", "Contact"] as const;
+
+export const namesImageBanner = ['viewHotel' , 'roomHotel' , 'swimmingPoolHotel'];
