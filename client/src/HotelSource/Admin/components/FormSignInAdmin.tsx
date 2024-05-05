@@ -6,11 +6,12 @@ import { Account } from '../../../types/models';
 import InputHk2t from '../../../common/InputHk2t';
 
 interface FormSignInProps {
-  handleSignIn : (values : Account) => void
+  onSignIn : (values : Account) => void
+  onHiddenErrorMsg : () => void
 }
 
 function FormSignInAdmin(props : FormSignInProps) {
-  const {handleSignIn} = props
+  const {onSignIn , onHiddenErrorMsg} = props
   
   const schema = yup.object({
     email: yup.string()
@@ -28,9 +29,9 @@ function FormSignInAdmin(props : FormSignInProps) {
   })
 
   return (
-    <form onSubmit={form.handleSubmit(handleSignIn as SubmitHandler<Account>)}>
-      <InputHk2t name='email' placeholder='Email' form={form} />
-      <InputHk2t name='password' placeholder='Password' typeInput='password' form={form} />
+    <form onSubmit={form.handleSubmit(onSignIn as SubmitHandler<Account>)}>
+      <InputHk2t name='email' placeholder='Email' form={form} onFocus={onHiddenErrorMsg}/>
+      <InputHk2t name='password' placeholder='Password' typeInput='password' form={form} onFocus={onHiddenErrorMsg}/>
       <div className="bl_btn__login">
         <Button
           size='medium'

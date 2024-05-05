@@ -11,6 +11,7 @@ interface InputProps {
     className?: string;
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onFocus?: () => void
 }
 
 function InputHk2t(props : InputProps) {
@@ -22,7 +23,8 @@ function InputHk2t(props : InputProps) {
         typeInput = 'text',
         className = '',
         value = '',
-        onChange
+        onChange,
+        onFocus
     } = props
     
     function renderInput(){
@@ -45,6 +47,7 @@ function InputHk2t(props : InputProps) {
                             error={!!hasError}
                             helperText={errors[name]?.message}
                             className={`un_input ${className}`}
+                            onFocus={onFocus}
                         />
                     }
                 />

@@ -15,9 +15,9 @@ export interface User extends Account{
     id_card ?: string,
     birth_day ?: string,
     gender ?: 'MALE' | 'FEMALE' | 'OTHER',
-    position : 'CUSTOMER' | 'ADMIN' | 'HOUSEKEEPER' | 'RECEPTIONIST'
+    position ?: 'CUSTOMER' | 'ADMIN' | 'HOUSEKEEPER' | 'RECEPTIONIST'
     salary ?: number,
-    image ?: string,
+    link_avatar ?: string,
     booked_rooms ?: Room[]
 }
 

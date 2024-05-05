@@ -1,8 +1,7 @@
 import { errorHandler } from "./errorHandler";
 import { RESOURCES } from "./resources";
-import axios from 'axios';
 
-const API_URL = import.meta.env.SERVER_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 const abortController = new AbortController();
 
@@ -22,9 +21,8 @@ const JSON_HEADER = {
     'Content-Type': 'application/json'
 }
 
-const defaultConfig = {
-    headers : {...JSON_HEADER},
-    withCredentials : true
+const defaultHeader = {
+    ...JSON_HEADER
 }
 
 export class ResponseError extends Error {
@@ -51,27 +49,43 @@ export const buildPath = function (resource: Resource, params: URLParams) {
 
 export default class GateWay {
     resource: string;
-    defaultParams: object;
+    defaultParams: object | null;
     requestParams: object | null;
+    accessToken: string | undefined;
 
-    constructor(resource: string , defaultParams: object , requestParams: object | null){
+    constructor(resource: string , accessToken?: string){
         this.resource = resource;
-        this.defaultParams = defaultParams;
-        this.requestParams = requestParams;
+        this.defaultParams = {};
+        this.requestParams = null;
+        this.accessToken = accessToken;
     }
 
-    response(response : AxiosResponse, path : string, params: object){
+    response(response : Response, path : string, params: object){
         const status: number = response.status;
         return errorHandler(status)(response, path, params)
     }
 
-    async get(params: URLParams, requestParams: RequestParams = null) {
+    authHeader(){
+        return {
+            'Authorization' : `Bearer ${this.accessToken}`
+        }
+    }
+
+    async get(params: URLParams) {
         if(!RESOURCES[this.resource][params.action]) throw new Error('No action found')
 
         const path = buildPath(RESOURCES[this.resource], {...params, ...this.defaultParams})
 
-        const result = await axios.get(path , {...defaultConfig , signal: abortController.signal})
-        
+        //const result = await axios.get(path , {...defaultConfig , signal: abortController.signal})
+        const result = await fetch(
+            path,
+            {
+                method : 'GET',
+                headers : defaultHeader,
+                signal: abortController.signal
+            }
+        )
+
         return this.response(result , path , params);
     }
 
@@ -82,10 +96,26 @@ export default class GateWay {
 
         let result = null;
         if(requestParams instanceof FormData){
-            result = await axios.post(path , {...defaultConfig , signal: abortController.signal})
+            result = await fetch(
+                path,
+                {
+                    method : 'POST',
+                    headers : defaultHeader,
+                    body : requestParams,
+                    signal: abortController.signal
+                }
+            )
         }else{
-            result = await axios.post(path , {...defaultConfig , requestParams ,signal: abortController.signal})
+            result = await fetch(
+                path,
+                {
+                    method : 'POST',
+                    headers : defaultHeader,
+                    body : JSON.stringify(requestParams),
+                    signal: abortController.signal
+                }
+            )        
         }
-        return this.response()
+        return this.response(result, path, params)
     }
 }

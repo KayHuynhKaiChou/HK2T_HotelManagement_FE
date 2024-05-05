@@ -80,7 +80,7 @@ const handleChangeValue = (value : string ) => {
   setValue(value)
 }
 // test checkbox
-const checkbox = [
+const checkboxDemo = [
   {
     label : 'abcd',
     checked : true
@@ -90,12 +90,15 @@ const checkbox = [
     checked : false
   }
 ]
+
+const [checkBox , setCheckBox] = useState(checkboxDemo);
+
 const handleCheckbox = (c : {label : string , checked : boolean}) => {
-  const eee = checkbox.find(ch => ch.label == c.label)
+  const eee = checkBox.find(ch => ch.label == c.label)
   if(eee){
     eee.checked = !c.checked
+    setCheckBox([...checkBox])
   }
-  console.log({checkbox})
 }
 
 const Width = ({ children }) => children(500)
@@ -130,9 +133,9 @@ const Width = ({ children }) => children(500)
           onChange={() => handleChangeValue(o)}
         />
       ))}
-      {checkbox.map((c,i) => (
+      {checkBox.map((c,i) => (
         <CheckboxHk2t
-          id={i+''}
+          id={i+'abc'}
           disabled={false}
           checked={c.checked}
           label={c.label}

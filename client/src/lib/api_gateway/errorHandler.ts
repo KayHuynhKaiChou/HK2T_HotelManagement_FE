@@ -1,10 +1,11 @@
 import { ResponseError } from ".";
+import { ResponseFormat } from "../../types/response";
 
 const abortController = new AbortController();
 
 export function errorHandler(
     status: number
-): (response: Response, path: string, params: object) => Promise<{ status: number; body: any}> {
+): (response: Response, path: string, params: object) => Promise<ResponseFormat> {
     switch(status) {
         case 200:
             return defaultHandler;
@@ -29,5 +30,5 @@ export function errorHandler(
     }
 }
 
-const defaultHandler = (response: Response) => 
-    response.json().then((body) => ({status: response.status, body}))
+const defaultHandler = (response: Response) => //({status: response.status, data : response.data})
+    response.json().then((resServer) : ResponseFormat => ({status: response.status, ...resServer}))
