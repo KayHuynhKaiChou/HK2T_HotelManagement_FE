@@ -4,9 +4,8 @@ import { CssBaseline } from "@mui/material";
 import FormSignInAdmin from "../components/FormSignInAdmin";
 import { useEffect, useState } from "react";
 import { useSelector , useDispatch } from 'react-redux';
-import { UserThunkAction, userAction } from "../../../redux/actions/user";
+import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";
-import { Dispatch, UnknownAction } from "redux";
 
 export default function AdminSigninPage() {
   const navigate = useNavigate();
