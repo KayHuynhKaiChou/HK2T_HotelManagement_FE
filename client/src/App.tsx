@@ -13,8 +13,8 @@ function App() {
         <Route path="/" element={<HomePage/>}/>
         <Route path="admin" element={<AdminSigninPage/>}/>
         <Route path="admin/:menu" element={<AdminHomePage/>}/>
-        <Route path="sign-in" element={<SigninPage/>}/>
-        <Route path="sign-up" element={<SignupPage/>}/>
+        <Route path="sign_in" element={<SigninPage/>}/>
+        <Route path="sign_up" element={<SignupPage/>}/>
       </Routes>
     </BrowserRouter>
   )

@@ -25,6 +25,7 @@
 
     .bl_navbarRightCustomer_act{
         display: flex;
+        cursor: pointer;
     }
 }
 
@@ -92,7 +93,7 @@
                 &:last-child{
                     flex-basis: 15%;
                     border-left: none;
-                    background-color: #ff5722;
+                    background-color: color-btn-customer;
                     border-radius: 0 10px 10px 0;
                     display: flex;
                     cursor: pointer;
@@ -111,4 +112,71 @@
     }
 }
 
+// Sign in page
+.bl_signinPage_container{
+    display: flex;
+    height: 100vh;
+
+    .bl_signinForm{
+        margin: auto;
+        padding: 40px;
+        width: 670px;
+        height: 520px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px 0 rgba(62,28,131,0.1);
+
+        &_header{
+            font-size: 22px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        &_body{
+            margin: 15px;
+            .un_input {
+                .MuiOutlinedInput-root{
+                    background: #f6f7f9;
+                    padding: 10px;
+
+                    svg{
+                        opacity: 0.5;
+                    }
+                }
+
+                input{
+                    background: #f6f7f9;
+                }
+
+                fieldset{
+                    border-color: #ebedf1;
+                }
+            }
+
+            .bl_btn__login{
+                margin: 20px 0;
+                button{
+                    background-color: $color-btn-customer;
+                    width: 100%;
+                    color: #fff;
+                }
+            }
+        }
+
+        &_footer{
+            text-align: center;
+
+            &__main{
+                display: inline;
+                margin-left: 5px;
+                color: $color-btn-customer;
+                font-weight: bold;
+                cursor: pointer;
+            }
+        }
+    }
+}
 

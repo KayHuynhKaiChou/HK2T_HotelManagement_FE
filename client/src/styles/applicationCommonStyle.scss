@@ -2,25 +2,34 @@
 @import 'mixins';
 
 // input common
-.un_input{
-    input{
-        background: #fff;
-        padding: 10.5px 14px;
-        text-overflow: ellipsis;
-        transition: border 0.4s;
-        width: 100%;
-        height: 100%;
-        border-radius: 6px;
+.un_input_wrap{
+    margin-bottom: 10px;
+    @include flex-column;
+    .un_input_label{
+        color: #707e9c;
+        font-weight: bold;
     }
 
-    p{
-        @include message-error-on-input;
-    }
-
-    .Mui-error fieldset{
-        border-color: $color-error-msg-input !important;
-    }
-} 
+    .un_input{
+        input{
+            background: #fff;
+            padding: 10.5px 14px;
+            text-overflow: ellipsis;
+            transition: border 0.4s;
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+        }
+    
+        p{
+            @include message-error-on-input;
+        }
+    
+        .Mui-error fieldset{
+            border-color: $color-error-msg-input !important;
+        }
+    } 
+}
 
 // radio btn common
 

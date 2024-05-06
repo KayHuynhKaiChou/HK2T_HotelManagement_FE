@@ -1,15 +1,17 @@
 import { Controller } from 'react-hook-form'
-import { TextField } from '@mui/material'
+import { InputAdornment, TextField } from '@mui/material'
 import '../styles/applicationCommonStyle.scss'
 
 interface InputProps {
     form?: any;
     name: string;
+    label?: string;
     placeholder?: string;
     typeInput?: string;
     disabled?: boolean;
     className?: string;
     value?: string;
+    iconInput?: JSX.Element;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onFocus?: () => void
 }
@@ -18,11 +20,13 @@ function InputHk2t(props : InputProps) {
     const {
         form,
         name = '',
+        label = '',
         placeholder = '',
         disabled = false,
         typeInput = 'text',
         className = '',
         value = '',
+        iconInput,
         onChange,
         onFocus
     } = props
@@ -48,6 +52,13 @@ function InputHk2t(props : InputProps) {
                             helperText={errors[name]?.message}
                             className={`un_input ${className}`}
                             onFocus={onFocus}
+                            InputProps={iconInput ? {
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    {iconInput}
+                                  </InputAdornment>
+                                ),
+                            } : {}}
                         />
                     }
                 />
@@ -65,13 +76,25 @@ function InputHk2t(props : InputProps) {
                     type={typeInput}
                     fullWidth
                     className={`un_input ${className}`}
+                    InputProps={iconInput ? {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            {iconInput}
+                          </InputAdornment>
+                        ),
+                    } : {}}
                 />
             )
         }
     }
 
     return (
-        renderInput()
+        <div className='un_input_wrap'>
+            <div className="un_input_label">
+                {label}
+            </div>
+            {renderInput()}
+        </div>
     )
 }
 
