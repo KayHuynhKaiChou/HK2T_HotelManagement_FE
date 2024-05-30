@@ -110,7 +110,7 @@
     width: calc(100% - 65px) !important;
 }
 
-.un_menuAdmin{
+.un_navbarLeft{
 
     .css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
         color: #fff !important;
@@ -146,4 +146,126 @@
 .css-ag7rrr-MuiTypography-root{
     font-size: 1.3rem !important;
     margin-left: 12px !important;
+}
+
+// scss person info admin
+.bl_personInfor{
+    padding: 5px 20px;
+    display: flex;
+
+    &_inner{
+        @include flex-center;
+        gap: 15px;
+        .bl_personInfor_avatar{
+            border: 5px solid;
+            border-radius: 50%;
+
+            &.bl_sizeAvatar_default{
+
+            }
+
+            &.bl_sizeAvatar_scale{
+                width: 60px;
+                height: 60px;
+            }
+        }
+    
+        .bl_personInfor_fullName{
+            p{
+                font-size: 13px;
+                color: #BAB8B8;
+            }
+        }
+    }
+}
+
+//scss header menu admin
+.un_headerMenu{
+    display: flex;
+    justify-content: space-between;
+
+    &_inner{
+        align-self: stretch;
+        display: flex;
+
+        &:hover{
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+    }
+}
+
+// inner dropdown 
+.bl_dropdown_inner{
+    border-radius: 10px;
+    width: 300px;
+
+    .bl_dropdown_item{
+        padding: 10px;
+        color: #5A738E;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        gap: 8px;
+
+        &:hover{
+            cursor: pointer;
+            color: #262626;
+            background-color: #f5f5f5;
+        }
+    }
+}
+
+// profile employee
+.bl_profileAdmin{
+    padding: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    &_inner{
+        //margin: 10px 20px 0px 20px;
+        .bl_personInfor_form{
+            @include flex-column;
+            gap: 30px;
+            &_inner{
+                .bl_personInfor_header{
+                    text-transform: capitalize;
+                    font-family: "Open Sans", sans-serif;
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+                .bl_personInfor_divider{
+                    margin: 15px 0;
+                }
+                .bl_personInfor_body{
+                    display: flex;
+                    &_background{
+                        @include flex-column-center;
+                        justify-content: start;
+                        .bl_personInfor_background_avatar{
+                            width: 150px;
+                            height: 150px;
+                        }
+                    }
+                    &_divider{
+                        margin: 0 30px;
+                    }
+                }
+            }
+
+            .bl_btn__login{
+                display: flex;
+                justify-content: end;
+
+                button{
+                    padding: 10 20px;
+                }
+            }
+        }
+    }
+}
+
+.bl_select_form{
+    font-weight: bold;
+    margin-top: 16px;
+    margin-bottom: 8px;
 }

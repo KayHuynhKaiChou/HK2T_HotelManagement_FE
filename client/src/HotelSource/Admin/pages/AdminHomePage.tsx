@@ -6,6 +6,7 @@ import DashboardAdmin from '../components/DashboardAdmin';
 import UserAdmin from '../components/UserAdmin';
 import NavbarLeftAdmin from '../components/NavbarLeftAdmin';
 import HeaderMenuAdmin from '../components/HeaderMenuAdmin';
+import ProfileAdmin from '../components/ProfileAdmin';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -33,6 +34,9 @@ export default function AdminHomePage() {
       case 'users':
         setMenuComp(<UserAdmin/>)
         break;
+      case 'profile':
+        setMenuComp(<ProfileAdmin/>)
+        break;
       default:
         setMenuComp(<></>)
         break;
@@ -42,8 +46,8 @@ export default function AdminHomePage() {
   return (
     <Box sx={{ display: 'flex' }}>
       <HeaderMenuAdmin
-        open = {open}
-        onToggleNavbar = {handleToggleNavbar}
+        open={open}
+        onToggleNavbar={handleToggleNavbar}
       />
       <NavbarLeftAdmin
         open = {open}

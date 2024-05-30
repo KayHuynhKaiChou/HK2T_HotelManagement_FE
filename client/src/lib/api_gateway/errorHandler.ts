@@ -16,9 +16,9 @@ export function errorHandler(
         case 422:
             return defaultHandler;
         case 401:
-            abortController.abort();
-            alert('xác thực đã hết hạn . Làm mới trang');
-            window.document.location.reload();
+            // abortController.abort();
+            // alert('xác thực đã hết hạn . Làm mới trang');
+            // window.document.location.reload();
             return defaultHandler;
         case 403:
             abortController.abort();

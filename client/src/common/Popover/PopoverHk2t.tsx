@@ -1,31 +1,55 @@
 import { Popover } from "@mui/material";
-import { useState } from "react";
+import { ReactElement, forwardRef, useImperativeHandle, useMemo, useState } from "react";
 
-interface PropsPopover{
+interface PopoverProps{
     id : string;
-
+    children : ReactElement;
 }
 
-export default function PopoverHk2t({
-    id
-} : PropsPopover) {
-    const [isOpen , setIsOpen] = useState(false);
+export interface PopoverHandle{
+    onOpen : (event: React.MouseEvent<HTMLElement>) => void;
+    onClose : () => void;
+}
 
-    function handleClose(){
-        setIsOpen(false)
+const PopoverHk2t = forwardRef<PopoverHandle , PopoverProps>((props , ref) => {
+    const { id , children } = props;
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+    function onOpen(event: React.MouseEvent<HTMLElement>){
+        setAnchorEl(event.currentTarget)
     }
+
+    function onClose(){
+        setAnchorEl(null)
+    }
+
+    useImperativeHandle(ref , () => ({
+        onOpen: (event: React.MouseEvent<HTMLElement>) => onOpen(event),
+        onClose: () => onClose()
+    }))
+
+    const isOpen = useMemo(() => {
+        return !!anchorEl
+    },[anchorEl])
 
     return (
         <Popover
             id={id}
+            anchorEl={anchorEl}
             open={isOpen}
-            onClose={handleClose}
+            onClose={onClose}
             anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
             }}
         >
-            aaaaaaaaaaaaaaaa
+            {children}
         </Popover>
     )
-}
+})
+
+export default PopoverHk2t

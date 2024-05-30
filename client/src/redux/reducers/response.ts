@@ -4,7 +4,6 @@ import { ResponseAction, responseType } from "../constants/responseType"
 const initState : ResponseFormat = {
     isLoading: false,
     message: '',
-    error: '',
     status: 0
 }
 export function responseReducer( 
@@ -27,8 +26,7 @@ export function responseReducer(
             return {
                 ...initState,
                 status : action.payload?.status!,
-                message : action.payload?.message!,
-                error : action.payload?.error
+                message : action.payload?.message!
             }
         default:
             return state

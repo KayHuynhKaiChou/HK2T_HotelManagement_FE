@@ -10,6 +10,7 @@ import { StyledComponent } from "@emotion/styled";
 import MuiDrawer from '@mui/material/Drawer';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import PersonInforAdmin from "./PersonInforAdmin";
 
 interface NavbarLeftAdminProps {
     open : boolean,
@@ -60,11 +61,12 @@ export default function NavbarLeftAdmin({ open , DrawerHeader } : NavbarLeftAdmi
     const navigate = useNavigate();
 
     return (
-        <Drawer className='un_menuAdmin' variant="permanent" open={open}>
+        <Drawer className='un_navbarLeft' variant="permanent" open={open}>
             <DrawerHeader>
                 <Icon className={`fa fa-paw un_hotelIcon__custom ${open ? '' : 'un_hotelIcon__customClose'}`} />
                 <Typography variant='h5'>HK2T HOTEL &</Typography>
             </DrawerHeader>
+            {open && <PersonInforAdmin />}
             <Divider />
             <List>
                 {listMenuAdmin.map(({ name, endpoint, Icon }) => (

@@ -1,10 +1,10 @@
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import { drawerWidth } from '../../../utils/constants';
+import PersonInforAdmin from './PersonInforAdmin';
 
 
 interface AppBarProps extends MuiAppBarProps {
@@ -37,7 +37,7 @@ interface HeaderMenuAdminProps {
 export default function HeaderMenuAdmin({ open , onToggleNavbar } : HeaderMenuAdminProps) {
     return (
         <AppBar position="fixed" open={open}>
-            <Toolbar>
+            <Toolbar className='un_headerMenu'>
                 <IconButton
                     aria-label="open drawer"
                     onClick={onToggleNavbar}
@@ -49,9 +49,9 @@ export default function HeaderMenuAdmin({ open , onToggleNavbar } : HeaderMenuAd
                 >
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" noWrap component="div">
-
-                </Typography>
+                <div className="un_headerMenu_inner">
+                    <PersonInforAdmin isShowDropdown={true}/>
+                </div>
             </Toolbar>
         </AppBar>
     )

@@ -8,7 +8,8 @@ interface propsButton extends Partial<CustomButtonType>{
     typeCustom ?: 'normal' | 'icon';
     colorCustom ?: ColorButtonCustom;
     content ?: string;
-    Icon ?: any
+    Icon ?: any;
+    isUseForm ?: boolean;
 }
 
 export default function ButtonHk2t({
@@ -19,7 +20,8 @@ export default function ButtonHk2t({
     disabled = false,
     size = 'small',
     Icon,
-    colorCustom = colorsBtnCustom['primary']
+    colorCustom = colorsBtnCustom['primary'],
+    isUseForm = false
 } : propsButton) {
 
     const ButtonIconCustom = styled(IconButton)({
@@ -45,6 +47,7 @@ export default function ButtonHk2t({
                     endIcon={endIcon}
                     disabled={disabled}
                     size={size}
+                    type={isUseForm ? 'submit' : 'button'}
                 >
                     { content }
                 </ButtonCustom>

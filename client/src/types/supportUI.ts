@@ -1,3 +1,5 @@
+import { User } from "./models";
+
 export interface ColorButtonCustom {
     background : string;
     borderColor : string;
@@ -30,8 +32,11 @@ export interface OptionSelect {
 
 export interface propsTypeButton {
     id: string;
+    form?: any;
     label: string;
-    checked: boolean;
-    disabled: boolean;
+    value?: string | number;
+    name: string;
+    checked?: boolean;
+    disabled?: boolean;
     onChange: () => void
 }

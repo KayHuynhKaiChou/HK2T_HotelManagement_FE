@@ -5,9 +5,11 @@
 .un_input_wrap{
     margin-bottom: 10px;
     @include flex-column;
+
     .un_input_label{
         color: #707e9c;
         font-weight: bold;
+        text-transform: capitalize;
     }
 
     .un_input{

@@ -186,6 +186,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
     }
     
     const handleChangePageSizeOption = (value : OptionSelect['value']) => {
+        console.log({value})
         setPageSizeOption(value);
     }
 
@@ -220,6 +221,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
                     <div className="bl_selectLimit">
                         <div className="bl_subText">Hiển thị</div>
                         <SelectHk2t
+                            name="select_total_number_row_per_page"
                             options={pageSizeOptions}
                             value={pageSizeOption}
                             onChange={handleChangePageSizeOption}
@@ -240,6 +242,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
                             />
                         ) : (
                             <SelectHk2t
+                                name='select_range'
                                 className="bl_searchTable_select"
                                 options={mapCriteriaToOptionSelect(columnDetail.criteria)}
                                 value={selectedCriteria ? selectedCriteria.join('-') : ''}
@@ -248,6 +251,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
                         )
                     }
                     <SelectHk2t
+                        name="select_field"
                         className="bl_searchTable_select"
                         options={mapColumnsToOptions(columns)}
                         value={selectedIdColumnDetail}

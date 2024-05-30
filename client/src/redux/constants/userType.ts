@@ -1,10 +1,12 @@
 import { Action } from "redux";
 import { User } from "../../types/models";
 
-type keyUserType = 'UPDATE' | 'RESET'
-type valueUserType = 'UPDATE_USER' | 'RESET_USER'
+type keyUserType = 'SIGN_IN' | 'SHOW' | 'UPDATE' | 'RESET'
+type valueUserType = 'SIGN_IN_USER' | 'SHOW_USER' | 'UPDATE_USER' | 'RESET_USER'
 
 export const userType : Record<keyUserType , valueUserType> = {
+    SIGN_IN : 'SIGN_IN_USER',
+    SHOW : 'SHOW_USER',
     UPDATE : 'UPDATE_USER',
     RESET : 'RESET_USER'
 } as const

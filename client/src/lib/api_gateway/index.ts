@@ -66,9 +66,7 @@ export default class GateWay {
     }
 
     authHeader(){
-        return {
-            'Authorization' : `Bearer ${this.accessToken}`
-        }
+        return {'Authorization' : `Bearer ${this.accessToken}`}
     }
 
     async get(params: URLParams) {
@@ -81,7 +79,7 @@ export default class GateWay {
             path,
             {
                 method : 'GET',
-                headers : defaultHeader,
+                headers : {...defaultHeader , ...this.authHeader()},
                 signal: abortController.signal
             }
         )
@@ -100,7 +98,7 @@ export default class GateWay {
                 path,
                 {
                     method : 'POST',
-                    headers : defaultHeader,
+                    headers : {...defaultHeader , ...this.authHeader()},
                     body : requestParams,
                     signal: abortController.signal
                 }
@@ -110,7 +108,7 @@ export default class GateWay {
                 path,
                 {
                     method : 'POST',
-                    headers : defaultHeader,
+                    headers : {...defaultHeader , ...this.authHeader()},
                     body : JSON.stringify(requestParams),
                     signal: abortController.signal
                 }

@@ -14,7 +14,7 @@ export default function AdminSigninPage() {
   const [msgSignin , setMsgSignin] = useState<string>('');
 
   const handleSignIn = async (formSignin : Account) => {
-    dispatch(userAction.updateUser(formSignin) as any)
+    dispatch(userAction.signInUser(formSignin) as any)
   }
 
   const handleResetMsgSignin = () => {

@@ -3,26 +3,27 @@ export interface Account {
     password : string
 } 
 
-export interface User extends Account{
-    id ?: number,
-    firstname ?: string,
-    surname ?: string,
-    city ?: string,
-    district ?: string,
-    ward ?: string,
-    address ?: string,
-    phone ?: string,
-    id_card ?: string,
-    birth_day ?: string,
-    gender ?: 'MALE' | 'FEMALE' | 'OTHER',
+export interface User {
+    id ?: number;
+    firstname : string;
+    surname : string;
+    email : Account['email'];
+    city ?: string;
+    district ?: string;
+    ward ?: string;
+    address ?: string;
+    phone ?: string;
+    birth_day ?: string;
+    gender ?: 1 | 2;
     position ?: 'CUSTOMER' | 'ADMIN' | 'HOUSEKEEPER' | 'RECEPTIONIST'
-    salary ?: number,
-    link_avatar ?: string,
-    booked_rooms ?: Room[]
+    salary ?: number;
+    link_avatar ?: string;
+    token ?: string;
+    booked_rooms ?: Room[];
 }
 
 export interface Room {
-    id ?: number,
+    id ?: number;
     type_room : TypeRoom,
     room_number ?: number,
     checkin_at : string,
