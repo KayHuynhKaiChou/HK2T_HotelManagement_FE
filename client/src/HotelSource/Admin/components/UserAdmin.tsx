@@ -1,14 +1,18 @@
-import { useState } from "react";
-import RadioBtnHK2t from "../../../common/RadioBtnHK2t";
 import TableHk2t from "../../../common/Table/TableHk2t";
-import { uuid } from "../../../utils";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { colorsBtnCustom } from "../../../utils/constants";
-import { ColumnTypeProps } from "../../../types/supportUI";
-import CheckboxHk2t from "../../../common/CheckboxHk2t";
+import { ColumnType, ColumnTypeProps } from "../../../types/supportUI";
+import { useMutation, useQuery} from '@tanstack/react-query';
+import { uuid } from "../../../utils";
+import GateWay from "../../../lib/api_gateway";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/reducers";
+import { User } from "../../../types/models";
+import { useMemo } from "react";
 
 export default function UserAdmin() {
+  const {user} = useSelector<RootState , RootState>(state => state);
   function createData(
     name: string,
     calories: number,
@@ -31,81 +35,54 @@ const rows = [
   createData("Juice lomen", 116, 6.0, 19, 3.4 , <ButtonHk2t />)
 ];
 
-const columns : ColumnTypeProps[] = [
-  {
-    id : '1',
-    nameCol : "name",
-    isSorted : true
-  },
-  {
-    id : '2',
-    nameCol : "calories",
-    isSorted : true,
-    criteria : [
+  const fetchGetAllUser = async () => {
+    const gateway = new GateWay('admin' , user.token)
+    const res = await gateway.get({action : 'show'});
+    return res.result
+  }
+
+  const queryAllUser = useQuery<User[]>({queryKey : [`all-user-${uuid()}`] , queryFn: fetchGetAllUser });
+  const {data : listUsers} = queryAllUser;
+
+  const columns = useMemo<ColumnType[]>(() => {
+    return [
       {
-        label : 'Từ 100 đến 300',
-        condition : [100,300]
+        id : `field-fullName-${uuid()}`,
+        nameCol : 'fullName'
       },
       {
-        label : 'Từ 300 đến 600',
-        condition : [300,600]
+        id : `field-email-${uuid()}`,
+        nameCol : 'email'
+      },
+      {
+        id : `field-phone-${uuid()}`,
+        nameCol : 'phone'
+      },
+      {
+        id : `field-gender-${uuid()}`,
+        nameCol : 'gender'
+      },
+      {
+        id : `field-position-${uuid()}`,
+        nameCol : 'position'
+      },
+      {
+        id : `field-status-${uuid()}`,
+        nameCol : 'status'
+      },
+      {
+        id : `field-action-${uuid()}`,
+        nameCol : 'action'
       }
     ]
-  },
-  {
-    id : '3',
-    nameCol : "fat",
-    isSorted : true
-  },
-  {
-    id : '4',
-    nameCol : "carbs",
-    isSorted : true
-  },
-  {
-    id : '5',
-    nameCol : "protein",
-    isSorted : true
-  },
-  {
-    id : '6',
-    nameCol : "action"
-  }
-]
-// test radio
-const options = ['month' , 'year']
-const [value , setValue] = useState('month');
-const handleChangeValue = (value : string ) => {
-  console.log(value)
-  setValue(value)
-}
-// test checkbox
-const checkboxDemo = [
-  {
-    label : 'abcd',
-    checked : true
-  },
-  {
-    label : 'efgh',
-    checked : false
-  }
-]
+  },[])
+  
+  const Width = ({ children }) => children(500)
 
-const [checkBox , setCheckBox] = useState(checkboxDemo);
-
-const handleCheckbox = (c : {label : string , checked : boolean}) => {
-  const eee = checkBox.find(ch => ch.label == c.label)
-  if(eee){
-    eee.checked = !c.checked
-    setCheckBox([...checkBox])
-  }
-}
-
-const Width = ({ children }) => children(500)
   return (
     <div>
       <TableHk2t
-        rows={[...rows,...rows]}
+        rows={listUsers!}
         columns={columns}
         pageSizeOptions={
           [
@@ -124,24 +101,6 @@ const Width = ({ children }) => children(500)
           ]
         }
       />
-      {options.map((o,i) => (
-        <RadioBtnHK2t
-          id={uuid()}
-          label={o}
-          checked={o === value}
-          disabled={false}
-          onChange={() => handleChangeValue(o)}
-        />
-      ))}
-      {checkBox.map((c,i) => (
-        <CheckboxHk2t
-          id={i+'abc'}
-          disabled={false}
-          checked={c.checked}
-          label={c.label}
-          onChange={() => handleCheckbox(c)}
-        />
-      ))}
       <Width>
         {width => <div>window is {width}</div>}
       </Width>

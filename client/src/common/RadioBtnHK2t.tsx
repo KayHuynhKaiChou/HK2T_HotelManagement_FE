@@ -25,8 +25,8 @@ export default function RadioBtnHK2t({
           type="radio" 
           className="un_radio"
           value={value}
-          checked = {checked}
-          {...form.register(name, { valueAsNumber: true })}
+          checked={checked}
+          //{...form.register(name, { valueAsNumber: true })}
         />
       )
     }else{

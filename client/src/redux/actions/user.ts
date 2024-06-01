@@ -5,6 +5,7 @@ import { ResponseAction, responseType } from "../constants/responseType"
 import { UserAction, userType } from "../constants/userType"
 import { Action } from 'redux';
 import { RootState } from "../reducers";
+import { FormPassword } from "../../types/form";
 
 export type UserThunkAction<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<UserAction['type'] | ResponseAction['type']>>;
 
@@ -100,8 +101,40 @@ const updateUser = (updatedProfile : User) : UserThunkAction => {
     }
 }
 
+const changePassword = (password : FormPassword) : UserThunkAction => {
+    return async (dispatch , getState) => {
+        const {user} = getState();
+        dispatch({ type : responseType.START })
+        const gateway = new GateWay('user' , user.token);
+        const passwordPayload = {
+            old_password : password.oldPassword,
+            new_password : password.newPassword
+        }
+        const response = await gateway.post({action : 'change-password'} , passwordPayload);
+ 
+        if (response.status == 200){
+            dispatch({
+                type : responseType.SUCCESS,
+                payload : {
+                    status : response.status,
+                    message : response.message
+                }
+            })
+        }else{
+            dispatch({
+                type : responseType.FAILURE,
+                payload : {
+                    status : response.status,
+                    message : response.message
+                }
+            })
+        }
+    }
+}
+
 export const userAction = {
     signInUser,
     showInforUser,
     updateUser,
+    changePassword
 }

@@ -21,3 +21,9 @@ export interface FormUserEmployee extends CustomUser {
     district : OptionSelect;
     ward : OptionSelect;
 }
+
+export interface FormPassword {
+    oldPassword : string;
+    newPassword : string;
+    confirmPassword : string;
+}

@@ -1,13 +1,15 @@
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import { store } from './redux/store.ts'
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import { store } from './redux/store.ts';
 import { Provider } from "react-redux";
-import './styles/index.scss'
-import {CssBaseline , ThemeProvider , createTheme, StyledEngineProvider} from '@mui/material'
+import {CssBaseline , ThemeProvider , createTheme, StyledEngineProvider} from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+import './styles/index.scss';
 import '@fortawesome/fontawesome-free/css/all.css';
 import '../src/styles/applicationCommonStyle.scss';
 import './HotelSource/Admin/styles/applicationAdminStyle.scss';
 import './HotelSource/Customer/styles/applicationCustomerStyle.scss'
+import 'react-toastify/dist/ReactToastify.css';
 
 const theme = createTheme({
   palette: {
@@ -21,6 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <App />
+        <ToastContainer/>
       </ThemeProvider>
     </StyledEngineProvider>
   </Provider>

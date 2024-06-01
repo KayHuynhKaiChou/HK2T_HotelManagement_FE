@@ -45,6 +45,7 @@
             cursor: pointer;
             @include flex-center;
             position: relative;
+            font-weight: 600;
 
             &::before{
                 content: '';

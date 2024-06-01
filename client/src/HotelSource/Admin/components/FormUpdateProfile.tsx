@@ -1,4 +1,4 @@
-import { useForm  , SubmitHandler, useWatch} from 'react-hook-form'
+import { useForm  , SubmitHandler, useWatch, UseFormReturn} from 'react-hook-form'
 import { Avatar, Divider, Grid } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -8,7 +8,7 @@ import SelectHk2t from '../../../common/SelectHk2t';
 import provinces from '../../../data/provinces.json';
 import districts from '../../../data/districts.json';
 import wards from '../../../data/wards.json';
-import { useEffect, useMemo } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
 import RadioBtnHK2t from '../../../common/RadioBtnHK2t';
 import { uuid } from '../../../utils';
 import { defaultGenders } from '../../../utils/constants';
@@ -21,7 +21,11 @@ interface FormUpdateProfileProps {
     onUpdateProfile : (values : FormUserEmployee) => void;
 }
 
-export default function FormUpdateProfile(props : FormUpdateProfileProps) {
+export interface FormUpdateProfileHandle {
+    form : UseFormReturn<FormUserEmployee>
+}
+
+const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfileProps>((props , ref) => {
     const {user , onUpdateProfile} = props;
 
     const schema = yup.object({
@@ -61,7 +65,7 @@ export default function FormUpdateProfile(props : FormUpdateProfileProps) {
         ward : {label : '---Choose ward---' , value : ''},
     }
 
-    const generateFirstFormProfile = () => {
+    const generateFirstFormProfile = (): FormUserEmployee => {
         const provinceName = provinces.find(p => p.province_id.toString() == user.city)?.province_name 
         const districtName = districts.find(d => d.district_id.toString() == user.district)?.district_name 
 
@@ -88,10 +92,13 @@ export default function FormUpdateProfile(props : FormUpdateProfileProps) {
     }
 
     // hook form
-    const form = useForm({
+    const form : UseFormReturn<FormUserEmployee> = useForm({
         defaultValues: generateFirstFormProfile(),
         resolver: yupResolver(schema)
     })
+
+    // useImperativeHandle hook
+    useImperativeHandle(ref , () => ({ form }))
 
     // useWatch
     const selectedGender = useWatch({
@@ -199,19 +206,45 @@ export default function FormUpdateProfile(props : FormUpdateProfileProps) {
                     <Divider className="bl_personInfor_body_divider" orientation='vertical' flexItem/>
                     <Grid container columnSpacing={3}>
                         <Grid item sm={4}>
-                            <InputHk2t label='firstname' name='firstname' placeholder='firstname' form={form} />
+                            <InputHk2t 
+                                label='firstname' 
+                                name='firstname' 
+                                placeholder='firstname' 
+                                form={form} 
+                            />
                         </Grid>
                         <Grid item sm={4}>
-                            <InputHk2t label='surname' name='surname' placeholder='Email' form={form} />
+                            <InputHk2t 
+                                label='surname' 
+                                name='surname' 
+                                placeholder='Email' 
+                                form={form} 
+                            />
                         </Grid>
                         <Grid item sm={4}>
-                            <InputHk2t label='email' name='email' placeholder='Password' form={form} />
+                            <InputHk2t 
+                                label='email' 
+                                name='email' 
+                                placeholder='Password' 
+                                form={form} 
+                            />
                         </Grid>
                         <Grid item sm={4}>
-                            <InputHk2t label='phone' name='phone' placeholder='Password' form={form} />
+                            <InputHk2t 
+                                label='phone' 
+                                name='phone' 
+                                placeholder='Password' 
+                                form={form} 
+                            />
                         </Grid>
                         <Grid item sm={4}>
-                            <InputHk2t label='birth_day' name='birth_day' typeInput='date' placeholder='Password' form={form} />
+                            <InputHk2t 
+                                label='birth day' 
+                                name='birth_day' 
+                                typeInput='date' 
+                                placeholder='select birthdate' 
+                                form={form} 
+                            />
                         </Grid>
                         <Grid item sm={6} container alignItems={"center"}>
                             <Grid
@@ -248,16 +281,39 @@ export default function FormUpdateProfile(props : FormUpdateProfileProps) {
                 <Divider className="bl_personInfor_divider"/>
                 <Grid container columnSpacing={3}>
                     <Grid item sm={4}>
-                        <SelectHk2t options={optionProvinces} label='city' name='city' placeholder='city' form={form} />
+                        <SelectHk2t 
+                            options={optionProvinces} 
+                            label='city' 
+                            name='city' 
+                            placeholder='city' 
+                            form={form} 
+                        />
                     </Grid>
                     <Grid item sm={4}>
-                        <SelectHk2t options={optionDistrict} label='district' name='district' placeholder='district' form={form} />
+                        <SelectHk2t 
+                            options={optionDistrict} 
+                            label='district' 
+                            name='district' 
+                            placeholder='district' 
+                            form={form} 
+                        />
                     </Grid>
                     <Grid item sm={4}>
-                        <SelectHk2t options={optionWards} label='ward' name='ward' placeholder='ward' form={form} />
+                        <SelectHk2t 
+                            options={optionWards} 
+                            label='ward' 
+                            name='ward' 
+                            placeholder='ward' 
+                            form={form} 
+                        />
                     </Grid>
                     <Grid item sm={4}>
-                        <InputHk2t label='address' name='address' placeholder='address' form={form} />
+                        <InputHk2t 
+                            label='address' 
+                            name='address' 
+                            placeholder='address' 
+                            form={form} 
+                        />
                     </Grid>
                 </Grid>
             </div>
@@ -265,8 +321,11 @@ export default function FormUpdateProfile(props : FormUpdateProfileProps) {
                 <ButtonHk2t
                     variant="contained"
                     content='update profile'
+                    isUseForm={true}
                 /> 
             </div>
         </form>
     )
-}
+})
+
+export default FormUpdateProfile
