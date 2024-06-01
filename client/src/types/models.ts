@@ -15,9 +15,10 @@ export interface User {
     phone ?: string;
     birth_day ?: string;
     gender ?: 1 | 2;
-    position ?: 'CUSTOMER' | 'ADMIN' | 'HOUSEKEEPER' | 'RECEPTIONIST'
+    position ?: 1 | 2 | 3 | 4;
     salary ?: number;
     link_avatar ?: string;
+    status ?: 0 | 1;
     token ?: string;
     booked_rooms ?: Room[];
 }

@@ -5,7 +5,7 @@ import { colorsBtnCustom } from "../utils/constants";
 
 type CustomButtonType = Omit<React.ComponentProps<typeof Button> , "color" | "type">
 interface propsButton extends Partial<CustomButtonType>{
-    typeCustom ?: 'normal' | 'icon';
+    typeCustom ?: 'normal' | 'icon'; // 'icon' => use Icon field , 'normal' => use startIcon , endIcon
     colorCustom ?: ColorButtonCustom;
     content ?: string;
     Icon ?: any;

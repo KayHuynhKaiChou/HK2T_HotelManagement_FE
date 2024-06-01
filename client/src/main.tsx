@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import { store } from './redux/store.ts';
 import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {CssBaseline , ThemeProvider , createTheme, StyledEngineProvider} from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import './styles/index.scss';
@@ -18,14 +19,16 @@ const theme = createTheme({
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Provider store={store}>
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-        <ToastContainer/>
-      </ThemeProvider>
-    </StyledEngineProvider>
-  </Provider>
+  <QueryClientProvider client={new QueryClient()}>
+    <Provider store={store}>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+          <ToastContainer/>
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </Provider>
+  </QueryClientProvider>
 )
 

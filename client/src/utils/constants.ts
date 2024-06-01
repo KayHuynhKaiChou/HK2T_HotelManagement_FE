@@ -1,5 +1,6 @@
 import HouseIcon from '@mui/icons-material/House';
 import PersonIcon from '@mui/icons-material/Person';
+import { OptionSelect } from '../types/supportUI';
 
 export const listMenuAdmin = [
     {
@@ -102,4 +103,23 @@ export const namesImageBanner = ['viewHotel' , 'roomHotel' , 'swimmingPoolHotel'
 export const defaultGenders : string[] = [
     'MALE',
     'FEMALE'
+]
+
+export const defaultPositions = [
+    'ADMIN' , 'HOUSEKEEPER' , 'RECEPTIONIST' , 'CUSTOMER'
+]
+
+export const defaultPageSizeOptions : OptionSelect[] = [
+    {
+      label : '5',
+      value : 5
+    },
+    {
+      label : '10',
+      value : 10
+    },
+    {
+      label : '15',
+      value : 15
+    },
 ]

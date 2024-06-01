@@ -12,7 +12,8 @@ type CustomUser = Required<
         "position" |
         "city" |
         "district" |
-        "ward"
+        "ward" |
+        "status"
     >
 >
 

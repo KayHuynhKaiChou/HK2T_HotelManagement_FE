@@ -1,7 +1,7 @@
 import TableHk2t from "../../../common/Table/TableHk2t";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { colorsBtnCustom } from "../../../utils/constants";
+import { colorsBtnCustom, defaultPageSizeOptions, defaultPositions } from "../../../utils/constants";
 import { ColumnType, ColumnTypeProps } from "../../../types/supportUI";
 import { useMutation, useQuery} from '@tanstack/react-query';
 import { uuid } from "../../../utils";
@@ -10,30 +10,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/reducers";
 import { User } from "../../../types/models";
 import { useMemo } from "react";
+import LoadingHk2t from "../../../common/LoadingHk2t";
+import { Grid, Switch } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
 
 export default function UserAdmin() {
   const {user} = useSelector<RootState , RootState>(state => state);
-  function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-    action: JSX.Element | HTMLElement
-  ) {
-      return { name, calories, fat, carbs, protein, action };
-  }
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0 , 
-    <ButtonHk2t/>
-  ),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, <ButtonHk2t typeCustom="icon" Icon={DeleteIcon} colorCustom={colorsBtnCustom['primary']}/>),
-  createData("Eclair", 262, 16.0, 24, 6.0, <ButtonHk2t/>),
-  createData("Cupcake", 305, 3.7, 67, 4.3 , <ButtonHk2t/>),
-  createData("Gingerbread", 356, 16.0, 49, 3.9 , <ButtonHk2t />),
-  createData("Juice lomen", 116, 6.0, 19, 3.4 , <ButtonHk2t />)
-];
 
   const fetchGetAllUser = async () => {
     const gateway = new GateWay('admin' , user.token)
@@ -41,8 +23,15 @@ const rows = [
     return res.result
   }
 
-  const queryAllUser = useQuery<User[]>({queryKey : [`all-user-${uuid()}`] , queryFn: fetchGetAllUser });
-  const {data : listUsers} = queryAllUser;
+  const queryKey = useMemo(() => {
+    return `all-user-${uuid()}`
+  },[])
+
+  const queryAllUser = useQuery<User[]>({queryKey : [queryKey] , queryFn: fetchGetAllUser });
+  const {
+    data : listUsers , 
+    isLoading : isLoadingListUsers
+  } = queryAllUser;
 
   const columns = useMemo<ColumnType[]>(() => {
     return [
@@ -68,45 +57,68 @@ const rows = [
       },
       {
         id : `field-status-${uuid()}`,
-        nameCol : 'status'
+        nameCol : 'status',
+        width : 80
       },
       {
         id : `field-action-${uuid()}`,
-        nameCol : 'action'
+        nameCol : 'action',
+        width : 200
       }
     ]
   },[])
+
+  const rows = useMemo(() => {
+    if(!listUsers) return [];
+    return listUsers
+      .map(user => {
+        return {
+          fullName : user.firstname + ' ' + user.surname,
+          email : user.email,
+          phone : user.phone || 'Not yet',
+          gender : user.gender == 1 ? 'Male' : 'Female',
+          position : defaultPositions[user.position! - 1],
+          status : <Switch defaultChecked={!!user.status} />,
+          action : (
+            <Grid container spacing={2}>
+              <Grid item sm={4}>
+                <ButtonHk2t
+                  typeCustom="icon"
+                  Icon={Edit}
+                />
+              </Grid>
+              <Grid item sm={4}>
+                <ButtonHk2t
+                  typeCustom="icon"
+                  Icon={Delete}
+                  colorCustom={colorsBtnCustom['danger']}
+                />
+              </Grid>
+            </Grid>
+          )
+        }
+      })
+  },[listUsers])
   
-  const Width = ({ children }) => children(500)
+  //const Width = ({ children }) => children(500)
 
   return (
     <div>
-      <TableHk2t
-        rows={listUsers!}
-        columns={columns}
-        pageSizeOptions={
-          [
-            {
-              label : '5',
-              value : 5
-            },
-            {
-              label : '10',
-              value : 10
-            },
-            {
-              label : '15',
-              value : 15
-            },
-          ]
-        }
-      />
-      <Width>
+      {
+        isLoadingListUsers 
+        ? <LoadingHk2t/> 
+        : <TableHk2t
+          rows={rows}
+          columns={columns}
+          pageSizeOptions={defaultPageSizeOptions}
+        />
+      }
+      {/* <Width>
         {width => <div>window is {width}</div>}
       </Width>
       <div>
         {["Hello ", <span>World</span>, "!"]}
-      </div>
+      </div> */}
     </div>
   )
 }
