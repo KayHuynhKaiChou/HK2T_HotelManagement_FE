@@ -13,7 +13,7 @@ function Navbar() {
     >
       <Container 
         maxWidth="xl"
-        className="bl_navbarCustomer_container"
+        className="bl_navbarCustomer_container un_paddingDefault"
       >
         <Toolbar 
           disableGutters
