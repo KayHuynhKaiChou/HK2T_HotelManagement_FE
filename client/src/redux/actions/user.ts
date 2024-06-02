@@ -5,14 +5,14 @@ import { ResponseAction, responseType } from "../constants/responseType"
 import { UserAction, userType } from "../constants/userType"
 import { Action } from 'redux';
 import { RootState } from "../reducers";
-import { FormPassword } from "../../types/form";
+import { FormPassword, FormSignup } from "../../types/form";
 
 export type UserThunkAction<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<UserAction['type'] | ResponseAction['type']>>;
 
-const signInUser = (formSignin : Account) : UserThunkAction => {
+const signInUser = (formSignin : Account , resource : string) : UserThunkAction => {
     return async (dispatch) => {
         dispatch({ type : responseType.START })
-        const gateway = new GateWay('employee');
+        const gateway = new GateWay(resource);
         const response = await gateway.post({action : 'sign-in'} , formSignin);
  
         if (response.status == 200){
@@ -25,6 +25,36 @@ const signInUser = (formSignin : Account) : UserThunkAction => {
             })
             dispatch({
                 type : userType.SIGN_IN,
+                payload : response.result
+            })
+        }else{
+            dispatch({
+                type : responseType.FAILURE,
+                payload : {
+                    status : response.status,
+                    message : response.message
+                }
+            })
+        }
+    }
+}
+
+const signUpUser = (formSignup : Omit<FormSignup , 'confirmPassword'> , resource : string) : UserThunkAction => {
+    return async (dispatch) => {
+        dispatch({ type : responseType.START })
+        const gateway = new GateWay(resource);
+        const response = await gateway.post({action : 'sign-up'} , formSignup);
+ 
+        if (response.status == 200){
+            dispatch({
+                type : responseType.SUCCESS,
+                payload : {
+                    status : response.status,
+                    message : response.message
+                }
+            })
+            dispatch({
+                type : userType.SIGN_UP,
                 payload : response.result
             })
         }else{
@@ -134,6 +164,7 @@ const changePassword = (password : FormPassword) : UserThunkAction => {
 
 export const userAction = {
     signInUser,
+    signUpUser,
     showInforUser,
     updateUser,
     changePassword

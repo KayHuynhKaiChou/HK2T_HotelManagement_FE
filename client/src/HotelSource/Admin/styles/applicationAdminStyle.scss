@@ -207,6 +207,7 @@
         font-weight: bold;
         display: flex;
         gap: 8px;
+        text-transform: capitalize;
 
         &:hover{
             cursor: pointer;

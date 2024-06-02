@@ -10,7 +10,8 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'sign-in' : '/employee/sign-in'
     },
     'customer' : {
-        'sign-in' : '/customer/sign-in'
+        'sign-in' : '/customer/sign-in',
+        'sign-up' : '/customer/sign-up'
     },
     'admin' : {
         'show' : '/admin/user/list'

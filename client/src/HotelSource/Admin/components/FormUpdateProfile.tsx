@@ -30,15 +30,15 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
 
     const schema = yup.object({
         firstname: yup.string()
-        .required('Please enter firstname !'),
+                .required('Please enter firstname !'),
         surname: yup.string()
-        .required('Please enter surname !'),
+                .required('Please enter surname !'),
         email: yup.string()
-        .required('Please enter email !'),
+                .required('Please enter email !'),
         phone: yup.string()
-        .required('Please enter phone !'),
+                .required('Please enter phone !'),
         birth_day: yup.string()
-        .required('Please select date !'),
+                .required('Please select date !'),
         gender: yup.number()
                 .oneOf([1,2] as const)
                 .required(),
@@ -56,7 +56,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
             value: yup.string().required(),
         }).required('Please select ward !'),
         address: yup.string()
-        .required('Please enter current address !'),
+                .required('Please enter current address !'),
     });
 
     const defaultLocation = {

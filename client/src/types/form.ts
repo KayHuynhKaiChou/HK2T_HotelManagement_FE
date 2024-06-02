@@ -1,4 +1,4 @@
-import { User } from "./models";
+import { Account, User } from "./models";
 import { OptionSelect } from "./supportUI";
 
 type CustomUser = Required<
@@ -26,5 +26,11 @@ export interface FormUserEmployee extends CustomUser {
 export interface FormPassword {
     oldPassword : string;
     newPassword : string;
+    confirmPassword : string;
+}
+
+export interface FormSignup extends Account{
+    firstname : string;
+    surname : string;
     confirmPassword : string;
 }

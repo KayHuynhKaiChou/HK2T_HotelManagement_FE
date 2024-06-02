@@ -1,10 +1,10 @@
-import SigninForm from "../components/SigninForm";
 import { useNavigate } from "react-router-dom";
 import { Account } from "../../../types/models";
 import { useEffect, useState } from "react";
 import { useSelector , useDispatch } from 'react-redux';
 import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";
+import FormSignInCustomer from "../components/FormSignInCustomer";
 
 export default function SigninPage() {
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ export default function SigninPage() {
   const dispatch = useDispatch();
   const [msgSignin , setMsgSignin] = useState<string>('');
 
-  const handleSignIn = async (formSignin : Account) => {
-    dispatch(userAction.updateUser(formSignin) as any)
+  const handleSignIn = (formSignin : Account) => {
+    dispatch(userAction.signInUser(formSignin , 'customer') as any)
   }
 
   const handleResetMsgSignin = () => {
@@ -32,18 +32,24 @@ export default function SigninPage() {
   }, [user , response])
 
   return (
-    <div className="bl_signinPage_container">
-      <div className="bl_signinForm">
-        <div className="bl_signinForm_header">Sign in</div>
-        <div className="bl_signinForm_body">
-          <SigninForm
+    <div className="bl_signInPage_container">
+      <div className="bl_signInForm">
+        <div className="bl_signInForm_header">sign in</div>
+        <div className="bl_signInForm_msg">{msgSignin}</div>
+        <div className="bl_signInForm_body">
+          <FormSignInCustomer
             onSignIn={handleSignIn}
             onHiddenErrorMsg={handleResetMsgSignin}
           />
         </div>
-        <div className="bl_signinForm_footer">
+        <div className="bl_signInForm_footer">
           Don't have an account?
-          <div className="bl_signinForm_footer__main">sign up</div>
+          <div 
+            className="bl_signInForm_footer__main"
+            onClick={() => navigate('/sign_up')}
+          >
+            sign up
+          </div>
         </div>
       </div>
     </div>

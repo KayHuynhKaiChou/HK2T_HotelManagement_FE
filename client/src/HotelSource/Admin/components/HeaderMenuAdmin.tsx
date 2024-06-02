@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import { drawerWidth } from '../../../utils/constants';
-import PersonInforAdmin from './PersonInforAdmin';
+import PersonInfor from '../../../common/SummaryInfor/SummaryInfor';
 
 
 interface AppBarProps extends MuiAppBarProps {
@@ -50,7 +50,7 @@ export default function HeaderMenuAdmin({ open , onToggleNavbar } : HeaderMenuAd
                     <MenuIcon />
                 </IconButton>
                 <div className="un_headerMenu_inner">
-                    <PersonInforAdmin isShowDropdown={true}/>
+                    <PersonInfor isShowDropdown={true}/>
                 </div>
             </Toolbar>
         </AppBar>

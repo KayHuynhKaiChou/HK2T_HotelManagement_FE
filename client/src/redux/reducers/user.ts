@@ -11,10 +11,9 @@ export function userReducer(
     action : UserAction = { type: "UPDATE_USER", payload: null }
 ) : User {
     switch (action.type) {
-        case userType.SIGN_IN:
-            return action?.payload!
-        case userType.SHOW:
-            return action?.payload!
+        case userType.SIGN_IN: 
+        case userType.SIGN_UP:            
+        case userType.SHOW:            
         case userType.UPDATE:
             return action?.payload!
         case userType.RESET:

@@ -15,6 +15,7 @@ function FormSignInAdmin(props : FormSignInProps) {
   
   const schema = yup.object({
     email: yup.string()
+      .email('Email is wrong format !')
       .required('Please enter email !'),
     password: yup.string()
       .required('Please enter password !')
