@@ -1,25 +1,23 @@
 import { useSelector } from "react-redux";
-import FormUpdateProfile, { FormUpdateProfileHandle } from "../../../common/FormProfile/FormUpdateProfile";
+import LoadingHk2t from "../../../common/LoadingHk2t";
+import { useEffect, useRef } from "react";
 import { RootState } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
+import FormUpdateProfile, { FormUpdateProfileHandle } from "../../../common/FormProfile/FormUpdateProfile";
 import { userAction } from "../../../redux/actions/user";
-import { useEffect, useRef } from "react";
-import { FormPassword, FormUserEmployee } from "../../../types/form";
 import { User } from "../../../types/models";
-import LoadingHk2t from "../../../common/LoadingHk2t";
-import FormChangePassword, { FormChangePasswordHandle } from "./FormChangePassword";
-import { toast } from "react-toastify";
+import { FormUserEmployee } from "../../../types/form";
 import { toastMSGObject } from "../../../utils";
+import { toast } from "react-toastify";
 
-export default function ProfileAdmin() {
+export default function ProfileCustomer() {
     //redux
     const {user , response} = useSelector<RootState , RootState>(state => state);
     const dispatch = useDispatch();
 
     //ref
     const formUpdateProfile = useRef<FormUpdateProfileHandle | null>(null);
-    const formChangePassword = useRef<FormChangePasswordHandle | null>(null); 
-   
+
     //func handle submit form
     const handleUpdateProfile = (updatedProfile : FormUserEmployee) => {
         const formatUpdatedProfile : User = {
@@ -32,10 +30,6 @@ export default function ProfileAdmin() {
         dispatch(userAction.updateUser(formatUpdatedProfile) as any)
     }
 
-    const handleChangePassword = async (password : FormPassword) => {
-        dispatch(userAction.changePassword(password) as any)
-    } 
-
     //useEffect 
     useEffect(() => { // update success and show toast
         const formState = formUpdateProfile.current!.form.formState!
@@ -43,20 +37,6 @@ export default function ProfileAdmin() {
             toast.success(response.message , toastMSGObject());
         }
     },[user])
-
-    useEffect(() => { // update success and show toast
-        const formState = formChangePassword.current!.form.formState!
-        if(response.status == 200 && formState.isSubmitSuccessful){
-            formChangePassword.current?.form.reset({
-                oldPassword : '',
-                newPassword : '',
-                confirmPassword : ''
-            })
-            toast.success(response.message , toastMSGObject());
-        } else if(response.status == 400) {
-            toast.error(response.message , toastMSGObject());
-        }
-    },[response])
 
     useEffect(() => {
         dispatch(userAction.showInforUser() as any)
@@ -70,12 +50,9 @@ export default function ProfileAdmin() {
                 )}               
                 <FormUpdateProfile
                     ref={formUpdateProfile}
+                    position="CUSTUMER"
                     user={user}
                     onUpdateProfile={handleUpdateProfile}
-                />
-                <FormChangePassword
-                    ref={formChangePassword}
-                    onChangePassword={handleChangePassword}
                 />
             </div>
         </div>

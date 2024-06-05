@@ -165,14 +165,14 @@
                 }
             }
 
-            .bl_btn__login{
-                margin: 20px 0;
-                button{
-                    background-color: $color-btn-customer;
-                    width: 100%;
-                    color: #fff;
-                }
-            }
+            // .bl_btn__login{
+            //     margin: 20px 0;
+            //     button{
+            //         background-color: $color-btn-customer;
+            //         width: 100%;
+            //         color: #fff;
+            //     }
+            // }
         }
 
         &_footer{
@@ -184,6 +184,42 @@
                 color: $color-btn-customer;
                 font-weight: bold;
                 cursor: pointer;
+            }
+        }
+    }
+}
+
+// common button in form for customer
+.bl_btn__login{
+    margin: 20px 0;
+    button{
+        background-color: $color-btn-customer;
+        color: #fff;
+
+        &:hover{
+            background-color: $color-btn-customer;
+        }
+    }
+}
+
+// change color for common radio by override css
+.un_radio_wrap{
+    input.un_radio{
+        & + label{
+            &::before{
+                border-color: $color-btn-customer-second;
+            }
+            &::after{
+                background-color: $color-btn-customer;
+            }
+        }
+        &:checked + label{
+            color: $color-btn-customer;
+
+            &::before {
+                animation: ripple 0.5s linear forwards;
+                background-color: $color-btn-customer;
+                border-color: $color-btn-customer-second;
             }
         }
     }
@@ -239,7 +275,7 @@
         @include flex-center;
         align-items: flex-start;
         gap: 30px;
-        .un_personalPage_grid{
+        .un_personalPage_grid:first-child{
             padding: 15px;
             box-shadow: 0 0 20px 0 rgba(62, 28, 131, 0.1);
             border-radius: 10px;

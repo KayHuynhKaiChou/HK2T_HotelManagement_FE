@@ -2,21 +2,22 @@ import { useForm  , SubmitHandler, useWatch, UseFormReturn} from 'react-hook-for
 import { Avatar, Divider, Grid } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { User } from '../../../types/models';
-import InputHk2t from '../../../common/InputHk2t';
-import SelectHk2t from '../../../common/SelectHk2t';
-import provinces from '../../../data/provinces.json';
-import districts from '../../../data/districts.json';
-import wards from '../../../data/wards.json';
+import { User } from '../../types/models';
+import InputHk2t from '../InputHk2t';
+import SelectHk2t from '../SelectHk2t';
+import provinces from '../../data/provinces.json';
+import districts from '../../data/districts.json';
+import wards from '../../data/wards.json';
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
-import RadioBtnHK2t from '../../../common/RadioBtnHK2t';
-import { uuid } from '../../../utils';
-import { defaultGenders } from '../../../utils/constants';
-import { FormUserEmployee } from '../../../types/form';
-import UploadFileBtnHk2t from '../../../common/UploadFileBtnHk2t';
-import ButtonHk2t from '../../../common/ButtonHk2t';
+import RadioBtnHK2t from '../RadioBtnHK2t';
+import { uuid } from '../../utils';
+import { defaultGenders } from '../../utils/constants';
+import { FormUserEmployee } from '../../types/form';
+import UploadFileBtnHk2t from '../UploadFileBtnHk2t';
+import ButtonHk2t from '../ButtonHk2t';
 
 interface FormUpdateProfileProps {
+    position ?: 'CUSTUMER' | 'EMPLOYEE'
     user : User;
     onUpdateProfile : (values : FormUserEmployee) => void;
 }
@@ -26,7 +27,7 @@ export interface FormUpdateProfileHandle {
 }
 
 const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfileProps>((props , ref) => {
-    const {user , onUpdateProfile} = props;
+    const {position = 'EMPLOYEE' , user , onUpdateProfile} = props;
 
     const schema = yup.object({
         firstname: yup.string()
@@ -188,22 +189,26 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                 <div className="bl_personInfor_header">personal information</div>
                 <Divider className="bl_personInfor_divider"/>
                 <div className="bl_personInfor_body">
-                    <div className="bl_personInfor_body_background">
-                        <Avatar
-                            className='bl_personInfor_background_avatar'
-                            src={uploadedLinkImage} 
-                        />
-                        <div className="bl_personInfor_background_fullName">
-                            {`${user.firstname} ${user.surname}`}
-                        </div>
-                        <div className="bl_personInfor_background_btnUpload">
-                            <UploadFileBtnHk2t
-                                form={form}
-                                name='link_avatar'
-                            />
-                        </div>
-                    </div>
-                    <Divider className="bl_personInfor_body_divider" orientation='vertical' flexItem/>
+                    {position == 'EMPLOYEE' && (
+                        <>                       
+                            <div className="bl_personInfor_body_background">
+                                <Avatar
+                                    className='bl_personInfor_background_avatar'
+                                    src={uploadedLinkImage} 
+                                />
+                                <div className="bl_personInfor_background_fullName">
+                                    {`${user.firstname} ${user.surname}`}
+                                </div>
+                                <div className="bl_personInfor_background_btnUpload">
+                                    <UploadFileBtnHk2t
+                                        form={form}
+                                        name='link_avatar'
+                                    />
+                                </div>
+                            </div>
+                            <Divider className="bl_personInfor_body_divider" orientation='vertical' flexItem/>
+                        </>
+                    )}
                     <Grid container columnSpacing={3}>
                         <Grid item sm={4}>
                             <InputHk2t 

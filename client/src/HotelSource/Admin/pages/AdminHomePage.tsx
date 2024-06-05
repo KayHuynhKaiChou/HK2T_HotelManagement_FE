@@ -20,7 +20,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function AdminHomePage() {
   const { menu } = useParams();
   const [open, setOpen] = useState(false);
-  const [MenuComp, setMenuComp] = useState(<></>);
+  const [MenuComponent, setMenuComponent] = useState(<></>);
 
   const handleToggleNavbar = () => {
     setOpen(!open);
@@ -29,16 +29,16 @@ export default function AdminHomePage() {
   useEffect(() => {
     switch (menu) {
       case 'dashboard':
-        setMenuComp(<DashboardAdmin/>)
+        setMenuComponent(<DashboardAdmin/>)
         break;
       case 'users':
-        setMenuComp(<UserAdmin/>)
+        setMenuComponent(<UserAdmin/>)
         break;
       case 'profile':
-        setMenuComp(<ProfileAdmin/>)
+        setMenuComponent(<ProfileAdmin/>)
         break;
       default:
-        setMenuComp(<></>)
+        setMenuComponent(<></>)
         break;
     }
   },[menu])
@@ -55,7 +55,7 @@ export default function AdminHomePage() {
       />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader/>
-        {MenuComp}
+        {MenuComponent}
       </Box>
     </Box>
   );

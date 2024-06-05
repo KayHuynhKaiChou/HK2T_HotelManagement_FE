@@ -2,9 +2,25 @@ import { HistoryOutlined, LockOutlined, PersonOutline } from "@mui/icons-materia
 import { Avatar } from "@mui/material";
 import { RootState } from "../../../redux/reducers";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { ComponentType, useEffect, useState } from "react";
+import ProfileCustomer from "../components/ProfileCustomer";
 
 export default function PersonalPage() {
+    const { menu } = useParams();
     const {response , user} = useSelector<RootState , RootState>(state => state);
+    const [MenuComponent, setMenuComponent] = useState<ComponentType>(() => ProfileCustomer);
+
+    useEffect(() => {
+        switch (menu) {
+            case 'profile':
+                setMenuComponent(() => ProfileCustomer)
+                break;
+            default:
+                setMenuComponent(() => <></>)
+                break;
+        }
+    },[menu])
 
     return (
         <div className="bl_personalPage">
@@ -43,7 +59,7 @@ export default function PersonalPage() {
                     </div>
                 </div>
                 <div className="bl_personalPage_right un_personalPage_grid">
-
+                    <MenuComponent/>
                 </div>
             </div>
         </div>

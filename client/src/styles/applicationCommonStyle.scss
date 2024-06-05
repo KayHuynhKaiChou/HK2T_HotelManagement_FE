@@ -30,6 +30,10 @@
         .Mui-error fieldset{
             border-color: $color-error-msg-input !important;
         }
+
+        input[type="date"]{
+            height: 20px;
+        }
     } 
 }
 
