@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { FormPassword, FormUserEmployee } from "../../../types/form";
 import { User } from "../../../types/models";
 import LoadingHk2t from "../../../common/LoadingHk2t";
-import FormChangePassword, { FormChangePasswordHandle } from "./FormChangePassword";
+import FormChangePassword, { FormChangePasswordHandle } from "../../../common/FormPassword/FormChangePassword";
 import { toast } from "react-toastify";
 import { toastMSGObject } from "../../../utils";
 
@@ -63,8 +63,8 @@ export default function ProfileAdmin() {
     },[])
 
     return (
-        <div className="bl_profileAdmin">
-            <div className="bl_profileAdmin_inner">
+        <div className="bl_profile">
+            <div className="bl_profile_inner">
                 {response.isLoading && (
                     <LoadingHk2t/>
                 )}               

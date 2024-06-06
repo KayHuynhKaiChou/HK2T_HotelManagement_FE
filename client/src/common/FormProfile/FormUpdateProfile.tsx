@@ -17,7 +17,6 @@ import UploadFileBtnHk2t from '../UploadFileBtnHk2t';
 import ButtonHk2t from '../ButtonHk2t';
 
 interface FormUpdateProfileProps {
-    position ?: 'CUSTUMER' | 'EMPLOYEE'
     user : User;
     onUpdateProfile : (values : FormUserEmployee) => void;
 }
@@ -27,7 +26,7 @@ export interface FormUpdateProfileHandle {
 }
 
 const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfileProps>((props , ref) => {
-    const {position = 'EMPLOYEE' , user , onUpdateProfile} = props;
+    const {user , onUpdateProfile} = props;
 
     const schema = yup.object({
         firstname: yup.string()
@@ -189,7 +188,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                 <div className="bl_personInfor_header">personal information</div>
                 <Divider className="bl_personInfor_divider"/>
                 <div className="bl_personInfor_body">
-                    {position == 'EMPLOYEE' && (
+                    {user.position != 4 && (
                         <>                       
                             <div className="bl_personInfor_body_background">
                                 <Avatar
@@ -322,7 +321,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                     </Grid>
                 </Grid>
             </div>
-            <div className="bl_btn__login">
+            <div className={`bl_btn__submit ${user.position != 4 ? 'for_employee' : 'for_customer'}`}>
                 <ButtonHk2t
                     variant="contained"
                     content='update profile'

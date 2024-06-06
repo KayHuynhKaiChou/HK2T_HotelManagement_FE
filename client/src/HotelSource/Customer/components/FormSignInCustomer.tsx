@@ -49,7 +49,7 @@ export default function FormSignInCustomer(props : FormSignInProps) {
                 iconInput={<LockOpenOutlined/>}
                 onFocus={onHiddenErrorMsg}
             />
-            <div className="bl_btn__login">
+            <div className="bl_btn__submit">
                 <ButtonHk2t
                     variant="contained"
                     content='sign in'

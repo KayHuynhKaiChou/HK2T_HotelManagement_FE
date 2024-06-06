@@ -79,7 +79,7 @@ export default function FormSignUpCustomer(props : FormSignUpProps) {
                 form={form}
                 onFocus={onHiddenErrorMsg}
             />
-            <div className="bl_btn__login">
+            <div className="bl_btn__submit">
               <ButtonHk2t
                 variant="contained"
                 content='sign up'

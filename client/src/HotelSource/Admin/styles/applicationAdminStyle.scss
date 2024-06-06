@@ -59,7 +59,7 @@
         }
     }
 
-    .bl_btn__login{
+    .bl_btn__submit{
         display: flex;
         justify-content: center;  
         
@@ -213,54 +213,6 @@
             cursor: pointer;
             color: #262626;
             background-color: #f5f5f5;
-        }
-    }
-}
-
-// profile employee
-.bl_profileAdmin{
-    padding: 20px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
-    &_inner{
-        //margin: 10px 20px 0px 20px;
-        .bl_personInfor_form{
-            @include flex-column;
-            gap: 30px;
-            &_inner{
-                .bl_personInfor_header{
-                    text-transform: capitalize;
-                    font-family: "Open Sans", sans-serif;
-                    font-size: 18px;
-                    font-weight: bold;
-                }
-                .bl_personInfor_divider{
-                    margin: 15px 0;
-                }
-                .bl_personInfor_body{
-                    display: flex;
-                    &_background{
-                        @include flex-column-center;
-                        justify-content: start;
-                        .bl_personInfor_background_avatar{
-                            width: 150px;
-                            height: 150px;
-                        }
-                    }
-                    &_divider{
-                        margin: 0 30px;
-                    }
-                }
-            }
-
-            .bl_btn__login{
-                display: flex;
-                justify-content: end;
-
-                button{
-                    padding: 10px 20px;
-                }
-            }
         }
     }
 }

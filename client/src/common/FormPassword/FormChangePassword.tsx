@@ -1,13 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, UseFormReturn, useForm } from 'react-hook-form';
 import * as yup from "yup";
-import { FormPassword } from '../../../types/form';
+import { FormPassword } from '../../types/form';
 import { Divider, Grid } from '@mui/material';
-import InputHk2t from '../../../common/InputHk2t';
-import ButtonHk2t from '../../../common/ButtonHk2t';
+import InputHk2t from '../InputHk2t';
+import ButtonHk2t from '../ButtonHk2t';
 import { forwardRef, useImperativeHandle } from 'react';
 
 interface FormChangePasswordProps {
+    position ?: 'CUSTOMER' | 'EMPLOYEE';
     onChangePassword : (values : FormPassword) => void;
 }
 
@@ -16,7 +17,7 @@ export interface FormChangePasswordHandle {
 }
 
 const FormChangePassword = forwardRef<FormChangePasswordHandle , FormChangePasswordProps>((props , ref) => {
-    const {onChangePassword} = props;
+    const {position = 'EMPLOYEE', onChangePassword} = props;
 
     const schema = yup.object({
         oldPassword: yup.string()
@@ -80,7 +81,7 @@ const FormChangePassword = forwardRef<FormChangePasswordHandle , FormChangePassw
                     </Grid>
                 </div>
             </div>
-            <div className="bl_btn__login">
+            <div className={`bl_btn__submit ${position == 'EMPLOYEE' ? 'for_employee' : 'for_customer'}`}>
                 <ButtonHk2t
                     variant="contained"
                     content='change password'

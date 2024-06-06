@@ -33,7 +33,7 @@ function FormSignInAdmin(props : FormSignInProps) {
     <form onSubmit={form.handleSubmit(onSignIn as SubmitHandler<Account>)}>
       <InputHk2t name='email' placeholder='Email' form={form} onFocus={onHiddenErrorMsg}/>
       <InputHk2t name='password' placeholder='Password' typeInput='password' form={form} onFocus={onHiddenErrorMsg}/>
-      <div className="bl_btn__login">
+      <div className="bl_btn__submit">
         <Button
           size='medium'
           type="submit"

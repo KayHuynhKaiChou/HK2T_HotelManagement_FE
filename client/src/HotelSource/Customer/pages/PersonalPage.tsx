@@ -2,12 +2,14 @@ import { HistoryOutlined, LockOutlined, PersonOutline } from "@mui/icons-materia
 import { Avatar } from "@mui/material";
 import { RootState } from "../../../redux/reducers";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ComponentType, useEffect, useState } from "react";
 import ProfileCustomer from "../components/ProfileCustomer";
+import ChangePasswordCustomer from "../components/ChangePasswordCustomer";
 
 export default function PersonalPage() {
     const { menu } = useParams();
+    const navigate = useNavigate();
     const {response , user} = useSelector<RootState , RootState>(state => state);
     const [MenuComponent, setMenuComponent] = useState<ComponentType>(() => ProfileCustomer);
 
@@ -15,6 +17,9 @@ export default function PersonalPage() {
         switch (menu) {
             case 'profile':
                 setMenuComponent(() => ProfileCustomer)
+                break;
+            case 'password':
+                setMenuComponent(() => ChangePasswordCustomer)
                 break;
             default:
                 setMenuComponent(() => <></>)
@@ -44,15 +49,24 @@ export default function PersonalPage() {
                         </div>
                     </div>
                     <div className="bl_sidebar_options">
-                        <div className="bl_option">
+                        <div 
+                            className="bl_option"
+                            onClick={() => navigate('/customer/profile')}
+                        >
                             <PersonOutline/>
                             profile
                         </div>
-                        <div className="bl_option">
+                        <div 
+                            className="bl_option"
+                            onClick={() => navigate('/customer/')}
+                        >
                             <HistoryOutlined/>
                             booking history
                         </div>
-                        <div className="bl_option">
+                        <div 
+                            className="bl_option"
+                            onClick={() => navigate('/customer/password')}
+                        >
                             <LockOutlined/>
                             change password
                         </div>

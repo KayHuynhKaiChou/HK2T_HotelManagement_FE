@@ -43,8 +43,8 @@ export default function ProfileCustomer() {
     },[])
 
     return (
-        <div className="bl_profileAdmin">
-            <div className="bl_profileAdmin_inner">
+        <div className="bl_profile">
+            <div className="bl_profile_inner">
                 {response.isLoading && (
                     <LoadingHk2t/>
                 )}               

@@ -43,72 +43,14 @@
     padding: 7px;
 
     input.un_radio{
-        display: none;
-
-        & + label{
-            cursor: pointer;
-            @include flex-center;
-            position: relative;
-            font-weight: 600;
-
-            &::before{
-                content: '';
-                border-radius: 50%;
-                border-color: $brand-primary-second;
-                display: inline-block;
-                height: 20px;
-                width: 20px;
-                border-width: 3px;
-                border-style: solid;
-                vertical-align: middle;
-            }
-
-            &::after{
-                content: '';
-                border-radius: 50%;
-                background-color: $brand-primary;
-                height: 6px;
-                width: 6px;
-                left: 10px;
-                position: absolute;
-                opacity: 0.3;
-                top: 50%;
-                transform: translate(-50% , -50%) scale(0);
-                transition: all 0.25s ease-in-out 0s;
-            }
-
-            &:hover{
-                &::after{
-                    transform: translate(-50% , -50%) scale(1);
-                }
-            }
+        &.for_employee{
+            @include radio-common($brand-primary , $brand-second)
         }
 
-        &:checked + label{
-            color: $brand-primary;
-            cursor: pointer;
-
-            &::before {
-                animation: ripple 0.5s linear forwards;
-                background-color: $brand-primary;
-                border-color: $brand-primary-second;
-                transform: scale(1);
-            }
+        &.for_customer{
+            @include radio-common($color-btn-customer-primary , $color-btn-customer-second)
         }
 
-        &:disabled + label{
-            color: #ebebeb;
-            cursor: not-allowed;
-
-            &::before{
-                background-color: unset;
-                border-color: #ebebeb;
-            }
-
-            &::after{
-                background-color: unset;
-            }
-        }
     }
 }
 
@@ -318,6 +260,55 @@
 
     .MuiInputBase-input{
         padding: 5px 14px;
+    }
+}
+
+// profile common
+.bl_profile{
+    padding: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    &_inner{
+        //margin: 10px 20px 0px 20px;
+        .bl_personInfor_form{
+            @include flex-column;
+            gap: 30px;
+            &_inner{
+                .bl_personInfor_header{
+                    text-transform: capitalize;
+                    font-family: "Open Sans", sans-serif;
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+                .bl_personInfor_divider{
+                    margin: 15px 0;
+                }
+                .bl_personInfor_body{
+                    display: flex;
+                    &_background{
+                        @include flex-column-center;
+                        justify-content: start;
+                        .bl_personInfor_background_avatar{
+                            width: 150px;
+                            height: 150px;
+                        }
+                    }
+                    &_divider{
+                        margin: 0 30px;
+                    }
+                }
+            }
+
+            .bl_btn__submit{
+                &.for_employee{
+                    @include button-submit-employee;
+                }
+
+                &.for_customer{
+                    @include button-submit-customer;
+                }
+            }
+        }
     }
 }
 
