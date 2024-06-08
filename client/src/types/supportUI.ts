@@ -1,4 +1,6 @@
-import { User } from "./models";
+import { SvgIconComponent } from "@mui/icons-material";
+import { SvgIconTypeMap } from "@mui/material";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 export interface ColorButtonCustom {
     background : string;
@@ -39,4 +41,10 @@ export interface propsTypeButton {
     checked?: boolean;
     disabled?: boolean;
     onChange: () => void
+}
+export interface MenuAdmin {
+    name : string;
+    endpoint : string;
+    Icon : SvgIconComponent;
+    childrenMenu : MenuAdmin[];
 }

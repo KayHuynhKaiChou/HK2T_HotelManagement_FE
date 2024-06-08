@@ -11,6 +11,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import PersonInfor from "../../../common/SummaryInfor/SummaryInfor";
+import CollapseMenu from "./CollapseMenu";
 
 interface NavbarLeftAdminProps {
     open : boolean,
@@ -55,7 +56,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         '& .MuiDrawer-paper': closedMixin(theme),
       }),
     }),
-  );
+);
 
 export default function NavbarLeftAdmin({ open , DrawerHeader } : NavbarLeftAdminProps) {
     const navigate = useNavigate();
@@ -69,30 +70,40 @@ export default function NavbarLeftAdmin({ open , DrawerHeader } : NavbarLeftAdmi
             {open && <PersonInfor />}
             <Divider />
             <List>
-                {listMenuAdmin.map(({ name, endpoint, Icon }) => (
+                {listMenuAdmin.map(({ name, endpoint, Icon, childrenMenu }) => (
                     <ListItem key={name} disablePadding sx={{ display: 'block' }}>
-                        <ListItemButton
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                            onClick={() => navigate(`/admin/${endpoint}`)}
-                        >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Icon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={name}
-                                sx={{ opacity: open ? 1 : 0 }}
-                            />
-                        </ListItemButton>
+                        {childrenMenu.length > 0 
+                            ? (
+                                <CollapseMenu
+                                   menuAdmin={{ name, endpoint, Icon, childrenMenu }}
+                                   open={open}
+                                />
+                            ) 
+                            : (
+                                <ListItemButton
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                                    onClick={() => navigate(`/admin/${endpoint}`)}
+                                >
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <Icon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={name}
+                                        sx={{ opacity: open ? 1 : 0 }}
+                                    />
+                                </ListItemButton>
+                            )
+                        }
                     </ListItem>
                 ))}
             </List>
