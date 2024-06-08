@@ -134,6 +134,11 @@ export const defaultGenders : string[] = [
     'FEMALE'
 ]
 
+export const defaultstatus : string[] = [
+    'ACTIVE',
+    'INACTIVE'
+]
+
 export const defaultPositions = [
     'ADMIN' , 'HOUSEKEEPER' , 'RECEPTIONIST' , 'CUSTOMER'
 ]

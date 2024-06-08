@@ -44,4 +44,10 @@ export interface TypeRoom {
     amenities : Array<number>
 }
 
+export interface Amenity {
+    id ?: string;
+    name: string;
+    status: 0 | 1;
+}
+
 

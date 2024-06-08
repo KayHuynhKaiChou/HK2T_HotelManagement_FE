@@ -7,6 +7,7 @@ import UserAdmin from '../components/UserAdmin';
 import NavbarLeftAdmin from '../components/NavbarLeftAdmin';
 import HeaderMenuAdmin from '../components/HeaderMenuAdmin';
 import ProfileAdmin from '../components/ProfileAdmin';
+import AmenityAdmin from '../components/AmenityAdmin';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -36,6 +37,9 @@ export default function AdminHomePage() {
         break;
       case 'profile':
         setMenuComponent(<ProfileAdmin/>)
+        break;
+      case 'amenities':
+        setMenuComponent(<AmenityAdmin/>)
         break;
       default:
         setMenuComponent(<></>)

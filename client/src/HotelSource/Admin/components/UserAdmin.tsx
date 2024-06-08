@@ -1,9 +1,8 @@
 import TableHk2t from "../../../common/Table/TableHk2t";
 import ButtonHk2t from "../../../common/ButtonHk2t";
-import DeleteIcon from '@mui/icons-material/Delete';
 import { colorsBtnCustom, columnsLoading, defaultPageSizeOptions, defaultPositions, rowsLoading } from "../../../utils/constants";
-import { ColumnType, ColumnTypeProps } from "../../../types/supportUI";
-import { useMutation, useQuery} from '@tanstack/react-query';
+import { ColumnType } from "../../../types/supportUI";
+import { useQuery} from '@tanstack/react-query';
 import { uuid } from "../../../utils";
 import GateWay from "../../../lib/api_gateway";
 import { useSelector } from "react-redux";
