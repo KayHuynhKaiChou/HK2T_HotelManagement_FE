@@ -6,8 +6,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import FontAwesomeIconHk2t from "../FontAwesomeIconHk2t";
 import { uuid } from "../../utils";
-import { useEffect, useMemo, useState } from "react";
-import { iconsSort } from "../../utils/constants";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { defaultSortColumn, iconsSort } from "../../utils/constants";
 import SelectHk2t from "../SelectHk2t";
 import { OptionSelect , ColumnType , CriteriaType, TypeSort } from "../../types/supportUI";
 import { 
@@ -23,12 +23,14 @@ import InputHk2t from "../InputHk2t";
 interface propsTable {
     rows: { [key : string] : any}[];
     columns: ColumnType[];
-    pageSizeOptions : OptionSelect[]; 
+    pageSizeOptions : OptionSelect[];
+    isLoadingTable : boolean; 
 }
 
 type selectTypeCurrentPage = 'NORMAL' | 'PREVIOUS' | 'NEXT';
 
-export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: propsTable) {
+export default function TableHk2t({ rows , columns , pageSizeOptions = [] , isLoadingTable }: propsTable) {
+    console.log({rows})
     // state ===================================================================
     const [selectedIdColumnDetail , setSelectedIdColumnDetail] = useState<OptionSelect['value']>(
         initSelectedIdColumnDetail(columns)
@@ -42,8 +44,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
     const [listNumberPage , setListNumberPage] = useState<number[]>([]); // ex : Previous 1 2 3 4 Next
     const [currentPage , setCurrentPage] = useState<number>(1);
     const [selectedCriteria , setSelectedCriteria] = useState<CriteriaType['condition'] | null>(null);
-    const [sortedColumn , setSortedColumn] = useState<{id : ColumnType['id'] , type : TypeSort}>({id : '' , type : 'NORMAL'});
-    //const [sortedTable , setSortedTable] = useState<boolean>(false);
+    const [sortedColumn , setSortedColumn] = useState<{id : ColumnType['id'] , type : TypeSort}>(defaultSortColumn);
 
     // useMemo ==================================================================
     const lengthRows = useMemo(() => rowsFilter.length ,[rowsFilter.length])
@@ -85,11 +86,32 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
     },[sortedColumn])
 
     // useEffect =================================================================
+    useLayoutEffect(() => { 
+        // use useLayoutEffect để update rowsDetail trước rồi mới update DOM 
+        // nếu dung useEffect : trường hợp isLoadingTable : true và đặc biệt lưu ý rows và rowDetails
+        // B1 : truyền props columns và rows ở dạng data đã có (từ api) 
+        // B2 : xuống phần DOM thì rowDetails vẫn ở dạng data loading ( {'-' : '-'} ) trong khi columns đã ở dạng data đã có
+        // do đó ở dòng 323, row[col.nameCol] bị null
+        // B3 : chạy useEffect này xong thì rowDetails mới đc update sang lại data đã có
+        if(isLoadingTable) return;
+        setRowsDetail(rows);
+        setRowsFilter(rows);
+        searchText != '' && setSearchText('');
+        const limitRowsPerPage = getLimitRowsPerPage(rows , pageSizeOptions);
+        pageSizeOption != limitRowsPerPage && setPageSizeOption(limitRowsPerPage);
+        listNumberPage.length > 0 && setListNumberPage([]);
+        currentPage > 1 && setCurrentPage(1);
+        selectedCriteria && setSelectedCriteria(null);
+        sortedColumn.id != defaultSortColumn.id && setSortedColumn(defaultSortColumn);
+    },[rows]) // when prop rows change , we need reset all states become default as first time
+
     useEffect(() => {
+        if(isLoadingTable) return;
         setCurrentPage(1)
     },[pageSizeOption , lengthRows]) // when change dropdown 
 
     useEffect(() => {
+        if(isLoadingTable) return;
         // giả sử tôi có 107 data , limit per page là 5 data , ta lấy 107 / 5 = 21 ceil lên 22
         // khi đó ta sẽ có Prev 1 2 3 ... 22 Next 
         const lengthListNumber = Math.ceil((lengthRows / +pageSizeOption)) || 1;
@@ -100,6 +122,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
 
     // track sort asc / desc by column
     useEffect(() => {
+        if(isLoadingTable) return;
         const foundSortedCol = columns.find(col => col.id === sortedColumn?.id);
         if(foundSortedCol){
             const keyRow = foundSortedCol.nameCol
@@ -125,6 +148,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
 
     // when change search text , rows will filter by text
     useEffect(() => {
+        if(isLoadingTable) return;
         if(columnDetail?.criteria){
             return;
         }
@@ -146,6 +170,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
 
     // when change criteria , rows will filter by criteria
     useEffect(() => {
+        if(isLoadingTable) return;
         if(columnDetail?.criteria && selectedCriteria){
             const condition = selectedCriteria
             const compareFirst = condition![0];
@@ -160,6 +185,7 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] }: pro
     },[selectedCriteria , columnDetail])
 
     useEffect(() => {
+        if(isLoadingTable) return;
         if(columnDetail?.criteria){
             setSelectedCriteria(columnDetail.criteria[0].condition)
         }else{

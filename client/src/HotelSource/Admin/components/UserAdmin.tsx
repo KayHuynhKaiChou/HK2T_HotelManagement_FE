@@ -1,7 +1,7 @@
 import TableHk2t from "../../../common/Table/TableHk2t";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { colorsBtnCustom, defaultPageSizeOptions, defaultPositions } from "../../../utils/constants";
+import { colorsBtnCustom, columnsLoading, defaultPageSizeOptions, defaultPositions, rowsLoading } from "../../../utils/constants";
 import { ColumnType, ColumnTypeProps } from "../../../types/supportUI";
 import { useMutation, useQuery} from '@tanstack/react-query';
 import { uuid } from "../../../utils";
@@ -63,7 +63,7 @@ export default function UserAdmin() {
       {
         id : `field-action-${uuid()}`,
         nameCol : 'action',
-        width : 200
+        width : 300
       }
     ]
   },[])
@@ -104,15 +104,13 @@ export default function UserAdmin() {
 
   return (
     <div>
-      {
-        isLoadingListUsers 
-        ? <LoadingHk2t/> 
-        : <TableHk2t
-          rows={rows}
-          columns={columns}
+        {isLoadingListUsers && <LoadingHk2t/> }
+        <TableHk2t
+          isLoadingTable = {isLoadingListUsers}
+          rows={isLoadingListUsers ? rowsLoading : rows}
+          columns={isLoadingListUsers ? columnsLoading : columns}
           pageSizeOptions={defaultPageSizeOptions}
         />
-      }
       {/* <Width>
         {width => <div>window is {width}</div>}
       </Width>

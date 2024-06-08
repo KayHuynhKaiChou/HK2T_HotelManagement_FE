@@ -1,17 +1,46 @@
 import HouseIcon from '@mui/icons-material/House';
 import PersonIcon from '@mui/icons-material/Person';
-import { OptionSelect } from '../types/supportUI';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import { ColumnType, MenuAdmin, OptionSelect, TypeSort } from '../types/supportUI';
 
-export const listMenuAdmin = [
+export const listMenuAdmin : MenuAdmin[] = [
     {
-        name : 'Bảng điều khiển',
+        name : 'Dashboard',
         endpoint : 'dashboard',
-        Icon : HouseIcon
+        Icon : HouseIcon ,
+        childrenMenu : []
     },
     {
-        name : 'Người dùng',
+        name : 'Users',
         endpoint : 'users',
-        Icon : PersonIcon
+        Icon : PersonIcon ,
+        childrenMenu : []
+    },
+    {
+        name : 'Rooms',
+        endpoint : '',
+        Icon : MeetingRoomIcon,
+        childrenMenu : [
+            {
+                name : 'Rooms',
+                endpoint : 'rooms',
+                Icon : RadioButtonUncheckedIcon ,
+                childrenMenu : []
+            },
+            {
+                name : 'Types room',
+                endpoint : 'types-room',
+                Icon : RadioButtonUncheckedIcon ,
+                childrenMenu : []
+            },
+            {
+                name : 'Amenities',
+                endpoint : 'amenities',
+                Icon : RadioButtonUncheckedIcon ,
+                childrenMenu : []
+            }
+        ]
     }
 ]
 
@@ -123,3 +152,15 @@ export const defaultPageSizeOptions : OptionSelect[] = [
       value : 15
     },
 ]
+
+export const columnsLoading : ColumnType[] = Array.from({length : 7} , (_ , i) => ({id : `loading-${i}` , nameCol : '-'}))
+
+export const rowsLoading = Array.from({length : 5} , (_ , i) => {
+    const row = {} as {[key : string] : string}
+    columnsLoading.forEach(c => {
+        row['-'] = c.nameCol
+    })
+    return row
+})
+
+export const defaultSortColumn : {id : ColumnType['id'] , type : TypeSort} = {id : '' , type : 'NORMAL'}
