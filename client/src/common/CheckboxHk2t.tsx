@@ -1,13 +1,20 @@
 import { useEffect } from "react";
-import { propsTypeButton } from "../types/supportUI";
+
+interface CheckboxHk2t {
+    id : string;
+    checked : boolean;
+    disabled ?: boolean;
+    label : string;
+    onChange : () => void;
+}
 
 export default function CheckboxHk2t({
     id,
     checked,
-    disabled,
+    disabled = false,
     label,
     onChange
-} : propsTypeButton) {
+} : CheckboxHk2t) {
 
     useEffect(() => {
         document.getElementById(id)?.addEventListener('click' , () => onChange())

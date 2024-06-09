@@ -1,0 +1,18 @@
+{
+    "general" : [
+        "bar mini",
+        "pyjama",
+        "slippers",
+        "nail clipper",
+        "mini safe" 
+    ],
+    "bathroom" : [
+        "disposable toothbrush and toothpaste",
+        "bathrobe",
+        "shave",
+        "soap"
+    ],
+    "other" : [
+        "Welcome fruit basket"
+    ]
+}

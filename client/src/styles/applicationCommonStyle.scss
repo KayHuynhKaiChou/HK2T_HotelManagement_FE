@@ -59,7 +59,6 @@
 .un_checkbox_wrap{
 
     @include flex-center;
-    gap: 3px;
     input.un_checkbox{
         display: none;
         

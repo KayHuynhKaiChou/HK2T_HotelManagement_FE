@@ -1,4 +1,4 @@
-import { useForm  , SubmitHandler, useWatch, UseFormReturn} from 'react-hook-form'
+import { useForm  , SubmitHandler, UseFormReturn} from 'react-hook-form'
 import { Avatar, Divider, Grid } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -9,7 +9,7 @@ import provinces from '../../data/provinces.json';
 import districts from '../../data/districts.json';
 import wards from '../../data/wards.json';
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
-import RadioBtnHK2t from '../RadioBtnHK2t';
+import RadioBtnHk2t from '../RadioBtnHk2t';
 import { uuid } from '../../utils';
 import { defaultGenders } from '../../utils/constants';
 import { FormUserEmployee } from '../../types/form';
@@ -95,31 +95,16 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
     const form : UseFormReturn<FormUserEmployee> = useForm({
         defaultValues: generateFirstFormProfile(),
         resolver: yupResolver(schema)
-    })
+    }) as UseFormReturn<FormUserEmployee>
 
     // useImperativeHandle hook
     useImperativeHandle(ref , () => ({ form }))
 
     // useWatch
-    const selectedGender = useWatch({
-        control: form.control,
-        name: 'gender'
-    })
-
-    const uploadedLinkImage = useWatch({
-        control: form.control,
-        name: 'link_avatar'
-    });
-
-    const selectedCity = useWatch({
-        control: form.control,
-        name: 'city'
-    });
-
-    const selectedDistrict = useWatch({
-        control: form.control,
-        name: 'district'
-    });
+    const selectedGender = form.watch("gender" , 1);
+    const uploadedLinkImage = form.watch("link_avatar" , '');
+    const selectedCity = form.watch("city" , {label : '' , value : ''});
+    const selectedDistrict = form.watch("district" , {label : '' , value : ''});
 
     // useMemo hook
     const optionProvinces = useMemo(() => {
@@ -221,7 +206,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                             <InputHk2t 
                                 label='surname' 
                                 name='surname' 
-                                placeholder='Email' 
+                                placeholder='surname' 
                                 form={form} 
                             />
                         </Grid>
@@ -229,7 +214,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                             <InputHk2t 
                                 label='email' 
                                 name='email' 
-                                placeholder='Password' 
+                                placeholder='email' 
                                 form={form} 
                             />
                         </Grid>
@@ -237,7 +222,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                             <InputHk2t 
                                 label='phone' 
                                 name='phone' 
-                                placeholder='Password' 
+                                placeholder='phone' 
                                 form={form} 
                             />
                         </Grid>
@@ -264,7 +249,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                                 const value = index + 1 as FormUserEmployee['gender']
                                 return (
                                     <Grid>
-                                        <RadioBtnHK2t
+                                        <RadioBtnHk2t
                                             id={`select-gender-${uuid()}`}
                                             name="gender"
                                             label={gender}

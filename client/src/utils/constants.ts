@@ -143,6 +143,17 @@ export const defaultPositions = [
     'ADMIN' , 'HOUSEKEEPER' , 'RECEPTIONIST' , 'CUSTOMER'
 ]
 
+export const defaultViewDirection = [
+    'RIVER',
+    'CITY'
+]
+
+export const defaultTypeAmenity = [
+    'GENERAL',
+    'BATHROOM',
+    'OTHER'
+]
+
 export const defaultPageSizeOptions : OptionSelect[] = [
     {
       label : '5',
@@ -160,7 +171,7 @@ export const defaultPageSizeOptions : OptionSelect[] = [
 
 export const columnsLoading : ColumnType[] = Array.from({length : 7} , (_ , i) => ({id : `loading-${i}` , nameCol : '-'}))
 
-export const rowsLoading = Array.from({length : 5} , (_ , i) => {
+export const rowsLoading = Array.from({length : 5} , () => {
     const row = {} as {[key : string] : string}
     columnsLoading.forEach(c => {
         row['-'] = c.nameCol

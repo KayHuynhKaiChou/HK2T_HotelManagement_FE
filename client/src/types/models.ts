@@ -1,6 +1,6 @@
 export interface Account {
-    email : string,
-    password : string
+    email : string;
+    password : string;
 } 
 
 export interface User {
@@ -25,29 +25,36 @@ export interface User {
 
 export interface Room {
     id ?: number;
-    type_room : TypeRoom,
-    room_number ?: number,
-    checkin_at : string,
-    checkout_at : string,
-    floor : number
-    description ?: number,
-    status : 'OPEN' | 'IN_PROGRESS' | 'END' | 'CANCEL'
+    type_room : TypeRoom;
+    room_number ?: number;
+    floor : number;
+    status : 'OPEN' | 'IN_PROGRESS' | 'END' | 'CANCEL';
 }
 
 export interface TypeRoom {
-    id ?: number,
-    title : string,
-    type : 'ROOM' | 'HALL',
-    adult_capacity : number,
-    kids_capacity : number,
-    base_price : number,
-    amenities : Array<number>
+    id ?: number;
+    title : string;
+    preferential_services : string;
+    size : number;
+    view_direction : 1 | 2;
+    adult_capacity : number;
+    kids_capacity : number;
+    base_price : number;
+    amenities : Array<Amenity['id']>;
+    images : Array<string>;
+    status : 0 | 1;
 }
 
 export interface Amenity {
     id ?: string;
+    type :  1 | 2 | 3;
     name: string;
     status: 0 | 1;
 }
 
+export type TypeAmenity = 'general' | 'bathroom' | 'other';
+
+export type TypeObjAmenity = {
+    [K in TypeAmenity] : string[];
+}
 

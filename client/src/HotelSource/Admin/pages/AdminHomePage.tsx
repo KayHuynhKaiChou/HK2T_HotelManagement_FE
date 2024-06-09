@@ -8,6 +8,7 @@ import NavbarLeftAdmin from '../components/NavbarLeftAdmin';
 import HeaderMenuAdmin from '../components/HeaderMenuAdmin';
 import ProfileAdmin from '../components/ProfileAdmin';
 import AmenityAdmin from '../components/AmenityAdmin';
+import TypeRoomAdmin from '../components/TypeRoomAdmin';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -40,6 +41,9 @@ export default function AdminHomePage() {
         break;
       case 'amenities':
         setMenuComponent(<AmenityAdmin/>)
+        break;
+      case 'types-room':
+        setMenuComponent(<TypeRoomAdmin/>)
         break;
       default:
         setMenuComponent(<></>)

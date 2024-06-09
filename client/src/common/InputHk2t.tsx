@@ -1,4 +1,4 @@
-import { Controller, UseFormReturn } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { InputAdornment, TextField } from '@mui/material'
 import '../styles/applicationCommonStyle.scss'
 
@@ -7,7 +7,7 @@ interface InputProps {
     name: string;
     label?: string;
     placeholder?: string;
-    typeInput?: string;
+    typeInput?: React.HTMLInputTypeAttribute;
     disabled?: boolean;
     className?: string;
     value?: string;

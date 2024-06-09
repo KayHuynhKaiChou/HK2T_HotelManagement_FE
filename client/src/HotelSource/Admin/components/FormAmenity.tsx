@@ -4,9 +4,11 @@ import { Amenity } from "../../../types/models";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { defaultstatus } from "../../../utils/constants";
-import RadioBtnHK2t from "../../../common/RadioBtnHK2t";
+import { defaultTypeAmenity, defaultstatus } from "../../../utils/constants";
+import RadioBtnHk2t from "../../../common/RadioBtnHk2t";
 import { uuid } from "../../../utils";
+import ButtonHk2t from "../../../common/ButtonHk2t";
+import SelectHk2t from "../../../common/SelectHk2t";
 
 interface FormAmenityProps {
     onActionProfile : (values : Amenity) => void;
@@ -43,19 +45,28 @@ export default function FormAmenity({onActionProfile} : FormAmenityProps) {
             className='bl_personInfor_form'
         >
             <div className="bl_personInfor_form_inner">
-                <div className="bl_personInfor_header">Form add amenity</div>
+                <div className="bl_personInfor_header">Form create amenity</div>
                 <Divider className="bl_personInfor_divider"/>
                 <div className="bl_personInfor_body">
                     <Grid container columnSpacing={3}>
-                        <Grid item sm={6}>
+                        <Grid item sm={4}>
                             <InputHk2t 
                                 label='name' 
                                 name='name' 
-                                placeholder='name' 
+                                placeholder='name amenity' 
                                 form={form} 
                             />
                         </Grid>
-                        <Grid item sm={6}>
+                        <Grid item sm={4}>
+                            <SelectHk2t 
+                                options={defaultTypeAmenity.map(ta => ({label : ta , value : ta}))} 
+                                label='type amenity' 
+                                name='type' 
+                                placeholder='select type amenity' 
+                                form={form} 
+                            />
+                        </Grid>
+                        <Grid item sm={4}>
                             <Grid
                                 sx={{
                                     color : "#707e9c;" , 
@@ -68,7 +79,7 @@ export default function FormAmenity({onActionProfile} : FormAmenityProps) {
                             <Grid container columnSpacing={3} sx={{margin : "16px 0 8px 0"}}>
                                 {defaultstatus.map((status , index) => (
                                     <Grid item>
-                                        <RadioBtnHK2t
+                                        <RadioBtnHk2t
                                             id={`select-gender-${uuid()}`}
                                             name="gender"
                                             label={status}
@@ -83,6 +94,13 @@ export default function FormAmenity({onActionProfile} : FormAmenityProps) {
                         </Grid>
                     </Grid>
                 </div>
+            </div>
+            <div className="bl_btn__submit for_employee">
+                <ButtonHk2t
+                    variant="contained"
+                    content='Create type room'
+                    isUseForm={true}
+                /> 
             </div>
         </form>
     )

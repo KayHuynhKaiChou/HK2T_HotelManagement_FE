@@ -1,6 +1,4 @@
 import { SvgIconComponent } from "@mui/icons-material";
-import { SvgIconTypeMap } from "@mui/material";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 export interface ColorButtonCustom {
     background : string;
@@ -29,19 +27,9 @@ export type ColumnTypeProps = Omit<ColumnType , 'typeSort'>
 
 export interface OptionSelect {
     label : string; 
-    value : string | number;
+    value : string;
 }
 
-export interface propsTypeButton {
-    id: string;
-    form?: any;
-    label: string;
-    value?: string | number;
-    name: string;
-    checked?: boolean;
-    disabled?: boolean;
-    onChange: () => void
-}
 export interface MenuAdmin {
     name : string;
     endpoint : string;

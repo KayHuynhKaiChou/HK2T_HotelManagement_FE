@@ -1,18 +1,27 @@
 import { useEffect } from "react";
-import { propsTypeButton } from "../types/supportUI";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 
-export default function RadioBtnHK2t({
+interface RadioBtnHk2t {
+    id: string;
+    form?: any;
+    label: string;
+    value?: string | number;
+    name: string;
+    checked?: boolean;
+    disabled?: boolean;
+    onChange: () => void;
+}
+
+export default function RadioBtnHk2t({
     id,
     form,
     label,
     value,
-    name,
     checked = false,
     disabled = false,
     onChange
-} : propsTypeButton) {
+} : RadioBtnHk2t) {
 
   //redux
   const {user} = useSelector<RootState , RootState>(state => state);
