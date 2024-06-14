@@ -16,7 +16,6 @@ export default function RichTextEditorHk2t(props : RichTextEditorHk2tProps) {
 
     return (
         <ReactQuill
-            style={{ height: "300px" , marginBottom: "30px" }}
             theme="snow" 
             placeholder={placeholder}
             value={textEditor} 

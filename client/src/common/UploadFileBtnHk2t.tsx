@@ -21,40 +21,35 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
     } = props
 
     const uid = uuid();
+
+    const uploadedImages = form.watch("images" , [])
+
+    const handleFileChange = async (event : ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files && event.target.files;
+        if (files) {
+            const promises = Array.from(files).map((file) => {
+                return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        resolve(reader.result);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            });
     
-    // function renderInput(){
-    //     if(form){
-    //         // const {formState : {errors}} = form;
-    //         // const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
-    //         return (
-    //             <input 
-    //                 {...form.register(name)}
-    //                 disabled={disabled}
-    //                 type="file"
-    //                 className={`un_input ${className}`}
-    //             />
-    //         )
-    //     }else{
-    //         return(
-    //             <input
-    //                 disabled={disabled}
-    //                 type="file"
-    //                 className={`un_input ${className}`}
-    //             />
-    //         )
-    //     }
-    // }
-    const handleFileChange = (event : ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files && event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64String = reader.result;
-                form.setValue(name, base64String)
-            };
-            reader.readAsDataURL(file);
+            try {
+                const base64Strings = await Promise.all(promises);
+                form.setValue(name, [...uploadedImages, ...base64Strings]);
+            } catch (error) {
+                console.error("Error reading files: ", error);
+            }
         }
     };
+
+    const handleClickBtn = () => {
+        document.getElementById(`uploadFile-${uid}`)?.click();
+    }
 
     return (
         <div className='un_uploadFile_wrap'>
@@ -62,12 +57,14 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
                 id={`uploadFile-${uid}`}
                 disabled={disabled}
                 type="file"
+                multiple
                 className={`un_uploadFile ${className}`}
                 style={{display : 'none'}}
                 onChange={handleFileChange}
             />
-            <label htmlFor={`uploadFile-${uid}`}>
+            <label htmlFor={`uploadFile-${uid}`} onClick={handleClickBtn}>
                 <ButtonHk2t
+                    id={`uploadFile-${uid}`}
                     startIcon={<Upload/>}
                     content="upload image"
                     className="un_uploadFile_btn"

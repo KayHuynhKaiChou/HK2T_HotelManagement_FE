@@ -92,7 +92,7 @@
             &::before{
                 transform: rotate(-45deg);
                 left: 1px;
-                top: 7.4px;
+                top: 7px;
                 animation: dothabottomcheck 0.2s ease 0s forwards;
             }
 
@@ -283,7 +283,8 @@
                     margin: 15px 0;
                 }
                 .bl_personInfor_body{
-                    display: flex;
+                    @include flex-column-center;
+                    gap: 80px;
                     &_background{
                         @include flex-column-center;
                         justify-content: start;
@@ -323,6 +324,91 @@
             box-shadow: rgba(0, 0, 0, .25) 0 1px 0, inset rgba(255, 255, 255, .16) 0 1px 0;
         }
     }
+}
+
+// carousel common
+.bl_sliderImages_wrap{
+    width: 612px;
+   
+    .bl_slider_container{
+        .slick-list{
+            border-radius: 10px;
+ 
+            .bl_img_wrap{
+                display: flex !important;
+                justify-content: center;
+                background-color: #f5f5f5;
+   
+                img{
+                    height: 408px;
+                }
+            }
+        }
+       
+       
+        .bl_arrow{
+            height: 32px;
+            width: 32px;
+            margin-top: -16px;
+            top: 50%;
+            position: absolute;
+            border: 0;
+            padding: 0;
+            opacity: .8;
+            cursor: pointer;
+       
+            &:hover{
+                opacity: 1;    
+            }
+           
+            &.bl_prevArrow{
+                z-index: 2;
+                left: 20px;
+                background: url(https://cf.bstatic.com/static/img/experiments/gallery-prev-2/db2a171fef8474e4e2b6c38a73e4f070064af21f.png) no-repeat;
+            }
+       
+            &.bl_nextArrow{
+                right: 20px;
+                background: url(https://cf.bstatic.com/static/img/experiments/gallery-next-2/52314eca28af6184cace9e2fec9bfbf61e8a9e0c.png) no-repeat;
+            }
+        }
+    }
+ 
+    .bl_smallImages{
+        display: flex;
+        margin-top: 4px;
+        flex-wrap: wrap;
+ 
+        .bl_smallImage_wrap{
+            width: 60px;
+            height: 60px;
+            margin: 3px;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            box-sizing: content-box; // width và height của .bl_smallImage_wrap là 60px , ko tính margin , border
+            cursor: pointer;
+ 
+            img{
+                width: 60px;
+                height: 60px;
+                border-radius: 4px;
+                object-fit: cover;
+            }
+           
+            &.is_selected{
+                outline: 3px solid #5bbaff;
+            }
+ 
+            &:hover{
+                opacity: .6;
+            }
+        }
+    }
+}
+
+// rich text editor common
+.ql-container {
+    height: 300px !important;
 }
 
 

@@ -14,8 +14,9 @@ import PersonInfor from "../../../common/SummaryInfor/SummaryInfor";
 import CollapseMenu from "./CollapseMenu";
 
 interface NavbarLeftAdminProps {
-    open : boolean,
-    DrawerHeader : StyledComponent<object , React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, object>
+    open : boolean;
+    onChangeOpenNavbarLeft : (isOpen : boolean) => void;
+    DrawerHeader : StyledComponent<object , React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, object>;
 }
 
 const drawerWidth = 240;
@@ -58,7 +59,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function NavbarLeftAdmin({ open , DrawerHeader } : NavbarLeftAdminProps) {
+export default function NavbarLeftAdmin({ open , DrawerHeader , onChangeOpenNavbarLeft } : NavbarLeftAdminProps) {
     const navigate = useNavigate();
 
     return (
@@ -77,6 +78,7 @@ export default function NavbarLeftAdmin({ open , DrawerHeader } : NavbarLeftAdmi
                                 <CollapseMenu
                                    menuAdmin={{ name, endpoint, Icon, childrenMenu }}
                                    open={open}
+                                   onChangeOpenNavbarLeft={onChangeOpenNavbarLeft}
                                 />
                             ) 
                             : (

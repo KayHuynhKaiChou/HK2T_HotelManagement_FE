@@ -1,18 +1,48 @@
 {
     "general" : [
-        "bar mini",
-        "pyjama",
-        "slippers",
-        "nail clipper",
-        "mini safe" 
+        {
+            "id": 1,
+            "name": "bar mini"
+        },
+        {
+            "id": 2,
+            "name": "pyjama"
+        },
+        {
+            "id": 3,
+            "name": "slippers"
+        },
+        {
+            "id": 4,
+            "name": "nail clipper"
+        },
+        {
+            "id": 5,
+            "name": "mini safe"
+        }
     ],
     "bathroom" : [
-        "disposable toothbrush and toothpaste",
-        "bathrobe",
-        "shave",
-        "soap"
+        {
+            "id": 6,
+            "name": "disposable toothbrush and toothpaste"
+        },
+        {
+            "id": 7,
+            "name": "bathrobe"
+        },
+        {
+            "id": 8,
+            "name": "shave"
+        },
+        {
+            "id": 9,
+            "name": "soap"
+        }
     ],
     "other" : [
-        "Welcome fruit basket"
+        {
+            "id": 10,
+            "name": "Welcome fruit basket"
+        }
     ]
 }

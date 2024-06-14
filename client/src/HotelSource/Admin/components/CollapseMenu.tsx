@@ -7,13 +7,17 @@ import { useNavigate } from "react-router-dom";
 export interface CollapseMenuProps {
     menuAdmin : MenuAdmin;
     open : boolean; // toggle navbar left
+    onChangeOpenNavbarLeft : (isOpen : boolean) => void;
 }
 
-export default function CollapseMenu ({ menuAdmin , open } : CollapseMenuProps) {
+export default function CollapseMenu ({ menuAdmin , open , onChangeOpenNavbarLeft } : CollapseMenuProps) {
     const navigate = useNavigate();
     const [isOpen , setIsOpen] = useState<boolean>(false);
 
     const handleCollapse = () => {
+        if(!open){
+            onChangeOpenNavbarLeft(true)
+        }
         setIsOpen(isOpen => !isOpen)
     }
 

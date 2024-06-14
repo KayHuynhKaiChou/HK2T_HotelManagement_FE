@@ -59,6 +59,7 @@ export default function AdminHomePage() {
       />
       <NavbarLeftAdmin
         open = {open}
+        onChangeOpenNavbarLeft = {(isOpen : boolean) => setOpen(isOpen)}
         DrawerHeader={DrawerHeader}
       />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
