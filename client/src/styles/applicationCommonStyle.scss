@@ -411,4 +411,74 @@
     height: 300px !important;
 }
 
+// date range picker common
+.bl_displayDate {
+    //min-width: 230px;
+    caret-color: transparent; // ẩn cái dấu | ở ô input
+    cursor: pointer;
+    input::selection{
+        background: transparent; /* Xóa màu nền khi select */
+        color: inherit;
+    }
+
+    fieldset{
+        display: none;
+    }
+}
+
+.css-10o2lyd-MuiStack-root{
+    padding-top: 0px;
+}
+
+
+// popover common 
+.bl_dropdown_inner{
+    @include dropdown-inner;
+    width: $width-drowdown-form-booking;
+
+    .bl_dropdown_item{
+        padding: 10px;
+        color: #5A738E;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        gap: 8px;
+        text-transform: capitalize;
+
+        &:not(.form_booking):hover{
+            cursor: pointer;
+            color: #262626;
+            background-color: #f5f5f5;
+        }
+
+        &.form_booking{
+            @include flex-center;
+
+            .bl_dropdown_item_ttl{
+                flex-basis: 50%;
+            }
+
+            .bl_dropdown_textFieldNumber{
+                flex-basis: 50%;
+                @include flex-center;
+
+                .bl_act_btn{
+                    width: 35px;
+                    height: 35px;
+                    line-height: 35px;
+                    background: #eef1f7;
+                    border-radius: 4px;
+                    text-align: center;
+                    color: #5E6D77;
+                    font-weight: 600;
+                    cursor: pointer;
+                }
+
+                .bl_quantityPerson{
+                    margin: 0 10px;
+                }
+            }
+        }
+    }
+}
 

@@ -90,17 +90,32 @@
             .bl_formBookingGroup{
                 border-left: 1px solid #e2e7ef;
                 flex-basis: calc((100% - 15%)/3);
+                padding-left: 20px;
+                
+                @include flex-center;
+
+                &_inner{
+                    @include flex-center;
+                    .bl_formBooking_infor{
+                        padding-left: 10px;
+                        font-weight:600;
+                    }
+                }
+
                 &:first-child{
                     border-left: none;
                 }
+
                 &:last-child{
+                    background-color: $color-btn-customer-primary;
                     flex-basis: 15%;
-                    border-left: none;
-                    background-color: color-btn-customer;
-                    border-radius: 0 10px 10px 0;
                     display: flex;
+                    border-left: none;
+                    border-radius: 0 10px 10px 0;
+                    padding-left: 0;
                     cursor: pointer;
                 }
+
                 &_btn{
                     letter-spacing: 0.8px;
                     margin: auto;

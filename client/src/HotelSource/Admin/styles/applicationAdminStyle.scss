@@ -195,28 +195,6 @@
     }
 }
 
-// inner dropdown 
-.bl_dropdown_inner{
-    border-radius: 10px;
-    width: 300px;
-
-    .bl_dropdown_item{
-        padding: 10px;
-        color: #5A738E;
-        font-size: 16px;
-        font-weight: bold;
-        display: flex;
-        gap: 8px;
-        text-transform: capitalize;
-
-        &:hover{
-            cursor: pointer;
-            color: #262626;
-            background-color: #f5f5f5;
-        }
-    }
-}
-
 .bl_select_form{
     font-weight: bold;
     margin-top: 16px;

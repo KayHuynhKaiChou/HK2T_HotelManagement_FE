@@ -28,7 +28,7 @@ export interface Room {
     type_room : TypeRoom;
     room_number ?: number;
     floor : number;
-    status : 'OPEN' | 'IN_PROGRESS' | 'END' | 'CANCEL';
+    status : 0 | 1;
 }
 
 export interface TypeRoom {

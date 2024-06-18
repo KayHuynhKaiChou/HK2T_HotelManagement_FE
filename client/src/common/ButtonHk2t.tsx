@@ -41,7 +41,7 @@ export default function ButtonHk2t({
     function classifyButton(){
         if(typeCustom == 'normal'){
             return (
-                <ButtonCustom 
+                <ButtonCustom
                     variant="contained"
                     startIcon={startIcon}
                     endIcon={endIcon}

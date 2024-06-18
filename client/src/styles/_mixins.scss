@@ -120,3 +120,8 @@
         }
     }
 }
+
+@mixin dropdown-inner {
+    border-radius: 10px;
+    width: $width-drowdown-person-infor;
+}

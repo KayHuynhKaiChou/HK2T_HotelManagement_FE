@@ -1,9 +1,11 @@
-import { Popover } from "@mui/material";
+import { Popover, PopoverOrigin } from "@mui/material";
 import { ReactElement, forwardRef, useImperativeHandle, useMemo, useState } from "react";
 
 interface PopoverProps{
     id : string;
     children : ReactElement;
+    anchorOrigin ?: PopoverOrigin;
+    transformOrigin ?: PopoverOrigin;
 }
 
 export interface PopoverHandle{
@@ -12,7 +14,18 @@ export interface PopoverHandle{
 }
 
 const PopoverHk2t = forwardRef<PopoverHandle , PopoverProps>((props , ref) => {
-    const { id , children } = props;
+    const { 
+        id , 
+        children ,
+        anchorOrigin = {
+            vertical: 'bottom',
+            horizontal: 'right',
+        },
+        transformOrigin = {
+            vertical: 'top',
+            horizontal: 'right',
+        }
+    } = props;
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
     function onOpen(event: React.MouseEvent<HTMLElement>){
@@ -38,14 +51,8 @@ const PopoverHk2t = forwardRef<PopoverHandle , PopoverProps>((props , ref) => {
             anchorEl={anchorEl}
             open={isOpen}
             onClose={onClose}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            anchorOrigin={anchorOrigin}
+            transformOrigin={transformOrigin}
         >
             {children}
         </Popover>
