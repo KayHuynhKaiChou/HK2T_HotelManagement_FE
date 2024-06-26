@@ -14,6 +14,15 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'sign-up' : '/customer/sign-up'
     },
     'admin' : {
-        'show' : '/admin/user/list'
+        // user
+        'show-user' : '/admin/user/list',
+        'update-user' : '/admin/user/update/:user_id',
+        // amenity
+        'show-ame' : '/admin/amenity/list',
+        'create-ame' : '/admin/amenity/add',
+        // type-room
+        'show-tr' : '/admin/type-room/list',
+        'create-tr' : '/admin/type-room/add',
+        'delete-tr' : '/admin/type-room/update/:type_room_id'
     }
 }

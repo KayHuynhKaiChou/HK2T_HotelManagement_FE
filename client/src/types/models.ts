@@ -46,7 +46,7 @@ export interface TypeRoom {
 }
 
 export interface Amenity {
-    id ?: number;
+    id : number;
     type :  1 | 2 | 3;
     name: string;
     status: 0 | 1;
@@ -55,6 +55,6 @@ export interface Amenity {
 export type TypeAmenity = 'general' | 'bathroom' | 'other';
 
 export type TypeObjAmenity = {
-    [K in TypeAmenity] : string[];
+    [K in TypeAmenity] : Amenity[];
 }
 

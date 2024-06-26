@@ -3,10 +3,9 @@ import { Divider, Grid } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { forwardRef, useImperativeHandle } from 'react';
-import { TypeAmenity, TypeRoom, User } from '../../../types/models';
+import { Amenity, TypeAmenity, TypeObjAmenity, TypeRoom} from '../../../types/models';
 import InputHk2t from '../../../common/InputHk2t';
 import ButtonHk2t from '../../../common/ButtonHk2t';
-import typeAmenity from '../../../data/amenities.json';
 import CheckboxHk2t from '../../../common/CheckboxHk2t';
 import { uuid } from '../../../utils';
 import RichTextEditorHk2t from '../../../common/RichTextEditor/RichTextEditorHk2t';
@@ -16,7 +15,7 @@ import SliderImagesRoom from './SliderImagesRoom';
 import UploadFileBtnHk2t from '../../../common/UploadFileBtnHk2t';
 
 interface FormTypeRoomProps {
-    user : User;
+    typesObjAmenity : TypeObjAmenity;
     onActionTypeRoom : (values : TypeRoom) => void;
 }
 
@@ -25,7 +24,7 @@ export interface FormTypeRoomHandle {
 }
 
 const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props , ref) => {
-    const {user , onActionTypeRoom} = props;
+    const {typesObjAmenity , onActionTypeRoom} = props;
 
     const schema = yup.object({
         title: yup.string()
@@ -67,7 +66,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
             kids_capacity : 0,
             base_price : 0,
             amenities : [],
-            images : [''],
+            images : [],
             status : 0
         },
         resolver: yupResolver(schema)
@@ -95,6 +94,10 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
             currentSelectedAmenities.push(id);
         }
         form.setValue("amenities" , currentSelectedAmenities)
+    }
+
+    const handleChangePreferentialServices = (textEditor : string) => {
+        form.setValue("preferential_services" , textEditor)
     }
 
     return (
@@ -198,7 +201,9 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                 />
                             </Grid>
                             <Grid item sm={12}>
-                                <SliderImagesRoom/>
+                                <SliderImagesRoom 
+                                    imageLinks={uploadedImages}
+                                />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -215,9 +220,9 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                             >
                                 Amenities
                             </Grid>
-                            {Object.keys(typeAmenity).map((key) => {
+                            {Object.keys(typesObjAmenity).map((key) => {
                                 const keyTypeObjAmenity = key as TypeAmenity 
-                                const amenities = typeAmenity[keyTypeObjAmenity]
+                                const amenities = typesObjAmenity[keyTypeObjAmenity]
                                 return (
                                     <Grid item sm={11} container spacing={3}>
                                         <Grid item sm={3}>{key}</Grid>
@@ -234,7 +239,6 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                             ))}
                                         </Grid>
                                     </Grid>
-
                                 )
                             })}
                         </Grid>
@@ -253,7 +257,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                             <Grid item sm={12}>
                                 <RichTextEditorHk2t
                                     textEditor='ss'
-                                    onChangeTextEditor={() => console.log('')}
+                                    onChangeTextEditor={handleChangePreferentialServices}
                                 />
                             </Grid>
                         </Grid>

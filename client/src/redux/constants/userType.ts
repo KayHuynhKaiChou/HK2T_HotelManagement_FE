@@ -6,7 +6,7 @@ type valueUserType = 'SIGN_IN_USER' | 'SIGN_UP_USER' | 'SHOW_USER' | 'UPDATE_USE
 
 export const userType : Record<keyUserType , valueUserType> = {
     SIGN_IN : 'SIGN_IN_USER',
-    SIGN_UP : 'SIGN_IN_USER',
+    SIGN_UP : 'SIGN_UP_USER',
     SHOW : 'SHOW_USER',
     UPDATE : 'UPDATE_USER',
     RESET : 'RESET_USER'

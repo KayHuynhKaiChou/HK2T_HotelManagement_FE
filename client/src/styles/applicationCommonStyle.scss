@@ -57,12 +57,13 @@
 // checkbox common
 
 .un_checkbox_wrap{
-
     @include flex-center;
+    cursor: pointer;
+    
     input.un_checkbox{
         display: none;
         
-        & + label{
+        & + label{  
             height: 20px;
             width: 20px;
             border-radius: 4px;
@@ -130,7 +131,7 @@
         }
     }
     .un_checkbox_labelText{
-
+        cursor: pointer;
     }
 }
 
@@ -341,6 +342,12 @@
    
                 img{
                     height: 408px;
+                }
+
+                &.bl_img_default{
+                    img{
+                        width: 100%;
+                    }
                 }
             }
         }

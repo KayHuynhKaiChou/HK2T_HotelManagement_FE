@@ -12,7 +12,7 @@ export default function CarouselHk2t({children , typeChildren = 'IMAGE' , imageL
     const sliderRef = useRef<Slider | null>(null);
  
     const CustomArrow = ({classNameCustom , onClick} : {classNameCustom : string , onClick?: () => void}) => {
-        return (
+        return imageLinks.length <= 1 ? <></> : (
             <div className={`bl_arrow ${classNameCustom}`} onClick={onClick}></div>
         )
     }
@@ -52,7 +52,7 @@ export default function CarouselHk2t({children , typeChildren = 'IMAGE' , imageL
                 </Slider>
             </div>
             <div className="bl_smallImages">
-                {[...imageLinks , ...imageLinks , ...imageLinks].map((link , index) => (
+                {imageLinks.map((link , index) => (
                     <div
                         className={`bl_smallImage_wrap ${checkSelectedImage(index)}`}
                         onClick={() => handleSelectImage(index)}

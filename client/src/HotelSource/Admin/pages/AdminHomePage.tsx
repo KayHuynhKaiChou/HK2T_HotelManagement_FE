@@ -9,6 +9,8 @@ import HeaderMenuAdmin from '../components/HeaderMenuAdmin';
 import ProfileAdmin from '../components/ProfileAdmin';
 import AmenityAdmin from '../components/AmenityAdmin';
 import TypeRoomAdmin from '../components/TypeRoomAdmin';
+import { useDispatch } from 'react-redux';
+import { amenityAction } from '../../../redux/actions/amenity';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -23,6 +25,12 @@ export default function AdminHomePage() {
   const { menu } = useParams();
   const [open, setOpen] = useState(false);
   const [MenuComponent, setMenuComponent] = useState(<></>);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(amenityAction.showAllAmenity() as any)
+  },[])
 
   const handleToggleNavbar = () => {
     setOpen(!open);
