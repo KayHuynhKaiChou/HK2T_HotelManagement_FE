@@ -9,7 +9,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 export default function TypeRoomAdmin() {
-    const {amenities} = useSelector<RootState , RootState>(state => state);
+    const {amenities , user} = useSelector<RootState , RootState>(state => state);
 
     const typesObjAmenity = useMemo(() => {
       return convertAmenitiesArrayToObject(amenities)
@@ -17,8 +17,8 @@ export default function TypeRoomAdmin() {
 
     const mutationCreateTypeRoom = useMutation<TypeRoom , unknown , TypeRoom>({
       mutationFn: async (data: TypeRoom) => {
-        const gateway = new GateWay("admin")
-        const res = await gateway.post({ action : "create" } , data)
+        const gateway = new GateWay("admin" , user.token)
+        const res = await gateway.post({ action : "create-tr" } , data)
         return res.result
       },
       onSuccess: () => {
@@ -33,7 +33,11 @@ export default function TypeRoomAdmin() {
     });
 
     const handleActionTypeRoom = (values : TypeRoom) => {
-      mutationCreateTypeRoom.mutate(values);
+      const payloadTypeRoom : TypeRoom = {
+        ...values,
+        images : values.images.map(img => img.replace('data:', '').replace(/^.+,/, ''))
+      }
+      mutationCreateTypeRoom.mutate(payloadTypeRoom);
     };
 
     return (

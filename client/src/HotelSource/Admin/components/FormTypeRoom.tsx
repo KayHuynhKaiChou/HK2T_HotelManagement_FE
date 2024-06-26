@@ -78,8 +78,8 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     // use watch
     const uploadedImages = form.watch("images" , []);
     const selectedViewDirection = form.watch("view_direction" , 1);
-    const selectedAmenities = form.watch("amenities" , [])
-    console.log(uploadedImages.length)
+    const selectedAmenities = form.watch("amenities" , []);
+    const inputtedPreferentialServices = form.watch("preferential_services",'');
 
     // func change state form
     const handleChangeViewDirection = (value : TypeRoom['view_direction']) => {       
@@ -200,7 +200,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                     name="images"
                                 />
                             </Grid>
-                            <Grid item sm={12}>
+                            <Grid item sm={12} style={{overflowX : 'auto'}}>
                                 <SliderImagesRoom 
                                     imageLinks={uploadedImages}
                                 />
@@ -256,7 +256,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                             </Grid>
                             <Grid item sm={12}>
                                 <RichTextEditorHk2t
-                                    textEditor='ss'
+                                    textEditor={inputtedPreferentialServices}
                                     onChangeTextEditor={handleChangePreferentialServices}
                                 />
                             </Grid>
