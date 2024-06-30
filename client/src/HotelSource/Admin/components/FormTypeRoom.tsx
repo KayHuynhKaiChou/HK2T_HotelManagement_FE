@@ -1,21 +1,32 @@
+// react-hook-form
 import { useForm  , SubmitHandler, UseFormReturn} from 'react-hook-form'
-import { Divider, Grid } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { forwardRef, useImperativeHandle } from 'react';
-import { Amenity, TypeAmenity, TypeObjAmenity, TypeRoom} from '../../../types/models';
+// MUI
+import { Divider, Grid } from '@mui/material'
+// hook
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import useEffectSkipFirstRender from '../../../hooks/useEffectSkipFirstRender';
+//model
+import { TypeAmenity, TypeObjAmenity, TypeRoom} from '../../../types/models';
+//common
 import InputHk2t from '../../../common/InputHk2t';
 import ButtonHk2t from '../../../common/ButtonHk2t';
 import CheckboxHk2t from '../../../common/CheckboxHk2t';
-import { uuid } from '../../../utils';
 import RichTextEditorHk2t from '../../../common/RichTextEditor/RichTextEditorHk2t';
-import { defaultViewDirection } from '../../../utils/constants';
 import RadioBtnHk2t from '../../../common/RadioBtnHk2t';
-import SliderImagesRoom from './SliderImagesRoom';
 import UploadFileBtnHk2t from '../../../common/UploadFileBtnHk2t';
+// util
+import { uuid } from '../../../utils';
+// constants
+import { defaultViewDirection } from '../../../utils/constants';
+import SliderImagesRoom from './SliderImagesRoom';
+import { ActionForm } from '../../../types/form';
 
 interface FormTypeRoomProps {
+    selectedTypeRoom ?: TypeRoom;
     typesObjAmenity : TypeObjAmenity;
+    typeActionForm : ActionForm;
     onActionTypeRoom : (values : TypeRoom) => void;
 }
 
@@ -24,7 +35,8 @@ export interface FormTypeRoomHandle {
 }
 
 const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props , ref) => {
-    const {typesObjAmenity , onActionTypeRoom} = props;
+    const {selectedTypeRoom , typesObjAmenity , typeActionForm , onActionTypeRoom} = props;
+    const formInnerRef = useRef<HTMLFormElement | null>(null);
 
     const schema = yup.object({
         title: yup.string()
@@ -55,20 +67,22 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                 .required()
     });
 
+    const defaultValues : TypeRoom = {
+        title : '',
+        preferential_services : '',
+        view_direction : 1,
+        size : 0,
+        adult_capacity : 0,
+        kids_capacity : 0,
+        base_price : 0,
+        amenities : [],
+        images : [],
+        status : 0
+    }
+
     // hook form
     const form : UseFormReturn<TypeRoom> = useForm({
-        defaultValues: {
-            title : '',
-            preferential_services : '',
-            view_direction : 1,
-            size : 0,
-            adult_capacity : 0,
-            kids_capacity : 0,
-            base_price : 0,
-            amenities : [],
-            images : [],
-            status : 0
-        },
+        defaultValues,
         resolver: yupResolver(schema)
     }) as UseFormReturn<TypeRoom>
 
@@ -80,6 +94,11 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     const selectedViewDirection = form.watch("view_direction" , 1);
     const selectedAmenities = form.watch("amenities" , []);
     const inputtedPreferentialServices = form.watch("preferential_services",'');
+
+    // useMemo
+    const keyWordForm = useMemo(() => {
+        return typeActionForm === 'CREATE' ? 'create' : 'update'
+    },[])
 
     // func change state form
     const handleChangeViewDirection = (value : TypeRoom['view_direction']) => {       
@@ -100,13 +119,29 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
         form.setValue("preferential_services" , textEditor)
     }
 
+    // useEffect
+    useEffectSkipFirstRender(() => {
+        if(form.formState.isSubmitSuccessful){
+            form.reset(defaultValues)
+        }
+    },[form.formState.isSubmitSuccessful])
+
+    useEffectSkipFirstRender(() => {
+        if(typeActionForm === 'CREATE'){
+            form.reset(defaultValues)
+        }else{
+            form.reset(selectedTypeRoom)
+        }
+    },[typeActionForm , selectedTypeRoom])
+
     return (
         <form 
             onSubmit={form.handleSubmit(onActionTypeRoom as SubmitHandler<TypeRoom>)}
             className='bl_personInfor_form'
+            ref={formInnerRef}
         >
             <div className="bl_personInfor_form_inner">
-                <div className="bl_personInfor_header">Form create type room</div>
+                <div className="bl_personInfor_header">Form {keyWordForm} type room</div>
                 <Divider className="bl_personInfor_divider"/>
                 <div className="bl_personInfor_body">
                     <Grid container columnSpacing={3}>
@@ -267,7 +302,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
             <div className="bl_btn__submit for_employee">
                 <ButtonHk2t
                     variant="contained"
-                    content='Create type room'
+                    content={`${keyWordForm} type room`}
                     isUseForm={true}
                 /> 
             </div>

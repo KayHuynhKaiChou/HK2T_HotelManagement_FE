@@ -1,7 +1,7 @@
 import { Table, TableRow, styled } from "@mui/material";
 import { ColumnType, OptionSelect , ColumnTypeProps } from "../../types/supportUI";
 
-export const getLimitRowsPerPage = (rows : unknown[] , pageSizeOptions : OptionSelect[]) => {
+export const getLimitRowsPerPage = (rows : {[key: string]: any}[] , pageSizeOptions : OptionSelect[]) => {
     const lengthRows = rows.length;
     let initValue = 0;
     const minOpt = +pageSizeOptions[0]?.value;

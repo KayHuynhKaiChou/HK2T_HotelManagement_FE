@@ -1,6 +1,11 @@
 @import 'variables';
 @import 'mixins';
 
+// helper
+.un_padding_updown_12{
+    padding: 12px 0;
+}
+
 // input common
 .un_input_wrap{
     margin-bottom: 10px;
@@ -161,13 +166,25 @@
     
         .bl_selectLimit{
             @include flex-center;
+            align-items: end;
 
-            .bl_select_wrap{
-
+            .un_input_wrap{
+                margin-bottom: 0;
             }
         }
+
+        .bl_act{
+            @include flex-center;
+            align-items: end;
+        }
+
         .bl_searchTable{
             @include flex-center;
+            align-items: end;
+
+            .un_input_wrap{
+                margin-bottom: 0;
+            }
 
             .bl_searchTable_label{
             

@@ -34,3 +34,5 @@ export interface FormSignup extends Account{
     surname : string;
     confirmPassword : string;
 }
+
+export type ActionForm = 'CREATE' | 'UPDATE' 

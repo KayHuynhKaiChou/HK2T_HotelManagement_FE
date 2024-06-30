@@ -21,7 +21,8 @@ export default function ButtonHk2t({
     size = 'small',
     Icon,
     colorCustom = colorsBtnCustom['primary'],
-    isUseForm = false
+    isUseForm = false,
+    ...other
 } : propsButton) {
 
     const ButtonIconCustom = styled(IconButton)({
@@ -48,6 +49,7 @@ export default function ButtonHk2t({
                     disabled={disabled}
                     size={size}
                     type={isUseForm ? 'submit' : 'button'}
+                    {...other}
                 >
                     { content }
                 </ButtonCustom>
@@ -56,6 +58,7 @@ export default function ButtonHk2t({
             return(
                 <ButtonIconCustom 
                     disabled={disabled}
+                    {...other}
                 >
                     <Icon/>
                 </ButtonIconCustom>

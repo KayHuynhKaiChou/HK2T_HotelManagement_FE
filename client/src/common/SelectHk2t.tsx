@@ -21,7 +21,7 @@ export default function SelectHk2t({
     value,
     disabled = false,
     placeholder = '',
-    className = '',
+    className,
     onChange
 } : propsSelect) {
 

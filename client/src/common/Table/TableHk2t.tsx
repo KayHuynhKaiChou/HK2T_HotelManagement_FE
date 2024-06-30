@@ -19,18 +19,28 @@ import {
     mapCriteriaToOptionSelect
 } from "./table_helper";
 import InputHk2t from "../InputHk2t";
+import ButtonHk2t from "../ButtonHk2t";
+import AddIcon from '@mui/icons-material/Add';
 
 interface propsTable {
     rows: { [key : string] : any}[];
     columns: ColumnType[];
     pageSizeOptions : OptionSelect[];
     isLoadingTable : boolean; 
+    onActionAdd ?: (...args: any[]) => void;
+    onExportExcel ?: (...args: any[]) => void;
 }
 
 type selectTypeCurrentPage = 'NORMAL' | 'PREVIOUS' | 'NEXT';
 
-export default function TableHk2t({ rows , columns , pageSizeOptions = [] , isLoadingTable }: propsTable) {
-    console.log({rows})
+export default function TableHk2t({ 
+    rows , 
+    columns , 
+    pageSizeOptions = [] , 
+    isLoadingTable ,
+    onActionAdd ,
+    onExportExcel
+}: propsTable) {
     // state ===================================================================
     const [selectedIdColumnDetail , setSelectedIdColumnDetail] = useState<OptionSelect['value']>(
         initSelectedIdColumnDetail(columns)
@@ -255,6 +265,25 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] , isLo
                         <div className="bl_subText">thành viên</div>
                     </div>
                 ) }
+                <div className="bl_act">
+                    {typeof onActionAdd === 'function' && (
+                        <ButtonHk2t
+                            content='add'
+                            startIcon={<AddIcon/>}
+                            onClick={onActionAdd}
+                        />
+                    )}
+                    {typeof onExportExcel === 'function' && (
+                        <ButtonHk2t
+                            content='export excel'
+                            startIcon={<FontAwesomeIconHk2t className="fa-file-excel"/>}
+                            colorCustom={{
+                                background: "green"
+                            }}
+                            onClick={onExportExcel}
+                        />
+                    )}
+                </div>
                 <div className="bl_searchTable">
                     <div className="bl_searchTable_label">Search: </div>
                     {
@@ -295,10 +324,10 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] , isLo
                             <TableCell 
                                 key={col.id} 
                                 className="un_tableCell_wrap" 
-                                align="left"
+                                align="center"
                                 width={col.width || 300}
                             >
-                                {col.nameCol}
+                                {col.label ?? col.nameCol}
                                 {col.isSorted && (
                                     <div 
                                         className="un_iconSort"
@@ -320,7 +349,9 @@ export default function TableHk2t({ rows , columns , pageSizeOptions = [] , isLo
                             key={uuid()}
                         >
                             {columns.map(col => (
-                                <TableCell align="left">{row[col.nameCol]}</TableCell>
+                                <TableCell align={col.textAlign ?? 'left'}>
+                                    {row[col.nameCol]}
+                                </TableCell>
                             ))}
                         </CustomTableRow>
                     ))}
