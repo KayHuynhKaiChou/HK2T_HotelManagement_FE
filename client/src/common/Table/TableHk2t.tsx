@@ -109,7 +109,7 @@ export default function TableHk2t({
         searchText != '' && setSearchText('');
         const limitRowsPerPage = getLimitRowsPerPage(rows , pageSizeOptions);
         pageSizeOption != limitRowsPerPage && setPageSizeOption(limitRowsPerPage);
-        listNumberPage.length > 0 && setListNumberPage([]);
+        // listNumberPage.length > 0 && setListNumberPage([]);
         currentPage > 1 && setCurrentPage(1);
         selectedCriteria && setSelectedCriteria(null);
         sortedColumn.id != defaultSortColumn.id && setSortedColumn(defaultSortColumn);
@@ -128,7 +128,8 @@ export default function TableHk2t({
         const listPage = Array.from({ length: lengthListNumber }, (_, index) => index + 1)
         setListNumberPage(listPage)
         setRowsDetail(rowsFilter.slice(fromRow , toRow))       
-    },[currentPage , pageSizeOption , lengthRows])
+    },[currentPage , pageSizeOption , lengthRows , rows])
+    // dependency rows mục đích là khi update 1 ele trong rows 
 
     // track sort asc / desc by column
     useEffect(() => {
@@ -247,6 +248,24 @@ export default function TableHk2t({
         })
     }
 
+    // logic css
+    const getJustifyContent = (isSorted : boolean , textAlign : ColumnType['textAlign']) => {
+        if(isSorted) return 'space-between';
+        let valueJC = '';
+        switch(textAlign){
+            case 'left':
+                valueJC = 'flex-start'
+                break;
+            case 'right':
+                valueJC = 'flex-end'
+                break;
+            case 'center':
+                valueJC = 'center'
+                break;
+        };
+        return valueJC
+    }
+
     return (
         <TableContainer 
             component={Paper}
@@ -322,23 +341,28 @@ export default function TableHk2t({
                     <TableRow>
                         {columns.map(col => (
                             <TableCell 
-                                key={col.id} 
-                                className="un_tableCell_wrap" 
-                                align="center"
+                                key={col.id}
                                 width={col.width || 300}
                             >
-                                {col.label ?? col.nameCol}
-                                {col.isSorted && (
-                                    <div 
-                                        className="un_iconSort"
-                                        onClick={() => handleChangeSortedColumn(col.id)}
-                                    >
-                                        <FontAwesomeIconHk2t
-                                            fontSizeCustom={15}
-                                            {...getIconSortByColumn(col.id)}
-                                        />
-                                    </div>
-                                )}
+                                <div 
+                                    className="un_tableCell_wrap"
+                                    style={{
+                                        justifyContent : getJustifyContent(!!col.isSorted , col.textAlign)
+                                    }}
+                                >
+                                    {col.label ?? col.nameCol}
+                                    {col.isSorted && (
+                                        <div 
+                                            className="un_iconSort"
+                                            onClick={() => handleChangeSortedColumn(col.id)}
+                                        >
+                                            <FontAwesomeIconHk2t
+                                                fontSizeCustom={15}
+                                                {...getIconSortByColumn(col.id)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </TableCell>
                         ))}
                     </TableRow>
@@ -349,7 +373,10 @@ export default function TableHk2t({
                             key={uuid()}
                         >
                             {columns.map(col => (
-                                <TableCell align={col.textAlign ?? 'left'}>
+                                <TableCell 
+                                    align={col.textAlign ?? 'left'} 
+                                    className={col.nameCol === 'action' ? 'un_flex_center_children_cell' : undefined}
+                                >
                                     {row[col.nameCol]}
                                 </TableCell>
                             ))}

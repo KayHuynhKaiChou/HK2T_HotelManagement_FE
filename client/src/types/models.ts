@@ -41,7 +41,7 @@ export interface TypeRoom {
     kids_capacity : number;
     base_price : number;
     amenities : Array<Amenity['id']>;
-    images : Array<string>;
+    images : Array<{id: number , link: string}>;
     status : 0 | 1;
 }
 

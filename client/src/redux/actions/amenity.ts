@@ -39,6 +39,38 @@ const showAllAmenity = () : amenityThunkAction => {
     }
 }
 
+const createNewAmenity = (amenity : Amenity) : amenityThunkAction => {
+    return async (dispatch , getState) => {
+        const {user} = getState();
+        dispatch({ type : responseType.START })
+        const gateway = new GateWay('admin' , user.token);
+        const response = await gateway.post({action : 'create-ame'} , amenity);
+ 
+        if (response.status == 200){
+            dispatch({
+                type : responseType.SUCCESS,
+                payload : {
+                    status : response.status,
+                    message : response.message
+                }
+            })
+            dispatch({
+                type : amenityType.CREATE,
+                payload : response.result
+            })
+        }else{
+            dispatch({
+                type : responseType.FAILURE,
+                payload : {
+                    status : response.status,
+                    message : response.message
+                }
+            })
+        }
+    }
+}
+
 export const amenityAction = {
-    showAllAmenity
+    showAllAmenity,
+    createNewAmenity
 }

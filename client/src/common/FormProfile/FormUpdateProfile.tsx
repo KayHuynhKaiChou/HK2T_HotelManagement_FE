@@ -164,6 +164,10 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         form.setValue("gender", gender)
     }
 
+    const handleUploadImages = (images : Array<string | ArrayBuffer | null>) => {
+        form.setValue("link_avatar", images[0] + '')
+    }
+
     return (
         <form 
             onSubmit={form.handleSubmit(onUpdateProfile as SubmitHandler<FormUserEmployee>)}
@@ -185,8 +189,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                                 </div>
                                 <div className="bl_personInfor_background_btnUpload">
                                     <UploadFileBtnHk2t
-                                        form={form}
-                                        name='link_avatar'
+                                        onUploadImages={handleUploadImages}
                                     />
                                 </div>
                             </div>

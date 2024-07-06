@@ -143,14 +143,18 @@
 // table common
 
 .un_tableCell_wrap{
-    position: relative;
+    @include flex-center;
     
     .un_iconSort{
-        position: absolute;
-        right: 10px;
-        bottom: 15px;
+        
         cursor: pointer;
     }
+}
+
+.un_flex_center_children_cell{
+    @include flex-center;
+    justify-content: center;
+    gap: 0;
 }
 
 .bl_tableContainer{
@@ -216,7 +220,6 @@
             border-bottom: 2px solid #bfbfbf;
             tr th{
                 font-size: 18px;
-                text-transform: capitalize;
             }
         } 
     }

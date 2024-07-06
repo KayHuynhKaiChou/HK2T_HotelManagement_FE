@@ -12,8 +12,9 @@ import { ColumnType } from "../../../types/supportUI";
 import { Grid, Switch } from "@mui/material";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import { Delete, Edit } from "@mui/icons-material";
-import { colorsBtnCustom, defaultPageSizeOptions, defaultViewDirection } from "../../../utils/constants";
+import { colorsBtnCustom, columnsLoading, defaultPageSizeOptions, defaultViewDirection, rowsLoading } from "../../../utils/constants";
 import { ActionForm } from "../../../types/form";
+import LoadingHk2t from "../../../common/LoadingHk2t";
 
 const HEIGHT_MENU_HEADER = 64 as const;
 const PADDING_UPDOWN_12 = 24 as const;
@@ -54,6 +55,26 @@ export default function TypeRoomAdmin() {
     changeTypeActionForm("UPDATE")
   }
 
+  // query for action get all
+  const fetchGetAllTypeRoom = async () => {
+    const gateway = new GateWay('admin' , user.token)
+    const res = await gateway.get({action : 'show-tr'});
+    return res.result
+  }
+
+  const queryKey = useMemo(() => {
+    return `all-type-room-${uuid()}`
+  },[])
+
+  const {
+    data : listTypeRooms , 
+    isLoading : isLoadingAllTypeRoom ,
+    refetch : refetchAllTypeRoom
+  } = useQuery<TypeRoom[]>({
+    queryKey : [queryKey] , 
+    queryFn: fetchGetAllTypeRoom 
+  });
+
   // mutation for action create
   const mutationCreateTypeRoom = useMutation<TypeRoom , unknown , TypeRoom>({
     mutationFn: async (data: TypeRoom) => {
@@ -68,37 +89,33 @@ export default function TypeRoomAdmin() {
       toast.error("Thêm sản phẩm mới thất bại", toastMSGObject());
     },
     onSettled: () => {
-      //queryAllProducts.refetch();
+      refetchAllTypeRoom();
+    }
+  });
+
+  // mutation for action update
+  const mutationUpdateTypeRoom = useMutation<TypeRoom , unknown , TypeRoom>({
+    mutationFn: async (data: TypeRoom) => {
+      const gateway = new GateWay("admin" , user.token)
+      const res = await gateway.post({ action : "update-tr" , type_room_id : selectedTypeRoom?.id + ''} , data)
+      return res.result
+    },
+    onSuccess: () => {
+      toast.success("Chỉnh sửa sản phẩm thành công", toastMSGObject());
+    },
+    onError: () => {
+      toast.error("Chỉnh sửa sản phẩm thất bại", toastMSGObject());
+    },
+    onSettled: () => {
+      refetchAllTypeRoom();
     }
   });
 
   const handleActionTypeRoom = (values : TypeRoom) => {
-    const payloadTypeRoom : TypeRoom = {
-      ...values,
-      images : values.images.map(img => img.replace('data:', '').replace(/^.+,/, ''))
-    }
-    mutationCreateTypeRoom.mutate(payloadTypeRoom);
+    typeActionForm === 'CREATE' 
+      ? mutationCreateTypeRoom.mutate(values)
+      : mutationUpdateTypeRoom.mutate(values)
   };
-
-  // query for action get all
-  const fetchGetAllTypeRoom = async () => {
-    const gateway = new GateWay('admin' , user.token)
-    const res = await gateway.get({action : 'show-tr'});
-    return res.result
-  }
-
-  const queryKey = useMemo(() => {
-    return `all-type-room-${uuid()}`
-  },[])
-
-  const queryAllTypeRoom = useQuery<TypeRoom[]>({
-    queryKey : [queryKey] , 
-    queryFn: fetchGetAllTypeRoom 
-  });
-  const {
-    data : listTypeRooms , 
-    isLoading : isLoadingAllTypeRoom    
-  } = queryAllTypeRoom;
 
   // define columns and rows
   const columns = useMemo<ColumnType[]>(() => {
@@ -118,8 +135,9 @@ export default function TypeRoomAdmin() {
         id : `field-size-${uuid()}`,
         nameCol : 'size',
         label : 'size (m²)',
-        width : 150,
-        textAlign : 'center'
+        width : 250,
+        textAlign : 'center',
+        isSorted : true
       },
       {
         id : `field-view_direction-${uuid()}`,
@@ -144,8 +162,8 @@ export default function TypeRoomAdmin() {
       {
         id : `field-base_price-${uuid()}`,
         nameCol : 'base_price',
-        label : 'base price',
-        width : 80
+        label : 'base price (vnđ)',
+        width : 300
       },
       {
         id : `field-status-${uuid()}`,
@@ -155,7 +173,7 @@ export default function TypeRoomAdmin() {
       {
         id : `field-action-${uuid()}`,
         nameCol : 'action',
-        width : 300,
+        width : 200,
         textAlign : 'center'
       }
     ]
@@ -166,6 +184,7 @@ export default function TypeRoomAdmin() {
     return listTypeRooms
       .map((typeRoom , index) => {
         return {
+          id : typeRoom.id,
           stt : index + 1,
           title : typeRoom.title,
           size : typeRoom.size,
@@ -177,14 +196,14 @@ export default function TypeRoomAdmin() {
           status : <Switch defaultChecked={!!typeRoom.status} />,
           action : (
             <Grid container spacing={2}>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <ButtonHk2t
                   typeCustom="icon"
                   Icon={Edit}
                   onClick={() => handleEdit(typeRoom)}
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <ButtonHk2t
                   typeCustom="icon"
                   Icon={Delete}
@@ -199,10 +218,11 @@ export default function TypeRoomAdmin() {
 
   return (
     <>
+      {isLoadingAllTypeRoom && <LoadingHk2t/> }
       <TableHk2t
         isLoadingTable={isLoadingAllTypeRoom}
-        columns={columns}
-        rows={rows}
+        rows={isLoadingAllTypeRoom ? rowsLoading : rows}
+        columns={isLoadingAllTypeRoom ? columnsLoading : columns}
         pageSizeOptions={defaultPageSizeOptions}
         onActionAdd={() => changeTypeActionForm("CREATE")}
         onExportExcel={() => {}}

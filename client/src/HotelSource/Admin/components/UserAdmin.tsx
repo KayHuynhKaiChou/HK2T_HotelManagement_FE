@@ -18,7 +18,7 @@ export default function UserAdmin() {
 
   const fetchGetAllUser = async () => {
     const gateway = new GateWay('admin' , user.token)
-    const res = await gateway.get({action : 'show'});
+    const res = await gateway.get({action : 'show-user'});
     return res.result
   }
 

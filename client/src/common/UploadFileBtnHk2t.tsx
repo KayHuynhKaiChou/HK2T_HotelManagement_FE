@@ -2,27 +2,20 @@ import { ChangeEvent } from "react";
 import { uuid } from "../utils";
 import ButtonHk2t from "./ButtonHk2t";
 import { Upload } from "@mui/icons-material";
-
 interface UploadFileBtnHk2tProps {
-    form?:any;
-    name : string;
+    onUploadImages : (images : Array<string | ArrayBuffer | null>) => void;
     disabled?: boolean;
     className?: string;
-    value?: any;
 }
 
 export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
     const {
-        form,
-        name = '',
+        onUploadImages,
         disabled = false,
-        className = '',
-        value = ''
+        className = ''
     } = props
 
     const uid = uuid();
-
-    const uploadedImages = form.watch(name , [])
 
     const handleFileChange = async (event : ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files && event.target.files;
@@ -34,7 +27,7 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
                         // ko thể dùng reader.result.replace('data:', '').replace(/^.+,/, '')
                         // vì cho vô field src nó ko hiện ảnh
                         // do đó lúc call api mới dùng .replace('data:', '').replace(/^.+,/, '')
-                        resolve(reader.result);
+                        resolve((reader.result + '').replace('data:', '').replace(/^.+,/, ''));
                     };
                     reader.onerror = reject;
                     reader.readAsDataURL(file);
@@ -43,7 +36,7 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
     
             try {
                 const base64Strings = await Promise.all(promises);
-                form.setValue(name, [...uploadedImages, ...base64Strings]);
+                onUploadImages(base64Strings);
             } catch (error) {
                 console.error("Error reading files: ", error);
             }

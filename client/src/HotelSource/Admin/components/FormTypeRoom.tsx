@@ -22,6 +22,9 @@ import { uuid } from '../../../utils';
 import { defaultViewDirection } from '../../../utils/constants';
 import SliderImagesRoom from './SliderImagesRoom';
 import { ActionForm } from '../../../types/form';
+import GateWay from '../../../lib/api_gateway';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/reducers';
 
 interface FormTypeRoomProps {
     selectedTypeRoom ?: TypeRoom;
@@ -36,7 +39,13 @@ export interface FormTypeRoomHandle {
 
 const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props , ref) => {
     const {selectedTypeRoom , typesObjAmenity , typeActionForm , onActionTypeRoom} = props;
+    const {user} = useSelector<RootState , RootState>(state => state);
     const formInnerRef = useRef<HTMLFormElement | null>(null);
+
+    const imageSchema = yup.object().shape({
+        id: yup.number().required('ID is required'),
+        link: yup.string().url('Must be a valid URL').required('Link is required')
+    });
 
     const schema = yup.object({
         title: yup.string()
@@ -59,7 +68,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                 .required()
                 .min(1, 'Must contain at least one amenity'),
         images: yup.array()
-                .of(yup.string())
+                .of(imageSchema)
                 .required()
                 .min(1, 'Must contain at least one image'),
         status: yup.number()
@@ -98,7 +107,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     // useMemo
     const keyWordForm = useMemo(() => {
         return typeActionForm === 'CREATE' ? 'create' : 'update'
-    },[])
+    },[typeActionForm])
 
     // func change state form
     const handleChangeViewDirection = (value : TypeRoom['view_direction']) => {       
@@ -119,9 +128,32 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
         form.setValue("preferential_services" , textEditor)
     }
 
+    const handleUploadImages = async (base64s : Array<string | ArrayBuffer | null>) => {
+        const gateway = new GateWay('admin' , user.token)
+        
+        const promiseImages = base64s.map((base64) => {
+            return new Promise(
+                async (resolve , reject) => {
+                    try {
+                        const res = await gateway.post(
+                            {action : 'upload' , type_room_id : selectedTypeRoom?.id + ''} ,
+                            {link : base64}
+                        );
+                        resolve(res.result)
+                    } catch (error) {
+                        reject(error)
+                    }
+                }
+            )
+        }) as Promise<{id: number , link: string}>[]
+
+        const images = await Promise.all(promiseImages)
+        form.setValue("images" , [...uploadedImages , ...images])
+    }
+
     // useEffect
     useEffectSkipFirstRender(() => {
-        if(form.formState.isSubmitSuccessful){
+        if(form.formState.isSubmitSuccessful && typeActionForm === 'CREATE'){
             form.reset(defaultValues)
         }
     },[form.formState.isSubmitSuccessful])
@@ -133,6 +165,10 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
             form.reset(selectedTypeRoom)
         }
     },[typeActionForm , selectedTypeRoom])
+
+    useEffectSkipFirstRender(() => {
+        console.log(form.formState.defaultValues , form.getValues())
+    },[form.getValues()])
 
     return (
         <form 
@@ -231,13 +267,12 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                     Room images
                                 </Grid>
                                 <UploadFileBtnHk2t
-                                    form={form}
-                                    name="images"
+                                    onUploadImages={handleUploadImages}
                                 />
                             </Grid>
                             <Grid item sm={12} style={{overflowX : 'auto'}}>
                                 <SliderImagesRoom 
-                                    imageLinks={uploadedImages}
+                                    imageLinks={uploadedImages.map(img => img.link)}
                                 />
                             </Grid>
                         </Grid>

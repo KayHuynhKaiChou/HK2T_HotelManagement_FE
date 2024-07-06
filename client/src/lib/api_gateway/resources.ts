@@ -23,6 +23,9 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         // type-room
         'show-tr' : '/admin/type-room/list',
         'create-tr' : '/admin/type-room/add',
-        'delete-tr' : '/admin/type-room/update/:type_room_id'
+        'update-tr' : '/admin/type-room/update/:type_room_id',
+        'delete-tr' : '/admin/type-room/update/:type_room_id',
+        // upload image
+        'upload' : '/admin/type-room/:type_room_id/image'
     }
 }

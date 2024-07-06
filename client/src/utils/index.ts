@@ -2,10 +2,22 @@ import { ToastOptions, ToastPosition, Theme } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { Amenity, TypeAmenity, TypeObjAmenity } from '../types/models';
 import { defaultTypeAmenity } from './constants';
+import { isValidElement } from 'react';
 
 export const uuid = () => {
   const id = uuidv4().replace(/-/g, '')
   return id
+}
+
+export const isJSXElement = (element: any): boolean => {
+  return isValidElement(element);
+}
+
+export const capitalizeFirstLetter = (text : String) => {
+  if (typeof text !== 'string' || text.length === 0) {
+    return '';
+  }
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 export const convertAmenitiesArrayToObject = (amenities : Amenity[]) : TypeObjAmenity => {
