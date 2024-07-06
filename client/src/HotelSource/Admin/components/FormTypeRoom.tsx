@@ -5,7 +5,7 @@ import * as yup from "yup";
 // MUI
 import { Divider, Grid } from '@mui/material'
 // hook
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import useEffectSkipFirstRender from '../../../hooks/useEffectSkipFirstRender';
 //model
 import { TypeAmenity, TypeObjAmenity, TypeRoom} from '../../../types/models';
@@ -19,12 +19,13 @@ import UploadFileBtnHk2t from '../../../common/UploadFileBtnHk2t';
 // util
 import { uuid } from '../../../utils';
 // constants
-import { defaultViewDirection } from '../../../utils/constants';
+import { colorsBtnCustom, defaultViewDirection } from '../../../utils/constants';
 import SliderImagesRoom from './SliderImagesRoom';
 import { ActionForm } from '../../../types/form';
 import GateWay from '../../../lib/api_gateway';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/reducers';
+import { Delete } from '@mui/icons-material';
 
 interface FormTypeRoomProps {
     selectedTypeRoom ?: TypeRoom;
@@ -41,6 +42,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     const {selectedTypeRoom , typesObjAmenity , typeActionForm , onActionTypeRoom} = props;
     const {user} = useSelector<RootState , RootState>(state => state);
     const formInnerRef = useRef<HTMLFormElement | null>(null);
+    const [indexImage , setIndexImage] = useState<number>(0);
 
     const imageSchema = yup.object().shape({
         id: yup.number().required('ID is required'),
@@ -110,6 +112,11 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     },[typeActionForm])
 
     // func change state form
+    const handleDeleteImage = () => {
+        const filterImages = uploadedImages.filter((_ , index) => index !== indexImage)
+        form.setValue("images",filterImages)
+    }
+
     const handleChangeViewDirection = (value : TypeRoom['view_direction']) => {       
         form.setValue("view_direction", value);
     }
@@ -255,7 +262,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                             </Grid>
                         </Grid>
                         <Grid item sm={6} container rowSpacing={1}>
-                            <Grid item sm={12} container>
+                            <Grid item sm={12} container alignItems={"flex-start"}>
                                 <Grid
                                     item
                                     sx={{
@@ -269,10 +276,19 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                 <UploadFileBtnHk2t
                                     onUploadImages={handleUploadImages}
                                 />
+                                <ButtonHk2t
+                                    startIcon={<Delete/>}
+                                    content='Delete'
+                                    colorCustom={colorsBtnCustom['danger']}
+                                    sx={{marginLeft : '10px'}}
+                                    disabled={uploadedImages.length == 0}
+                                    onClick={handleDeleteImage}
+                                />
                             </Grid>
                             <Grid item sm={12} style={{overflowX : 'auto'}}>
                                 <SliderImagesRoom 
                                     imageLinks={uploadedImages.map(img => img.link)}
+                                    onChangeImage={(index : number) => setIndexImage(index)}
                                 />
                             </Grid>
                         </Grid>

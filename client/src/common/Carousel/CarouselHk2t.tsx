@@ -2,13 +2,18 @@ import { ReactNode, useMemo, useRef, useState } from "react";
 import Slider from "react-slick";
  
 interface CarouselHk2t {
+    indexSlider : number;
+    onChangeIndexSlider : (indexSlider : number) => void;
     children : ReactNode;
-    typeChildren?: 'IMAGE';
     imageLinks?: Array<string>;
 }
  
-export default function CarouselHk2t({children , typeChildren = 'IMAGE' , imageLinks = []} : CarouselHk2t) {
-    const [indexSlider , setIndexSlider] = useState<number>(0);
+export default function CarouselHk2t({
+    indexSlider,
+    onChangeIndexSlider,
+    children , 
+    imageLinks = []
+} : CarouselHk2t) {
     const sliderRef = useRef<Slider | null>(null);
  
     const CustomArrow = ({classNameCustom , onClick} : {classNameCustom : string , onClick?: () => void}) => {
@@ -25,7 +30,7 @@ export default function CarouselHk2t({children , typeChildren = 'IMAGE' , imageL
  
     const handleSelectImage = (index : number) => {
         sliderRef.current?.slickGoTo(index)
-        setIndexSlider(index)
+        onChangeIndexSlider(index)
     }
  
     const settings = {
@@ -38,7 +43,7 @@ export default function CarouselHk2t({children , typeChildren = 'IMAGE' , imageL
         waitForAnimate: false,
         prevArrow: <CustomArrow classNameCustom={'bl_prevArrow'}/>,
         nextArrow: <CustomArrow classNameCustom={'bl_nextArrow'}/>,
-        beforeChange: (current : any, next : any) => setIndexSlider(next)
+        beforeChange: (current : any, next : any) => onChangeIndexSlider(next)
     };
    
     return (
