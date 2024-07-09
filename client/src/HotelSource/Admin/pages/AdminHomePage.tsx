@@ -11,6 +11,7 @@ import AmenityAdmin from '../components/AmenityAdmin';
 import TypeRoomAdmin from '../components/TypeRoomAdmin';
 import { useDispatch } from 'react-redux';
 import { amenityAction } from '../../../redux/actions/amenity';
+import RoomAdmin from '../components/RoomAdmin';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -52,6 +53,9 @@ export default function AdminHomePage() {
         break;
       case 'types-room':
         setMenuComponent(<TypeRoomAdmin/>)
+        break;
+      case 'booking':
+        setMenuComponent(<RoomAdmin/>)
         break;
       default:
         setMenuComponent(<></>)

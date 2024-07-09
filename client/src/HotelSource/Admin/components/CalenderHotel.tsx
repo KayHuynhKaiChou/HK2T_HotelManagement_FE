@@ -3,6 +3,8 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import { uuid } from "../../../utils";
 
 export default function CalenderHotel() {
@@ -18,119 +20,36 @@ export default function CalenderHotel() {
     const calendarApi = selectInfo.view.calendar
 
     calendarApi.unselect() // clear date selection
-
+    console.log(selectInfo.resource?._resource)
     if (title) {
       calendarApi.addEvent({
         id: uuid(),
+        resourceId: selectInfo.resource?._resource.id,
         title,
         start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-
+        end: selectInfo.endStr
       })
     }
   }
 
   return (
     <FullCalendar
-      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimeGridPlugin, resourceTimelinePlugin]}
       headerToolbar={{
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth", // we can use timeGridWeek, timeGridDay
+        left: 'today prev,next',
+        center: 'title',
+        right: 'resourceTimelineMonth'
       }}
-      initialView="dayGridMonth"
+      initialView='resourceTimelineMonth'
+      resourceAreaHeaderContent='Rooms'
+      resources='https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors'
+      events='https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
       editable={true}
       selectable={true}
       selectMirror={true}
       dayMaxEvents={true}
       select={handleDateSelect}
-      events={[
-        {
-          title: 'All Day Event',
-          start: '2024-03-01',
-          className: 'css_green'
-        },
-        {
-          title: 'Long Event',
-          start: '2024-03-07',
-          end: '2024-03-10'
-        },
-        {
-          title: 'Long Event 1',
-          start: '2024-03-07',
-          end: '2024-03-10'
-        },
-        {
-          title: 'Long Event 2',
-          start: '2024-03-07',
-          end: '2024-03-10'
-        },
-        {
-          title: 'Long Event 3',
-          start: '2024-03-07',
-          end: '2024-03-10'
-        },
-        {
-          title: 'Long Event 4',
-          start: '2024-03-07',
-          end: '2024-03-10'
-        },
-        {
-          title: 'Long Event 5',
-          start: '2024-03-07',
-          end: '2024-03-10'
-        },
-        {
-          title: 'Long Event 6',
-          start: '2024-03-07',
-          end: '2024-03-10'
-        },
-        {
-          title: 'Repeating Event',
-          start: '2024-03-09'
-        },
-        {
-          title: 'Repeating Event',
-          start: '2024-03-16T00:00:00', // 4p Repeating Event hay là 4:00PM
-          color: 'red'
-        },
-        {
-          title: 'Conference',
-          start: '2024-03-11',
-          end: '2024-03-13'
-        },
-        {
-          title: 'Meeting',
-          start: '2024-03-12T10:30:00',
-          end: '2024-03-12T12:30:00'
-        },
-        {
-          title: 'Lunch',
-          start: '2024-03-12T12:00:00'
-        },
-        {
-          title: 'Meeting',
-          start: '2024-03-12T14:30:00'
-        },
-        {
-          title: 'Happy Hour',
-          start: '2024-03-12T17:30:00'
-        },
-        {
-          title: 'Dinner',
-          start: '2024-03-12T20:00:00'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2024-03-13T07:00:00'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2024-03-28'
-        }
-    ]}
+      //eventClick={}
     />
   );
 }

@@ -23,8 +23,8 @@ export const listMenuAdmin : MenuAdmin[] = [
         Icon : MeetingRoomIcon,
         childrenMenu : [
             {
-                name : 'Rooms',
-                endpoint : 'rooms',
+                name : 'Booking',
+                endpoint : 'booking',
                 Icon : RadioButtonUncheckedIcon ,
                 childrenMenu : []
             },

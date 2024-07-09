@@ -5,7 +5,6 @@ export default function DashboardAdmin() {
   return (
     <div>
       <SummaryReport/>
-      <CalenderHotel/>
     </div>
   )
 }
