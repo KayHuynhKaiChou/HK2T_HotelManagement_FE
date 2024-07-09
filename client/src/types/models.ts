@@ -46,7 +46,7 @@ export interface TypeRoom {
 }
 
 export interface Amenity {
-    id : number;
+    id ?: number;
     type :  1 | 2 | 3;
     name: string;
     status: 0 | 1;

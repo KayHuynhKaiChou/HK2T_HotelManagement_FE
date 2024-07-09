@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 import FontAwesomeIconHk2t from "../FontAwesomeIconHk2t";
 import { uuid } from "../../utils";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { defaultSortColumn, iconsSort } from "../../utils/constants";
+import { colorsBtnCustom, defaultSortColumn, iconsSort } from "../../utils/constants";
 import SelectHk2t from "../SelectHk2t";
 import { OptionSelect , ColumnType , CriteriaType, TypeSort } from "../../types/supportUI";
 import { 
@@ -296,9 +296,7 @@ export default function TableHk2t({
                         <ButtonHk2t
                             content='export excel'
                             startIcon={<FontAwesomeIconHk2t className="fa-file-excel"/>}
-                            colorCustom={{
-                                background: "green"
-                            }}
+                            colorCustom={colorsBtnCustom['success']}
                             onClick={onExportExcel}
                         />
                     )}

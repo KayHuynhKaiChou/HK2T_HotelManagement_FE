@@ -14,11 +14,15 @@ interface FormAmenityProps {
     onActionProfile : (values : Amenity) => void;
 }
 
-export default function FormAmenity({onActionProfile} : FormAmenityProps) {
+export default function FormAmenity({
+    onActionProfile
+} : FormAmenityProps) {
 
     const schema = yup.object({
         name: yup.string()
                 .required('Please enter firstname !'),
+        type: yup.number()
+                .required('Please select type !'),
         status:  yup.number()
                 .oneOf([0,1] as const)
                 .required(),
@@ -28,6 +32,7 @@ export default function FormAmenity({onActionProfile} : FormAmenityProps) {
     const form = useForm({
         defaultValues: {
             name : '',
+            type : 0,
             status : 0
         },
         resolver: yupResolver(schema)
@@ -98,7 +103,7 @@ export default function FormAmenity({onActionProfile} : FormAmenityProps) {
             <div className="bl_btn__submit for_employee">
                 <ButtonHk2t
                     variant="contained"
-                    content='Create type room'
+                    content='Create amenity'
                     isUseForm={true}
                 /> 
             </div>

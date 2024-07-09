@@ -4,13 +4,13 @@ import FormAmenity from "./FormAmenity";
 import { RootState } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { amenityAction } from "../../../redux/actions/amenity";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnType } from "../../../types/supportUI";
 import { capitalizeFirstLetter, uuid } from "../../../utils";
-import { Grid, Switch } from "@mui/material";
+import { Chip } from "@mui/material";
 import ButtonHk2t from "../../../common/ButtonHk2t";
-import { Delete, Edit } from "@mui/icons-material";
-import { colorsBtnCustom, defaultPageSizeOptions, defaultTypeAmenity } from "../../../utils/constants";
+import { Edit } from "@mui/icons-material";
+import { defaultPageSizeOptions, defaultstatus, defaultTypeAmenity } from "../../../utils/constants";
 import TableHk2t from "../../../common/Table/TableHk2t";
 
 export default function AmenityAdmin() {
@@ -18,7 +18,7 @@ export default function AmenityAdmin() {
     const {amenities} = useSelector<RootState , RootState>(state => state);
     const dispatch = useDispatch();
 
-    const handleActionProfile = (formAmenity : Amenity) => {
+    const handleActionAmenity = (formAmenity : Amenity) => {
         dispatch(amenityAction.createNewAmenity(formAmenity) as any)
     }
 
@@ -46,12 +46,6 @@ export default function AmenityAdmin() {
                 id : `field-status-${uuid()}`,
                 nameCol : 'status',
                 width : 80
-            },
-            {
-                id : `field-action-${uuid()}`,
-                nameCol : 'action',
-                width : 300,
-                textAlign : 'center'
             }
         ]
     },[])
@@ -65,23 +59,11 @@ export default function AmenityAdmin() {
                 stt : index + 1,
                 name : capitalizeFirstLetter(ame.name),
                 type : defaultTypeAmenity[ame.type - 1],     
-                status : <Switch defaultChecked={!!ame.status} />,
-                action : (
-                    <Grid container spacing={2} width={100}>
-                        <Grid item sm={6}>
-                            <ButtonHk2t
-                            typeCustom="icon"
-                            Icon={Edit}
-                            />
-                        </Grid>
-                        <Grid item sm={6}>
-                            <ButtonHk2t
-                            typeCustom="icon"
-                            Icon={Delete}
-                            colorCustom={colorsBtnCustom['danger']}
-                            />
-                        </Grid>
-                    </Grid>
+                status : (
+                    <Chip 
+                      color={!!ame.status ? 'success' : 'error'} 
+                      label={defaultstatus[ame.status]}
+                    />
                 )
             }
         })
@@ -98,7 +80,9 @@ export default function AmenityAdmin() {
             <div className="un_padding_updown_12"></div>
             <div className="bl_profile">
                 <div className="bl_profile_inner">
-                    <FormAmenity onActionProfile={handleActionProfile} />
+                    <FormAmenity
+                        onActionProfile={handleActionAmenity}
+                    />
                 </div>
             </div>
         </>

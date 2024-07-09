@@ -5,7 +5,7 @@ import * as yup from "yup";
 // MUI
 import { Divider, Grid } from '@mui/material'
 // hook
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import useEffectSkipFirstRender from '../../../hooks/useEffectSkipFirstRender';
 //model
 import { TypeAmenity, TypeObjAmenity, TypeRoom} from '../../../types/models';
@@ -19,7 +19,7 @@ import UploadFileBtnHk2t from '../../../common/UploadFileBtnHk2t';
 // util
 import { uuid } from '../../../utils';
 // constants
-import { colorsBtnCustom, defaultViewDirection } from '../../../utils/constants';
+import { colorsBtnCustom, defaultstatus, defaultViewDirection } from '../../../utils/constants';
 import SliderImagesRoom from './SliderImagesRoom';
 import { ActionForm } from '../../../types/form';
 import GateWay from '../../../lib/api_gateway';
@@ -105,11 +105,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     const selectedViewDirection = form.watch("view_direction" , 1);
     const selectedAmenities = form.watch("amenities" , []);
     const inputtedPreferentialServices = form.watch("preferential_services",'');
-
-    // useMemo
-    const keyWordForm = useMemo(() => {
-        return typeActionForm === 'CREATE' ? 'create' : 'update'
-    },[typeActionForm])
+    const selectedStatus = form.watch("status" , 0)
 
     // func change state form
     const handleDeleteImage = () => {
@@ -135,6 +131,10 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
         form.setValue("preferential_services" , textEditor)
     }
 
+    const handleChangeStatus = (index : TypeRoom['status']) => {
+        form.setValue("status" , index)
+    }
+
     const handleUploadImages = async (base64s : Array<string | ArrayBuffer | null>) => {
         const gateway = new GateWay('admin' , user.token)
         
@@ -157,6 +157,11 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
         const images = await Promise.all(promiseImages)
         form.setValue("images" , [...uploadedImages , ...images])
     }
+
+    // useMemo
+    const keyWordForm = useMemo(() => {
+        return typeActionForm === 'CREATE' ? 'create' : 'update'
+    },[typeActionForm])
 
     // useEffect
     useEffectSkipFirstRender(() => {
@@ -238,7 +243,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                     sx={{
                                         color : "#707e9c;" , 
                                         fontWeight : "bold",
-                                        marginRight : 4
+                                        width : 150
                                     }}
                                 >
                                     View direction
@@ -259,6 +264,31 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                         </Grid>
                                     )
                                 })}
+                            </Grid>
+                            <Grid item sm={11} container spacing={3} alignItems={"center"}>
+                                <Grid
+                                    item
+                                    sx={{
+                                        color : "#707e9c;" , 
+                                        fontWeight : "bold",
+                                        width : 150
+                                    }}
+                                >
+                                    Status
+                                </Grid>
+                                {defaultstatus.map((status , index) => (
+                                    <Grid item>
+                                        <RadioBtnHk2t
+                                            id={`select-gender-${uuid()}`}
+                                            name="gender"
+                                            label={status}
+                                            value={index}
+                                            checked={selectedStatus == index}
+                                            form={form}
+                                            onChange={() => handleChangeStatus(index as TypeRoom['status'])}
+                                        />
+                                    </Grid>
+                                ))}
                             </Grid>
                         </Grid>
                         <Grid item sm={6} container rowSpacing={1}>
@@ -319,7 +349,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                                         id={`checkbox-amenity-by-type-${uuid()}`}
                                                         label={ame.name}
                                                         checked={selectedAmenities.includes(ame.id)}
-                                                        onChange={() => handleChangeCheckAmenity(ame.id)}
+                                                        onChange={() => handleChangeCheckAmenity(ame.id || 0)}
                                                     />
                                                 </Grid>
                                             ))}

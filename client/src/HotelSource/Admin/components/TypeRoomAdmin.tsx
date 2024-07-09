@@ -9,10 +9,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useMemo, useRef, useState } from "react";
 import TableHk2t from "../../../common/Table/TableHk2t";
 import { ColumnType } from "../../../types/supportUI";
-import { Grid, Switch } from "@mui/material";
+import { Chip, Grid, Switch } from "@mui/material";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import { Delete, Edit } from "@mui/icons-material";
-import { colorsBtnCustom, columnsLoading, defaultPageSizeOptions, defaultViewDirection, rowsLoading } from "../../../utils/constants";
+import { colorsBtnCustom, columnsLoading, defaultPageSizeOptions, defaultstatus, defaultViewDirection, rowsLoading } from "../../../utils/constants";
 import { ActionForm } from "../../../types/form";
 import LoadingHk2t from "../../../common/LoadingHk2t";
 
@@ -171,8 +171,8 @@ export default function TypeRoomAdmin() {
         width : 80
       },
       {
-        id : `field-action-${uuid()}`,
-        nameCol : 'action',
+        id : `field-edit-${uuid()}`,
+        nameCol : 'edit',
         width : 200,
         textAlign : 'center'
       }
@@ -193,24 +193,18 @@ export default function TypeRoomAdmin() {
           adult_capacity : typeRoom.adult_capacity,
           kids_capacity : typeRoom.kids_capacity,
           base_price : typeRoom.base_price,        
-          status : <Switch defaultChecked={!!typeRoom.status} />,
-          action : (
-            <Grid container spacing={2}>
-              <Grid item sm={6}>
-                <ButtonHk2t
-                  typeCustom="icon"
-                  Icon={Edit}
-                  onClick={() => handleEdit(typeRoom)}
-                />
-              </Grid>
-              <Grid item sm={6}>
-                <ButtonHk2t
-                  typeCustom="icon"
-                  Icon={Delete}
-                  colorCustom={colorsBtnCustom['danger']}
-                />
-              </Grid>
-            </Grid>
+          status : (
+            <Chip 
+              color={!!typeRoom.status ? 'success' : 'error'} 
+              label={defaultstatus[typeRoom.status]}
+            />
+          ),
+          edit : (
+            <ButtonHk2t
+              typeCustom="icon"
+              Icon={Edit}
+              onClick={() => handleEdit(typeRoom)}
+            />
           )
         }
       })
