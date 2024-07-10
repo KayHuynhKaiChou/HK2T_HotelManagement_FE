@@ -9,6 +9,10 @@ export const uuid = () => {
   return id
 }
 
+export const formatDate = (dateObj : Date) => {
+  return `${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}`;
+}
+
 export const isJSXElement = (element: any): boolean => {
   return isValidElement(element);
 }

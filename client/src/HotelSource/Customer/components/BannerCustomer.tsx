@@ -28,7 +28,7 @@ export default function BannerCustomer() {
         >
             <div className="bl_bannerCustomer">
                 <div className="bl_bannerCustomer_title">
-                    <h2>HK2T Hotel Management</h2>
+                    <h2>HK2T Hotel Booking</h2>
                     <p>Hệ thống đặt phòng khách sạn trực tuyến</p>
                 </div>
                 <FormBookingCustomer/>

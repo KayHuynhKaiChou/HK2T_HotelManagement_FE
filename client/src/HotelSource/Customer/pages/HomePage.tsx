@@ -1,4 +1,5 @@
 import BannerCustomer from "../components/BannerCustomer";
+import IntroduceHotel from "../components/IntroduceHotel";
 import Navbar from "../components/NavbarCustomer";
 
 export default function HomePage() {
@@ -6,6 +7,7 @@ export default function HomePage() {
     <div>
       <Navbar />
       <BannerCustomer/>
+      <IntroduceHotel/>
     </div>
   )
 }
