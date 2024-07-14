@@ -25,6 +25,9 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'create-tr' : '/admin/type-room/add',
         'update-tr' : '/admin/type-room/update/:type_room_id',
         'delete-tr' : '/admin/type-room/update/:type_room_id',
+        // room
+        'show-room' : '/admin/room/list',
+        'create-room' : '/admin/room/add',
         // upload image
         'upload' : '/admin/type-room/:type_room_id/image'
     }
