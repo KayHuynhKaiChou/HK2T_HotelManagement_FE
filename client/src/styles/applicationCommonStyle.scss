@@ -18,6 +18,11 @@
     }
 
     .un_input{
+        &.bl_datePicker{
+            margin-top: 15px;
+            overflow-y: hidden;
+            flex: 1;
+        }
         input{
             background: #fff;
             padding: 10.5px 14px;

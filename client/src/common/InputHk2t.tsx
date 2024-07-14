@@ -1,6 +1,12 @@
+import '../styles/applicationCommonStyle.scss'
 import { Controller } from 'react-hook-form'
 import { InputAdornment, TextField } from '@mui/material'
-import '../styles/applicationCommonStyle.scss'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateValidationError, PickerChangeHandlerContext, PickerValidDate } from '@mui/x-date-pickers/models';
 
 interface InputProps {
     form?: any;
@@ -12,7 +18,9 @@ interface InputProps {
     className?: string;
     value?: string;
     iconInput?: JSX.Element;
+    minDate?: PickerValidDate;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChangeDatePicker?:(value: Dayjs | null, context: PickerChangeHandlerContext<DateValidationError>) => void
     onFocus?: () => void
 }
 
@@ -24,10 +32,12 @@ function InputHk2t(props : InputProps) {
         placeholder = '',
         disabled = false,
         typeInput = 'text',
-        className = '',
+        className,
         value = '',
         iconInput,
+        minDate = dayjs('2032-01-01'),
         onChange,
+        onChangeDatePicker,
         onFocus
     } = props
     
@@ -88,12 +98,27 @@ function InputHk2t(props : InputProps) {
         }
     }
 
+    function renderDatePicker(){
+        return (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                    <DatePicker 
+                        className={`un_input bl_datePicker ${className}`}
+                        minDate={minDate}
+                        onChange={onChangeDatePicker}
+                        disabled={disabled}
+                    />
+                </DemoContainer>
+            </LocalizationProvider>
+        )
+    }
+
     return (
         <div className='un_input_wrap'>
             <div className="un_input_label">
                 {label}
             </div>
-            {renderInput()}
+            {typeInput === 'date' ? renderDatePicker() : renderInput()}
         </div>
     )
 }

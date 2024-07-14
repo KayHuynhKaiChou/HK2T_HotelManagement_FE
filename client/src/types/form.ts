@@ -36,3 +36,12 @@ export interface FormSignup extends Account{
 }
 
 export type ActionForm = 'CREATE' | 'UPDATE' 
+
+export interface FormBooking {
+    email : string;
+    checkin_at : string;
+    checkout_at : string;
+    adult_capacity : number;
+    kid_capacity : number;
+    type_room_id : number;
+}

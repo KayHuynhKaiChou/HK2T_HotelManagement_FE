@@ -1,10 +1,10 @@
-import { Room } from "../../../types/models";
+import { FormBooking } from "../../../types/form";
 import CalenderHotel from "./CalenderHotel";
-import FormRoom from "./FormRoom";
+import FormBookingRoom from "./FormBookingRoom";
 
 export default function RoomAdmin() {
 
-    const handleActionProfile = (formRoom : Room) => {
+    const handleActionBookingRoom = (values : FormBooking) => {
 
     }
 
@@ -12,7 +12,7 @@ export default function RoomAdmin() {
         <div className="bl_profile">
             <div className="bl_profile_inner">                
                 <CalenderHotel/>
-                <FormRoom onActionProfile={handleActionProfile} />
+                <FormBookingRoom onActionReversation={handleActionBookingRoom}/>
             </div>
         </div>
     )
