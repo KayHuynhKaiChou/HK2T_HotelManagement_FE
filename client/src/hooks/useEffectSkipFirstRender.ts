@@ -1,4 +1,5 @@
 import { DependencyList, EffectCallback, useEffect, useRef } from "react";
+import { noop } from "../utils/noop";
 
 export default function useEffectSkipFirstRender(
     effectCallback : EffectCallback,
@@ -16,5 +17,6 @@ export default function useEffectSkipFirstRender(
             }
         }
         
+        return noop
     },deps)
 }
