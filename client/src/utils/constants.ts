@@ -125,7 +125,20 @@ export const iconsSort = {
     }
 }
 
-export const defaultPages = ["Home", "About", "Contact"] as const;
+export const defaultPages = [
+    {
+        title: "Home",
+        href: '/'
+    },
+    {
+        title: "Room",
+        href: '/rooms'
+    },
+    {
+        title: "About",
+        href: '/'
+    }
+] as const;
 
 export const namesImageBanner = ['viewHotel' , 'roomHotel' , 'swimmingPoolHotel'];
 
@@ -212,5 +225,20 @@ export const anotherPartServices : {title: string, backgroundImg: string}[] = [
     {
         title: 'Amenity & utilities',
         backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/lotte/saigon/promotion/package/6437-1440-pkg-LTHO.jpg.thumb.480.480.jpg'
+    },
+]
+
+export const defaultEndows : {title: string, backgroundImg: string}[] = [
+    {
+        title: 'Members-only events',
+        backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/common/member/pc-mai-rewards1.png'
+    },
+    {
+        title: 'Attractive room rates and services',
+        backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/common/member/pc-mai-rewards2.png'
+    },
+    {
+        title: 'Accumulate points and redeem rewards',
+        backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/common/member/pc-mai-rewards3.png'
     },
 ]
