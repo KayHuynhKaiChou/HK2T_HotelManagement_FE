@@ -129,14 +129,33 @@ export const defaultPages = ["Home", "About", "Contact"] as const;
 
 export const namesImageBanner = ['viewHotel' , 'roomHotel' , 'swimmingPoolHotel'];
 
+export const statusBooking = [
+    {
+        name : 'OPEN',
+        color : colorsBtnCustom.primary.background
+    },
+    {
+        name : 'INPROGRESS',
+        color : colorsBtnCustom.warning.background
+    },
+    {
+        name : 'END',
+        color : colorsBtnCustom.success.background
+    }, 
+    {
+        name : 'CANCEL',
+        color : colorsBtnCustom.danger.background
+    }
+]
+
 export const defaultGenders : string[] = [
     'MALE',
     'FEMALE'
 ]
 
 export const defaultstatus : string[] = [
-    'ACTIVE',
-    'INACTIVE'
+    'INACTIVE',
+    'ACTIVE'
 ]
 
 export const defaultPositions = [
@@ -180,3 +199,18 @@ export const rowsLoading = Array.from({length : 5} , () => {
 })
 
 export const defaultSortColumn : {id : ColumnType['id'] , type : TypeSort} = {id : '' , type : 'NORMAL'}
+
+export const anotherPartServices : {title: string, backgroundImg: string}[] = [
+    {
+        title: 'Food services',
+        backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/lotte/saigon/dining/restaurant/italian-trattoria-oggi/6662-4-2000-din-LTHO.jpg.thumb.480.480.jpg'
+    },
+    {
+        title: 'Hotel information',
+        backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/lotte/saigon/promotion/package/6625-1-1440-pkg-LTHO.jpg.thumb.480.480.jpg'
+    },
+    {
+        title: 'Amenity & utilities',
+        backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/lotte/saigon/promotion/package/6437-1440-pkg-LTHO.jpg.thumb.480.480.jpg'
+    },
+]
