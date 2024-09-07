@@ -1,7 +1,7 @@
 import { ReactNode, useMemo, useRef, useState } from "react";
 import Slider from "react-slick";
  
-interface CarouselHk2t {
+interface CarouselHk2tProps {
     indexSlider?: number;
     onChangeIndexSlider?: (indexSlider : number) => void;
     children : ReactNode;
@@ -13,7 +13,7 @@ export default function CarouselHk2t({
     onChangeIndexSlider,
     children , 
     imageLinks = []
-} : CarouselHk2t) {
+} : CarouselHk2tProps) {
     const sliderRef = useRef<Slider | null>(null);
  
     const CustomArrow = ({classNameCustom , onClick} : {classNameCustom : string , onClick?: () => void}) => {
