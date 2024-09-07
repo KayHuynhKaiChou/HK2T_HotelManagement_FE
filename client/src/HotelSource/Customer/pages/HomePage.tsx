@@ -2,10 +2,10 @@ import { useDispatch } from "react-redux";
 import BannerCustomer from "../components/BannerCustomer";
 import IntroduceHotel from "../components/IntroduceHotel";
 import ListTypeRoomCustomer from "../components/ListTypeRoomCustomer";
-import Navbar from "../components/NavbarCustomer";
 import { useEffect } from "react";
 import { typeRoomAction } from "../../../redux/actions/typeRoom";
 import { anotherPartServices } from "../../../utils/constants";
+import RegisterMemberComponent from "../components/RegisterMemberComponent";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -16,7 +16,6 @@ export default function HomePage() {
 
   return (
     <div>
-      <Navbar />
       <BannerCustomer/>
       <IntroduceHotel/>
       <div className="bl_mainInfor_wrap">
@@ -32,6 +31,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+      <RegisterMemberComponent/>
     </div>
   )
 }
