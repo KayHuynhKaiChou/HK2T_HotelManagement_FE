@@ -45,6 +45,7 @@ export default function SelectHk2t({
                             isSearchable={false}
                             options={options}
                             placeholder={placeholder}
+                            isDisabled={disabled}
                             className='bl_select_form'
                         />
                     }
