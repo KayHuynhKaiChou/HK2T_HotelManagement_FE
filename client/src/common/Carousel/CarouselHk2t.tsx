@@ -15,7 +15,6 @@ export default function CarouselHk2t({
     imageLinks = []
 } : CarouselHk2t) {
     const sliderRef = useRef<Slider | null>(null);
-    console.log(children)
  
     const CustomArrow = ({classNameCustom , onClick} : {classNameCustom : string , onClick?: () => void}) => {
         return (children as any).length <= 1 ? <></> : (
