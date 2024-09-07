@@ -4,7 +4,9 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'sign_up' : '/api/user/sign_up',
         'show' : '/user/profile',
         'update' : '/user/profile',
-        'change-password' : '/user/change-password'
+        'change-password' : '/user/change-password',
+        'show-tr' : '/public/type-room/list',
+        'create-re' : '/user/reservation/add'
     },
     'employee' : {
         'sign-in' : '/employee/sign-in'
@@ -21,13 +23,14 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'show-ame' : '/admin/amenity/list',
         'create-ame' : '/admin/amenity/add',
         // type-room
-        'show-tr' : '/admin/type-room/list',
         'create-tr' : '/admin/type-room/add',
         'update-tr' : '/admin/type-room/update/:type_room_id',
         'delete-tr' : '/admin/type-room/update/:type_room_id',
         // room
         'show-room' : '/admin/room/list',
         'create-room' : '/admin/room/add',
+        // reservation
+        'show-re' : '/admin/reservation/list',
         // upload image
         'upload' : '/admin/type-room/:type_room_id/image'
     }
