@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector , useDispatch } from 'react-redux';
 import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";
 import FormSignUpCustomer from "../components/FormSignUpCustomer";
 import { FormSignup } from "../../../types/form";
+import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function SignupPage() {
     }
   }
 
-  useEffect(() => {
+  useEffectSkipFirstRender(() => {
     if(response.isLoading || response.status == 0) return;
     if(response.status == 200){
       navigate('/')

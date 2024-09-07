@@ -5,6 +5,7 @@ import { useSelector , useDispatch } from 'react-redux';
 import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";
 import FormSignInCustomer from "../components/FormSignInCustomer";
+import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
 
 export default function SigninPage() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function SigninPage() {
     }
   }
 
-  useEffect(() => {
+  useEffectSkipFirstRender(() => {
     if(response.isLoading || response.status == 0) return;
     if(response.status == 200){
       navigate('/')
