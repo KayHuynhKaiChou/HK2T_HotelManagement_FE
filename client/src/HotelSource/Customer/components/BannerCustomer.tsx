@@ -9,7 +9,6 @@ export default function BannerCustomer() {
         setInterval(() => {
             if(bannerEle.current){
                 const linkImage = bannerEle.current.style.backgroundImage;
-                console.log(linkImage)
                 let indexNameImage = namesImageBanner.findIndex(nameImg => linkImage.includes(nameImg));
                 if(indexNameImage == namesImageBanner.length - 1){
                     indexNameImage = 0;
