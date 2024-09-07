@@ -2,8 +2,8 @@ import { ReactNode, useMemo, useRef, useState } from "react";
 import Slider from "react-slick";
  
 interface CarouselHk2t {
-    indexSlider : number;
-    onChangeIndexSlider : (indexSlider : number) => void;
+    indexSlider?: number;
+    onChangeIndexSlider?: (indexSlider : number) => void;
     children : ReactNode;
     imageLinks?: Array<string>;
 }
@@ -15,9 +15,10 @@ export default function CarouselHk2t({
     imageLinks = []
 } : CarouselHk2t) {
     const sliderRef = useRef<Slider | null>(null);
+    console.log(children)
  
     const CustomArrow = ({classNameCustom , onClick} : {classNameCustom : string , onClick?: () => void}) => {
-        return imageLinks.length <= 1 ? <></> : (
+        return (children as any).length <= 1 ? <></> : (
             <div className={`bl_arrow ${classNameCustom}`} onClick={onClick}></div>
         )
     }
@@ -30,7 +31,7 @@ export default function CarouselHk2t({
  
     const handleSelectImage = (index : number) => {
         sliderRef.current?.slickGoTo(index)
-        onChangeIndexSlider(index)
+        onChangeIndexSlider && onChangeIndexSlider(index)
     }
  
     const settings = {
@@ -43,7 +44,7 @@ export default function CarouselHk2t({
         waitForAnimate: false,
         prevArrow: <CustomArrow classNameCustom={'bl_prevArrow'}/>,
         nextArrow: <CustomArrow classNameCustom={'bl_nextArrow'}/>,
-        beforeChange: (current : any, next : any) => onChangeIndexSlider(next)
+        beforeChange: (current : any, next : any) => onChangeIndexSlider && onChangeIndexSlider(next)
     };
    
     return (
@@ -56,16 +57,18 @@ export default function CarouselHk2t({
                     {children}
                 </Slider>
             </div>
-            <div className="bl_smallImages">
-                {imageLinks.map((link , index) => (
-                    <div
-                        className={`bl_smallImage_wrap ${checkSelectedImage(index)}`}
-                        onClick={() => handleSelectImage(index)}
-                    >
-                        <img src={link} alt="" />
-                    </div>
-                ))}
-            </div>    
+            {imageLinks.length > 0 && (
+                <div className="bl_smallImages">
+                    {imageLinks.map((link , index) => (
+                        <div
+                            className={`bl_smallImage_wrap ${checkSelectedImage(index)}`}
+                            onClick={() => handleSelectImage(index)}
+                        >
+                            <img src={link} alt="" />
+                        </div>
+                    ))}
+                </div>
+            )}
         </>
     );
 }
