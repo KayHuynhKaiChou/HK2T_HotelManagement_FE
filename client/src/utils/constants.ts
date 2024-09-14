@@ -213,6 +213,8 @@ export const rowsLoading = Array.from({length : 5} , () => {
 
 export const defaultSortColumn : {id : ColumnType['id'] , type : TypeSort} = {id : '' , type : 'NORMAL'}
 
+export const linkDefaultImage = 'https://cdn.pixabay.com/photo/2017/11/10/05/24/add-2935429_960_720.png'
+
 export const anotherPartServices : {title: string, backgroundImg: string}[] = [
     {
         title: 'Food services',
