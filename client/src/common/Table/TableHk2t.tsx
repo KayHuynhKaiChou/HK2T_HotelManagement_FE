@@ -26,9 +26,9 @@ interface propsTable {
     rows: { [key : string] : any}[];
     columns: ColumnType[];
     pageSizeOptions : OptionSelect[];
-    isLoadingTable : boolean; 
-    onActionAdd ?: (...args: any[]) => void;
-    onExportExcel ?: (...args: any[]) => void;
+    isLoadingTable?: boolean; 
+    onActionAdd?: (...args: any[]) => void;
+    onExportExcel?: (...args: any[]) => void;
 }
 
 type selectTypeCurrentPage = 'NORMAL' | 'PREVIOUS' | 'NEXT';
@@ -37,7 +37,7 @@ export default function TableHk2t({
     rows , 
     columns , 
     pageSizeOptions = [] , 
-    isLoadingTable ,
+    isLoadingTable = false,
     onActionAdd ,
     onExportExcel
 }: propsTable) {
@@ -104,8 +104,8 @@ export default function TableHk2t({
         // do đó ở dòng 323, row[col.nameCol] bị null
         // B3 : chạy useEffect này xong thì rowDetails mới đc update sang lại data đã có
         if(isLoadingTable) return;
-        setRowsDetail(rows);
-        setRowsFilter(rows);
+        setRowsDetail([...rows].slice(fromRow , toRow))
+        setRowsFilter([...rows]);
         searchText != '' && setSearchText('');
         const limitRowsPerPage = getLimitRowsPerPage(rows , pageSizeOptions);
         pageSizeOption != limitRowsPerPage && setPageSizeOption(limitRowsPerPage);
@@ -128,8 +128,7 @@ export default function TableHk2t({
         const listPage = Array.from({ length: lengthListNumber }, (_, index) => index + 1)
         setListNumberPage(listPage)
         setRowsDetail(rowsFilter.slice(fromRow , toRow))       
-    },[currentPage , pageSizeOption , lengthRows , rows])
-    // dependency rows mục đích là khi update 1 ele trong rows 
+    },[currentPage , pageSizeOption , lengthRows])
 
     // track sort asc / desc by column
     useEffect(() => {
