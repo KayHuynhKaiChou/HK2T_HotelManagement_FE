@@ -3,6 +3,7 @@ import { TypeRoom } from "../../../types/models"
 import { linkDefaultImage } from "../../../utils/constants"
 import CarouselHk2t from "../../../common/Carousel/CarouselHk2t"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useNavigate } from "react-router-dom";
 
 interface TypeRoomInforCommonCustomerProps {
     typeRoom: TypeRoom
@@ -10,6 +11,8 @@ interface TypeRoomInforCommonCustomerProps {
 export default function TypeRoomInforCommonCustomer({
   typeRoom
 } : TypeRoomInforCommonCustomerProps) {
+
+  const navigate = useNavigate()
 
   const { images, title, adult_capacity, kids_capacity, size } = typeRoom
 
@@ -25,6 +28,12 @@ export default function TypeRoomInforCommonCustomer({
         </div>
     ))
   }, [images])
+
+  const handleNavigateToDetailTR = () => {
+    let titleURL = title.replace('Phòng','Room').toLowerCase().replaceAll(/\s+/g, '-');
+    navigate(`/rooms/${titleURL}`,{ state: typeRoom })
+  }
+
   return (
     <div className="bl_tr_wrap">
       <div className="bl_carousel_wrap">
@@ -42,7 +51,10 @@ export default function TypeRoomInforCommonCustomer({
             <span>|</span>
             <p>Size room: <b>{size} ㎡</b></p>
           </div>
-          <div className="bl_detail">
+          <div 
+            className="bl_detail"
+            onClick={handleNavigateToDetailTR}
+          >
             <b>xem chi tiết</b>
             <ArrowForwardIosIcon sx={{ fontSize: 13 }} />
           </div>

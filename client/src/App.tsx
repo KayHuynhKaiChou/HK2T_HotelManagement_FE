@@ -7,6 +7,7 @@ import HomePage from "./HotelSource/Customer/pages/HomePage";
 import PersonalPage from "./HotelSource/Customer/pages/PersonalPage";
 import ListRoomPage from "./HotelSource/Customer/pages/ListRoomPage";
 import DefaultPage from "./HotelSource/Customer/pages/DefaultPage";
+import DetailTypeRoomPage from "./HotelSource/Customer/pages/DetailTypeRoomPage";
 
 function App() {
 
@@ -15,7 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<DefaultPage/>}>
           <Route index element={<HomePage />} />
-          <Route path="rooms" element={<ListRoomPage/>}/>
+          <Route path="rooms" element={<ListRoomPage/>} />
+          <Route path="rooms/:title" element={<DetailTypeRoomPage/>} />
         </Route>
         <Route path="admin" element={<AdminSigninPage/>}/>
         <Route path="admin/:menu" element={<AdminHomePage/>}/>
