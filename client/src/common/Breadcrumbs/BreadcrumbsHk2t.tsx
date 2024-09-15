@@ -2,16 +2,15 @@ import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Chip, emphasize, styled } from '@mui/material';
 import { BreadCrumbChild } from '../../types/supportUI';
+import { useNavigate } from 'react-router-dom';
 
 interface BreadcrumbsHk2tProps {
     listBreadcrumbs: BreadCrumbChild[];
 }
+//event: React.MouseEvent<HTMLDivElement, MouseEvent>
 
 export default function BreadcrumbsHk2t({ listBreadcrumbs } : BreadcrumbsHk2tProps) {
-    function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-      event.preventDefault();
-      console.info('You clicked a breadcrumb.');
-    }
+    const navigate = useNavigate()
 
     const StyledBreadcrumb = styled(Chip)(({ theme }) => {
         const backgroundColor =
@@ -35,7 +34,7 @@ export default function BreadcrumbsHk2t({ listBreadcrumbs } : BreadcrumbsHk2tPro
     }) as typeof Chip;
 
     return (
-        <div role="presentation" onClick={handleClick}>
+        <div role="presentation">
             <Breadcrumbs aria-label="breadcrumb">
                 {listBreadcrumbs.map((breadcrumb, index) => {
                     if(index === listBreadcrumbs.length - 1){
@@ -49,9 +48,10 @@ export default function BreadcrumbsHk2t({ listBreadcrumbs } : BreadcrumbsHk2tPro
                     return (
                         <StyledBreadcrumb
                             component="a" // chip same as <a href="" />
-                            href={breadcrumb.href}
+                            // href={breadcrumb.href}
                             label={breadcrumb.label}
                             icon={breadcrumb.icon}
+                            onClick={() => breadcrumb.href && navigate(breadcrumb.href)}
                         />
                     )
                 })}
