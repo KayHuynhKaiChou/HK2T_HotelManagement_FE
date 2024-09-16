@@ -13,6 +13,71 @@
     }
 }
 
+// Default page , form booking
+.bl_container_form{
+    position: fixed;
+    z-index: 999;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    background-color: #ff9a00;
+    height: 0; /* Bắt đầu với max-height là 0 */
+    overflow: hidden; /* Đảm bảo nội dung không hiển thị khi ẩn */
+    transition: height 0.5s linear; /* Thời gian và hiệu ứng transition */
+
+    &.active{
+        height: 130px;
+    }
+
+    .bl_formBooking_wrap{
+        margin: auto;
+        width: 1150px;
+        height: 90px;
+        border-radius: 10px;
+        background: #fff;
+        display: flex;
+
+        .bl_formBookingGroup{
+            border-left: 1px solid #e2e7ef;
+            flex-basis: calc((100% - 15%)/3);
+            padding-left: 20px;
+            
+            @include flex-center;
+
+            &_inner{
+                @include flex-center;
+                .bl_formBooking_infor{
+                    padding-left: 10px;
+                    font-weight:600;
+                }
+            }
+
+            &:first-child{
+                border-left: none;
+            }
+
+            &:last-child{
+                background-color: $color-btn-customer-primary;
+                flex-basis: 15%;
+                display: flex;
+                border-left: none;
+                border-radius: 0 10px 10px 0;
+                padding-left: 0;
+                cursor: pointer;
+            }
+
+            &_btn{
+                letter-spacing: 0.8px;
+                margin: auto;
+                color: #fff;
+                font-weight: 600;
+                text-transform: uppercase;
+                text-wrap: nowrap;
+            }
+        }
+    }
+}
+
 // navbar home page
 .bl_navbarCustomer_container{
 
@@ -79,54 +144,6 @@
                 font-size: $font-size-support-header-banner;
             }
         }
-
-        .bl_formBooking_wrap{
-            width: 1150px;
-            height: 90px;
-            border-radius: 10px;
-            background: #fff;
-            display: flex;
-
-            .bl_formBookingGroup{
-                border-left: 1px solid #e2e7ef;
-                flex-basis: calc((100% - 15%)/3);
-                padding-left: 20px;
-                
-                @include flex-center;
-
-                &_inner{
-                    @include flex-center;
-                    .bl_formBooking_infor{
-                        padding-left: 10px;
-                        font-weight:600;
-                    }
-                }
-
-                &:first-child{
-                    border-left: none;
-                }
-
-                &:last-child{
-                    background-color: $color-btn-customer-primary;
-                    flex-basis: 15%;
-                    display: flex;
-                    border-left: none;
-                    border-radius: 0 10px 10px 0;
-                    padding-left: 0;
-                    cursor: pointer;
-                }
-
-                &_btn{
-                    letter-spacing: 0.8px;
-                    margin: auto;
-                    color: #fff;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    text-wrap: nowrap;
-                }
-            }
-        }
-
     }
 }
 
