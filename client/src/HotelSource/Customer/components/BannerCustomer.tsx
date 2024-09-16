@@ -30,7 +30,6 @@ export default function BannerCustomer() {
                     <h2>HK2T Hotel Booking</h2>
                     <p>Hệ thống đặt phòng khách sạn trực tuyến</p>
                 </div>
-                <FormBookingCustomer/>
             </div>
         </div>
     )
