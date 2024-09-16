@@ -5,13 +5,15 @@ import ListTypeRoomCustomer from "../components/ListTypeRoomCustomer";
 import { useEffect } from "react";
 import { typeRoomAction } from "../../../redux/actions/typeRoom";
 import { anotherPartServices } from "../../../utils/constants";
-import RegisterMemberComponent from "../components/RegisterMemberComponent";
+import RegisterMemberCustomer from "../components/RegisterMemberCustomer";
+import { amenityAction } from "../../../redux/actions/amenity";
 
 export default function HomePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(typeRoomAction.showAllTypeRoom() as any)
+    dispatch(amenityAction.showAllAmenity() as any)
   },[])
 
   return (
@@ -31,7 +33,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-      <RegisterMemberComponent/>
+      <RegisterMemberCustomer/>
     </div>
   )
 }
