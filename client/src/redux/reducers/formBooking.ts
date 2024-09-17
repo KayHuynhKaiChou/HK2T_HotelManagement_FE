@@ -11,14 +11,15 @@ const initState : FormBookingCustomer = {
     total_price: 0
 }
 
-export function typeRoomReducer( 
+export function formBookingReducer<T extends keyof FormBookingCustomer>( 
     state : FormBookingCustomer = initState, 
-    action : FormBookingAction = { type: "SHOW_FORM_BOOKING", payload: null }
+    action : FormBookingAction<T> = { type: "SHOW_FORM_BOOKING", payload: null }
 ) : FormBookingCustomer {
     switch (action.type) {
         case formBookingType.UPDATE:
             return {
-                ...(action?.payload || initState)
+                ...state,
+                ...(action?.payload || {})
             }
         default:
             return state

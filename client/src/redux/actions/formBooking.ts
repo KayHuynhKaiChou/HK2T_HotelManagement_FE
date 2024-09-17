@@ -1,4 +1,4 @@
-import { formBookingType } from "../constants/formBookingType";
+import { formBookingType, TypeOfKey } from "../constants/formBookingType";
 import { FormBookingCustomer } from "../../types/form";
 
 // export type amenityThunkAction<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<AmenityAction['type'] | ResponseAction['type']>>;
@@ -34,13 +34,17 @@ import { FormBookingCustomer } from "../../types/form";
 //     }
 // }
 
-const updateFormBooking = (formBooking : FormBookingCustomer) => {
+const updateFormBooking = <T extends keyof FormBookingCustomer>(
+    fieldName: T, 
+    value: TypeOfKey<T>
+) => {
+    
     return { 
         type: formBookingType.UPDATE,
-        payload: formBooking
+        payload: {[fieldName] : value}
     }
 }
 
-export const amenityAction = {
+export const formBookingAction = {
     updateFormBooking
 }

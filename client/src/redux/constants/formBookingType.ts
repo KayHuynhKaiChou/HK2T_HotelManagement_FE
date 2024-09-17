@@ -10,6 +10,10 @@ export const formBookingType : Record<keyFormBookingType , valueFormBookingType>
     UPDATE : 'UPDATE_FORM_BOOKING'
 } as const
 
-export interface FormBookingAction extends Action<valueFormBookingType> {
-    payload : FormBookingCustomer | null;
+export type TypeOfKey<T extends keyof FormBookingCustomer> = FormBookingCustomer[T]
+
+export interface FormBookingAction<T extends keyof FormBookingCustomer> extends Action<valueFormBookingType> {
+    payload : {
+        [x: string]: TypeOfKey<T>;
+    } | null;
 }
