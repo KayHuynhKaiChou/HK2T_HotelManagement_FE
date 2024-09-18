@@ -33,5 +33,8 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'show-re' : '/admin/reservation/list',
         // upload image
         'upload' : '/admin/type-room/:type_room_id/image'
+    },
+    'public' : {
+        'show-ame' : '/admin/amenity/list',
     }
 }
