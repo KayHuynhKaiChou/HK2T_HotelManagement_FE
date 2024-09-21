@@ -1,12 +1,15 @@
 import { useMemo } from "react"
 import { TypeRoom } from "../../../types/models"
-import { linkDefaultImage } from "../../../utils/constants"
+import { colorsBtnCustom, linkDefaultImage } from "../../../utils/constants"
 import CarouselHk2t from "../../../common/Carousel/CarouselHk2t"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from "react-router-dom";
+import ButtonHk2t from "../../../common/ButtonHk2t";
+import { useDispatch } from "react-redux";
+import { formBookingAction } from "../../../redux/actions/formBooking";
 
 interface TypeRoomInforCommonCustomerProps {
-    typeRoom: TypeRoom
+  typeRoom: TypeRoom
 }
 export default function TypeRoomInforCommonCustomer({
   typeRoom
@@ -14,7 +17,9 @@ export default function TypeRoomInforCommonCustomer({
 
   const navigate = useNavigate()
 
-  const { images, title, adult_capacity, kids_capacity, size } = typeRoom
+  const dispatch = useDispatch()
+
+  const { id, images, title, adult_capacity, kids_capacity, size } = typeRoom
 
   const ListImages = useMemo(() => {
     if(images.length == 0) return (
@@ -30,8 +35,18 @@ export default function TypeRoomInforCommonCustomer({
   }, [images])
 
   const handleNavigateToDetailTR = () => {
+    handleSelectTypeRoom()
     let titleURL = title.replace('Phòng','Room').toLowerCase().replaceAll(/\s+/g, '-');
     navigate(`/rooms/${titleURL}`,{ state: typeRoom })
+  }
+
+  const handleSelectTypeRoom = () => {
+    dispatch(
+      formBookingAction.updateFormBooking(
+        "type_room_id",
+        id || 0
+      )
+    )
   }
 
   return (
@@ -58,6 +73,13 @@ export default function TypeRoomInforCommonCustomer({
             <b>xem chi tiết</b>
             <ArrowForwardIosIcon sx={{ fontSize: 13 }} />
           </div>
+        </div>
+        <div className="bl_content_action">
+          <ButtonHk2t
+            onClick={handleSelectTypeRoom}
+            colorCustom={colorsBtnCustom['dark']}
+            content="Select type room"
+          />
         </div>
       </div>
     </div>

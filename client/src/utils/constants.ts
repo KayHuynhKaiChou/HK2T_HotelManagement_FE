@@ -109,6 +109,14 @@ export const colorsBtnCustom = {
             backgroundColor: "#c62828",
             borderColor: "#ac2925"
         }
+    },
+    dark : {
+        background: "#333",
+        borderColor: "#333",
+        hover: {
+            backgroundColor: "#000",
+            borderColor: "#000"
+        }
     }
     
 }

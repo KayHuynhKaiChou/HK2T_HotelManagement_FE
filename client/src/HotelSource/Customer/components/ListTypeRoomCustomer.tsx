@@ -6,7 +6,7 @@ import { defaultViewDirection } from "../../../utils/constants";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export default function ListTypeRoomCustomer() {
-    const {typeRooms, user} = useSelector<RootState , RootState>(state => state);
+    const {typeRooms} = useSelector<RootState , RootState>(state => state);
 
     const ListTypeRoom = useMemo(() => {
         return typeRooms.map(tRoom => (

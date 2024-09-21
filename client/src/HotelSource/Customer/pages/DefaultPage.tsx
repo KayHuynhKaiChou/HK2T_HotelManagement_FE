@@ -2,14 +2,18 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/NavbarCustomer";
 import FormBookingCustomer from "../components/FormBookingCustomer";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/reducers";
 
 export default function DefaultPage() {
     const { pathname } = useLocation();
+    //redux
+    const {formBooking} = useSelector<RootState, RootState>(state => state);
     
     useEffect(() => {
         const handleScroll = () => {
             const formContainerEle = document.querySelector('.bl_container_form') as HTMLDivElement;
-            if (formContainerEle) {
+            if (formContainerEle && formBooking.type_room_id) {
                 formContainerEle.classList.add('active')
             }
         };
@@ -21,6 +25,13 @@ export default function DefaultPage() {
             window.removeEventListener('scroll', handleScroll);
         };
     },[])
+
+    useEffect(() => {
+        const formContainerEle = document.querySelector('.bl_container_form') as HTMLDivElement;
+        if (formContainerEle && formBooking.type_room_id) {
+            formContainerEle.classList.add('active')
+        }
+    }, [formBooking.type_room_id])
 
     // thêm key={pathname để ele .un_body_wrap được re-render lại}
     return (

@@ -575,19 +575,24 @@
                             margin: 0 10px;
                         }
                     }
+
+                    .bl_detail{
+                        flex-basis: 30%;
+                        @include flex-center;
+                        gap: 4px;
+                        cursor: pointer;
+                        color: #b8b8b8;
+                        justify-content: end;
+    
+                        b::first-letter{
+                            text-transform: capitalize;
+                        }
+                    }
                 }
 
-                .bl_detail{
-                    flex-basis: 30%;
-                    @include flex-center;
-                    gap: 4px;
-                    cursor: pointer;
-                    color: #b8b8b8;
+                .bl_content_action{
+                    display: flex;
                     justify-content: end;
-
-                    b::first-letter{
-                        text-transform: capitalize;
-                    }
                 }
             }
         }
@@ -626,6 +631,7 @@
             display: flex;
             margin: 40px 20px;
             padding: 30px 0px;
+            align-items: start;
 
             .bl_inforCom_ttl{
                 flex-basis: 25%;
@@ -642,6 +648,10 @@
                     .bl_cnt_name {
                         min-width: 150px;
                         font-weight: 600;
+
+                        &.contact {
+                            min-width: 70px;
+                        }
                     }
 
                     .bl_cnt_value {
@@ -653,13 +663,17 @@
 
             .bl_amenity_content {
                 @include flex-column;
-                
-                .bl_cnt_type{
+                flex-basis: 25%;
+                font-size: 20px;
+                padding-right: 30px;
 
+                .bl_cnt_type{
+                    font-weight: 600;
                 }
 
                 .bl_cnt_amenities{
-
+                    font-weight: lighter;
+                    color: #434343;
                 }
             }
         }
