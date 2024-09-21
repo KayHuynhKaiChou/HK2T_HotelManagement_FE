@@ -9,7 +9,7 @@ import { formBookingReducer } from "./formBooking";
 
 // Cấu hình persist
 const persistConfig: PersistConfig<RootState> = {
-  key: 'root', // Key này sẽ lưu trong storage
+  key: 'rootHotelHk2T', // Key này sẽ lưu trong storage
   storage,     // Sử dụng localStorage
 };
 
