@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
-import { store } from './redux/store.ts';
+import { persistor, store } from './redux/store.ts';
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {CssBaseline , ThemeProvider , createTheme, StyledEngineProvider} from '@mui/material';
@@ -11,6 +11,7 @@ import '../src/styles/applicationCommonStyle.scss';
 import './HotelSource/Admin/styles/applicationAdminStyle.scss';
 import './HotelSource/Customer/styles/applicationCustomerStyle.scss'
 import 'react-toastify/dist/ReactToastify.css';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const theme = createTheme({
   palette: {
@@ -21,13 +22,15 @@ const theme = createTheme({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={new QueryClient()}>
     <Provider store={store}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-          <ToastContainer/>
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+            <ToastContainer/>
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </PersistGate>
     </Provider>
   </QueryClientProvider>
 )
