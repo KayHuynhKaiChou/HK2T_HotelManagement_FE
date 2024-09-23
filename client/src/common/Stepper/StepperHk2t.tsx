@@ -4,13 +4,14 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
 interface StepperHk2tProps {
-    steps: string[]
+    steps: string[];
+    activeStep: number;
 }
 
-export default function StepperHk2t({ steps = [] } : StepperHk2tProps) {
+export default function StepperHk2t({ steps, activeStep } : StepperHk2tProps) {
     return (
         <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={1} alternativeLabel>
+            <Stepper activeStep={activeStep} alternativeLabel>
                 {steps.map((label) => (
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>
