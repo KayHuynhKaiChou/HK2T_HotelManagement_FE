@@ -10,6 +10,7 @@ import DefaultPage from "./HotelSource/Customer/pages/DefaultPage";
 import DetailTypeRoomPage from "./HotelSource/Customer/pages/DetailTypeRoomPage";
 import ReservationPage from "./HotelSource/Customer/pages/ReservationPage";
 import InforCustomerPage from "./HotelSource/Customer/pages/InforCustomerPage";
+import CompletedBookingPage from "./HotelSource/Customer/pages/CompletedBookingPage";
 
 function App() {
 
@@ -21,8 +22,8 @@ function App() {
           <Route path="rooms" element={<ListRoomPage/>} />
           <Route path="rooms/:title" element={<DetailTypeRoomPage/>} />
           <Route path="reservation/" element={<ReservationPage/>} >
-            <Route path="person-infor" element={<InforCustomerPage/>}/>
-            {/* <Route path="reservation/payment" element={</>} /> */}
+            <Route path="person-infor" element={<InforCustomerPage/>} />
+            <Route path="payment" element={<CompletedBookingPage/>} />
           </Route>
         </Route>
         <Route path="admin" element={<AdminSigninPage/>}/>
