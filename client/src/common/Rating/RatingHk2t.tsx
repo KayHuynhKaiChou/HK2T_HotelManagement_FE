@@ -13,6 +13,7 @@ export default function RatingHk2t({
         <Rating 
             name={name} 
             value={name === 'no-value' ? null : value} 
+            size="small"
             readOnly={name === 'read-only'}
             disabled={name === 'disabled'} 
         />

@@ -11,12 +11,16 @@ import { TypeRoom } from '../../../types/models';
 import { toast } from 'react-toastify';
 import { MATH_ACTION } from '../../../types/enum'
 import useEffectSkipFirstRender from '../../../hooks/useEffectSkipFirstRender';
+import { useNavigate } from 'react-router-dom';
 
 type QuantityCustomer = Pick<TypeRoom , 'adult_capacity' | 'kids_capacity'>
   
 export default function FormBookingCustomer() {
     //redux
-    const {typeRooms, formBooking} = useSelector<RootState, RootState>(state => state);
+    const {typeRooms, formBooking, user} = useSelector<RootState, RootState>(state => state);
+
+    //navigate
+    const navigate = useNavigate()
 
     //state
     const [quantityCustomer, setQuantityCustomer] = useState<QuantityCustomer>(
@@ -81,6 +85,16 @@ export default function FormBookingCustomer() {
             default:
                 break;
         }
+    }
+
+    const handleNavigateReservation = () => {
+        let url = ''
+        if (user.email) {
+            url = '/reservation'
+        } else {
+            url = '/sign_in'
+        }
+        navigate('/reservation/person-infor')
     }
 
     // useEffect
@@ -163,7 +177,10 @@ export default function FormBookingCustomer() {
                 </div>
             </div>
             <div className="bl_formBookingGroup">
-                <div className="bl_formBookingGroup_btn">
+                <div 
+                    className="bl_formBookingGroup_btn"
+                    onClick={handleNavigateReservation}
+                >
                     booking now
                 </div>
             </div>

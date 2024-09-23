@@ -8,16 +8,22 @@ import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import { RootState } from "../../../redux/reducers";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
+import { useMemo } from "react";
 
 export default function ReservationPage() {
     //redux
     const { user, formBooking, typeRooms } = useSelector<RootState , RootState>(state => state);
+console.log(formBooking)
+    const selectedTypeRoom = useMemo(() => {
+        return typeRooms.find(typeRoom => typeRoom.id === formBooking.type_room_id)
+    }, [])
 
     return (
         <div className="bl_ReservationPage_wrap">
             <div className="bl_stepper_wrap">
                 <StepperHk2t
                     steps={defaultSteps}
+                    activeStep={1}
                 />
             </div>
             <div className="bl_reservation_grid">
@@ -55,7 +61,7 @@ export default function ReservationPage() {
                                     Check in
                                 </div>
                                 <b className="bl_timeRoom_date">
-                                    T6, 27 tháng 9 2024
+                                    {formBooking.checkin_at}
                                 </b>
                                 <div className="bl_timeRoom_hour un_font_blink">
                                     14:00 – 23:00

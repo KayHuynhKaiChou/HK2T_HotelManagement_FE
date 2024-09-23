@@ -833,6 +833,32 @@
                     @include flex-center;
                     margin-bottom: 16px;
                 }
+
+                .bl_notPayment_wrap {
+                    display: flex;
+
+                    .bl_notPayment_ttl {
+                        @include flex-column;
+                        gap: 12px;
+
+                        p {
+                            font-size: 14px;
+                            letter-spacing: 0.1px;
+                        }
+                    }
+
+                    .bl_notPayment_img {
+                        width: 120px;
+                        display: flex;
+                        justify-content: end;
+                    }
+                }
+
+                .bl_note_sub {
+                    font-size: 13px;
+                    margin-bottom: 20px;
+                    letter-spacing: 0.1px;
+                }
             }
 
             .bl_btn_next {
@@ -842,6 +868,20 @@
                 button {
                     width: 30%;
                     padding: 15px;
+                }
+            }
+
+            .bl_btns_wrap {
+                display: flex;
+                justify-content: end;
+
+                .bl_btn_act:first-child {
+                    background-color: inherit;
+                    border-color: inherit;
+                }
+
+                .bl_btn_act:last-child {
+                    margin-left: 15px;
                 }
             }
         }
