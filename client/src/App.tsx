@@ -8,6 +8,8 @@ import PersonalPage from "./HotelSource/Customer/pages/PersonalPage";
 import ListRoomPage from "./HotelSource/Customer/pages/ListRoomPage";
 import DefaultPage from "./HotelSource/Customer/pages/DefaultPage";
 import DetailTypeRoomPage from "./HotelSource/Customer/pages/DetailTypeRoomPage";
+import ReservationPage from "./HotelSource/Customer/pages/ReservationPage";
+import InforCustomerPage from "./HotelSource/Customer/pages/InforCustomerPage";
 
 function App() {
 
@@ -18,6 +20,10 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="rooms" element={<ListRoomPage/>} />
           <Route path="rooms/:title" element={<DetailTypeRoomPage/>} />
+          <Route path="reservation/" element={<ReservationPage/>} >
+            <Route path="person-infor" element={<InforCustomerPage/>}/>
+            {/* <Route path="reservation/payment" element={</>} /> */}
+          </Route>
         </Route>
         <Route path="admin" element={<AdminSigninPage/>}/>
         <Route path="admin/:menu" element={<AdminHomePage/>}/>

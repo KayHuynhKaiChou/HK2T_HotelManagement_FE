@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/NavbarCustomer";
 import FormBookingCustomer from "../components/FormBookingCustomer";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/reducers";
 
@@ -10,6 +10,10 @@ export default function DefaultPage() {
     //redux
     const {formBooking} = useSelector<RootState, RootState>(state => state);
     
+    const isShowFormBooking = useMemo(() => {
+        return pathname !== '/' && !pathname.includes('/reservation')
+    }, [pathname])
+
     useEffect(() => {
         const handleScroll = () => {
             const formContainerEle = document.querySelector('.bl_container_form') as HTMLDivElement;
@@ -38,7 +42,7 @@ export default function DefaultPage() {
         <div key={pathname} className="un_body_wrap">
             <Navbar />
             <Outlet/>
-            {pathname !== '/' && (
+            {isShowFormBooking && (
                 <div className={`bl_container_form`}>
                     <FormBookingCustomer/>
                 </div>
