@@ -1,6 +1,7 @@
 import { OptionSelect } from '../types/supportUI';
 import { Controller } from 'react-hook-form';
 import Select, { SingleValue } from 'react-select';
+import { colors, FormHelperText } from '@mui/material';
 interface propsSelect {
     form?: any;
     name : string;
@@ -30,24 +31,45 @@ export default function SelectHk2t({
             onChange(option!.value)
         }
     }
-
+   
     const renderSelect = () => {
         if(form){
-            // const {formState : {errors}} = form;
-            // const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
+            const {formState : { errors, isSubmitted }} = form;
+            const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
+            
+            const selectStyles = {
+                control: (provided: any, state: any) => ({
+                    ...provided,
+                    marginTop: '16px',
+                    marginBottom: '8px',
+                    borderColor: hasError && isSubmitted ? '#ff0000' : provided.borderColor, // Thay đổi màu viền nếu có lỗi
+                    boxShadow: 'none', // Tắt box shadow nếu cần
+                    '&:hover': {
+                        borderColor: hasError && isSubmitted ? '#ff0000' : provided.borderColor, // Thay đổi viền khi hover
+                    }
+                }),
+            };
+
             return (
                 <Controller
                     name={name}
                     control={form.control}
                     render={({field}) => 
-                        <Select
-                            {...field}
-                            isSearchable={false}
-                            options={options}
-                            placeholder={placeholder}
-                            isDisabled={disabled}
-                            className='bl_select_form'
-                        />
+                        <>
+                            <Select
+                                {...field}
+                                isSearchable={false}
+                                options={options}
+                                placeholder={placeholder}
+                                isDisabled={disabled}
+                                styles={selectStyles}                           
+                            />
+                            <p style={{
+                                fontSize: "1rem",
+                                color: "#ff0000",
+                                letterSpacing: "0.03333em"
+                            }} >{errors[name]?.value.message}</p>
+                        </>
                     }
                 />
             )
