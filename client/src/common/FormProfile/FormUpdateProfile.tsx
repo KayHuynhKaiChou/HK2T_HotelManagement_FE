@@ -1,4 +1,4 @@
-import { useForm  , SubmitHandler, UseFormReturn} from 'react-hook-form'
+import { useForm  , SubmitHandler, UseFormReturn, useWatch} from 'react-hook-form'
 import { Avatar, Divider, Grid } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -70,6 +70,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         const provinceName = provinces.find(p => p.province_id.toString() == user.city)?.province_name 
         const districtName = districts.find(d => d.district_id.toString() == user.district)?.district_name 
         const wardName = wards.find(d => d.ward_id.toString() == user.ward)?.ward_name
+        
         return {
             firstname : user.firstname,
             surname : user.surname,
@@ -105,11 +106,11 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
     useImperativeHandle(ref , () => ({ form }))
 
     // useWatch
-    const selectedGender = form.watch("gender" , 1);
-    const uploadedLinkImage = form.watch("link_avatar" , '');
-    const selectedCity = form.watch("city" , {label : '' , value : ''});
-    const selectedDistrict = form.watch("district" , {label : '' , value : ''});
-    const selectedWard = form.watch("ward" , {label : '' , value : ''});
+    const selectedGender = useWatch({ control: form.control, name: "gender" });
+    const uploadedLinkImage = useWatch({ control: form.control, name: "link_avatar" });
+    const selectedCity = useWatch({ control: form.control, name: "city" });
+    const selectedDistrict = useWatch({ control: form.control, name: "district" });
+    const selectedWard = useWatch({ control: form.control, name: "ward" });
 
     // useMemo hook
     const optionProvinces = useMemo(() => {
