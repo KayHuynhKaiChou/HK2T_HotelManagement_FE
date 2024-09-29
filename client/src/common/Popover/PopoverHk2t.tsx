@@ -6,6 +6,7 @@ interface PopoverProps{
     children : ReactElement;
     anchorOrigin ?: PopoverOrigin;
     transformOrigin ?: PopoverOrigin;
+    onClosePopover ?: () => void;
 }
 
 export interface PopoverHandle{
@@ -24,7 +25,8 @@ const PopoverHk2t = forwardRef<PopoverHandle , PopoverProps>((props , ref) => {
         transformOrigin = {
             vertical: 'top',
             horizontal: 'right',
-        }
+        },
+        onClosePopover
     } = props;
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -34,6 +36,7 @@ const PopoverHk2t = forwardRef<PopoverHandle , PopoverProps>((props , ref) => {
 
     function onClose(){
         setAnchorEl(null)
+        onClosePopover && onClosePopover()
     }
 
     useImperativeHandle(ref , () => ({
