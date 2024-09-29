@@ -35,16 +35,17 @@ function InputHk2t(props : InputProps) {
         className,
         value = '',
         iconInput,
-        minDate = dayjs('2032-01-01'),
+        minDate = dayjs('1900-01-01'),
         onChange,
         onChangeDatePicker,
         onFocus
     } = props
     
+    const {formState : {errors}} = form;
+    const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
+
     function renderInput(){
         if(form){
-            const {formState : {errors}} = form;
-            const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
             return (
                 <Controller
                     name={name}
@@ -99,14 +100,16 @@ function InputHk2t(props : InputProps) {
     }
 
     function renderDatePicker(){
+        const datePicker = form.getValues(name)
         return (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
                     <DatePicker 
-                        className={`un_input bl_datePicker ${className}`}
+                        className={`un_input bl_datePicker ${className} ${hasError ? 'is_required_datePicker' : ''}`}
                         minDate={minDate}
                         onChange={onChangeDatePicker}
                         disabled={disabled}
+                        value={dayjs(datePicker)}
                     />
                 </DemoContainer>
             </LocalizationProvider>
@@ -118,7 +121,9 @@ function InputHk2t(props : InputProps) {
             <div className="un_input_label">
                 {label}
             </div>
-            {typeInput === 'date' ? renderDatePicker() : renderInput()}
+            {typeInput === 'date' && onChangeDatePicker 
+                ? renderDatePicker() 
+                : renderInput()}
         </div>
     )
 }
