@@ -4,7 +4,10 @@ import { UserAction, userType } from "../constants/userType"
 const initState : User = {
     firstname : '',
     surname : '',
-    email : ''
+    position : 4,
+    link_avatar : '',
+    email : '',
+    token : ''
 }
 export function userReducer( 
     state : User = initState, 
