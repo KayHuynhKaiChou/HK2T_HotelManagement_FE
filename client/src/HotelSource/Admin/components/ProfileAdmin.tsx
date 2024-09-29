@@ -24,6 +24,7 @@ export default function ProfileAdmin() {
     const handleUpdateProfile = (updatedProfile : FormUserProfile) => {
         const formatUpdatedProfile : User = {
             ...updatedProfile,
+            link_avatar : updatedProfile.link_avatar.replace('data:', '').replace(/^.+,/, ''),
             city : updatedProfile.city.value + '',
             district : updatedProfile.district.value + '',
             ward : updatedProfile.ward.value + ''

@@ -27,7 +27,7 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
                         // ko thể dùng reader.result.replace('data:', '').replace(/^.+,/, '')
                         // vì cho vô field src nó ko hiện ảnh
                         // do đó lúc call api mới dùng .replace('data:', '').replace(/^.+,/, '')
-                        resolve((reader.result + '').replace('data:', '').replace(/^.+,/, ''));
+                        resolve(reader.result || '');
                     };
                     reader.onerror = reject;
                     reader.readAsDataURL(file);
