@@ -45,16 +45,16 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         .required(),
         link_avatar: yup.string().required(),
         city: yup.object().shape({
-            label: yup.string().required(),
-            value: yup.string().required(),
+            label: yup.string().required('Please select city !'),
+            value: yup.string().required('Please select city !'),
         }).required('Please select city !'),
         district: yup.object().shape({
-            label: yup.string().required(),
-            value: yup.string().required()
+            label: yup.string().required('Please select district !'),
+            value: yup.string().required('Please select district !')
         }).required('Please select district !'),
         ward: yup.object().shape({
-            label: yup.string().required(),
-            value: yup.string().required(),
+            label: yup.string().required('Please select ward !'),
+            value: yup.string().required('Please select ward !'),
         }).required('Please select ward !'),
         address: yup.string()
         .required('Please enter current address !'),
