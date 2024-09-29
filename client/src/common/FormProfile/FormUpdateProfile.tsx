@@ -170,10 +170,6 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         form.setValue("link_avatar", images[0] + '')
     }
 
-    const handleChangeDatePicker = (dateRange: Dayjs | null) => {
-        dateRange && form.setValue("birth_day", dateRange.format('YYYY-MM-DD'))
-    }
-
     return (
         <form 
             onSubmit={form.handleSubmit(onUpdateProfile as SubmitHandler<FormUserProfile>)}
@@ -242,7 +238,6 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                                 typeInput='date' 
                                 placeholder='select birthdate' 
                                 form={form}
-                                onChangeDatePicker={handleChangeDatePicker}
                             />
                         </Grid>
                         <Grid item sm={6} container alignItems={"center"}>
