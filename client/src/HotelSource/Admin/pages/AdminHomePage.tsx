@@ -12,6 +12,8 @@ import TypeRoomAdmin from '../components/TypeRoomAdmin';
 import { useDispatch } from 'react-redux';
 import { amenityAction } from '../../../redux/actions/amenity';
 import RoomAdmin from '../components/RoomAdmin';
+import { typeRoomAction } from '../../../redux/actions/typeRoom';
+import { userAction } from '../../../redux/actions/user';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -30,6 +32,8 @@ export default function AdminHomePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(userAction.showInforUser() as any)
+    dispatch(typeRoomAction.showAllTypeRoom() as any)
     dispatch(amenityAction.showAllAmenity() as any)
   },[])
 

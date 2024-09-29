@@ -17,7 +17,7 @@ type CustomUser = Required<
     >
 >
 
-export interface FormUserEmployee extends CustomUser {
+export interface FormUserProfile extends CustomUser {
     city : OptionSelect;
     district : OptionSelect;
     ward : OptionSelect;
@@ -38,10 +38,16 @@ export interface FormSignup extends Account{
 export type ActionForm = 'CREATE' | 'UPDATE' 
 
 export interface FormBooking {
-    email : string;
+    email : OptionSelect;
     checkin_at : string;
     checkout_at : string;
     adult_capacity : number;
     kid_capacity : number;
+    type_room : OptionSelect;
+    total_price : number;
+}
+
+export interface FormBookingCustomer extends Omit<FormBooking, "email" | "type_room"> {
+    user_id : number;
     type_room_id : number;
 }

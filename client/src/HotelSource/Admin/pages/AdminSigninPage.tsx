@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useSelector , useDispatch } from 'react-redux';
 import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";
+import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
 
 export default function AdminSigninPage() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function AdminSigninPage() {
     }
   }
 
-  useEffect(() => {
+  useEffectSkipFirstRender(() => {
     if(response.isLoading || response.status == 0) return;
     if(response.status == 200){
       navigate('/admin/dashboard')

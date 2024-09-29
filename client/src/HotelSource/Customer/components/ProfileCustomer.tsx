@@ -6,9 +6,10 @@ import { useDispatch } from "react-redux";
 import FormUpdateProfile, { FormUpdateProfileHandle } from "../../../common/FormProfile/FormUpdateProfile";
 import { userAction } from "../../../redux/actions/user";
 import { User } from "../../../types/models";
-import { FormUserEmployee } from "../../../types/form";
+import { FormUserProfile } from "../../../types/form";
 import { toastMSGObject } from "../../../utils";
 import { toast } from "react-toastify";
+import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
 
 export default function ProfileCustomer() {
     //redux
@@ -19,7 +20,7 @@ export default function ProfileCustomer() {
     const formUpdateProfile = useRef<FormUpdateProfileHandle | null>(null);
 
     //func handle submit form
-    const handleUpdateProfile = (updatedProfile : FormUserEmployee) => {
+    const handleUpdateProfile = (updatedProfile : FormUserProfile) => {
         const formatUpdatedProfile : User = {
             ...updatedProfile,
             link_avatar : updatedProfile.link_avatar.replace('data:', '').replace(/^.+,/, ''),
@@ -31,7 +32,7 @@ export default function ProfileCustomer() {
     }
 
     //useEffect 
-    useEffect(() => { // update success and show toast
+    useEffectSkipFirstRender(() => { // update success and show toast
         const formState = formUpdateProfile.current!.form.formState!
         if(response.status == 200 && formState.isSubmitSuccessful){
             toast.success(response.message , toastMSGObject());
@@ -50,7 +51,6 @@ export default function ProfileCustomer() {
                 )}               
                 <FormUpdateProfile
                     ref={formUpdateProfile}
-                    position="CUSTUMER"
                     user={user}
                     onUpdateProfile={handleUpdateProfile}
                 />

@@ -31,7 +31,7 @@ export default function SignupPage() {
     }else{
       setMsgSignup(response.message)
     }
-  }, [user , response])
+  }, [user, response])
 
   return (
     <div className="bl_signInPage_container">

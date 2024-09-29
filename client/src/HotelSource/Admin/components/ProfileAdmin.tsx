@@ -4,7 +4,7 @@ import { RootState } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { userAction } from "../../../redux/actions/user";
 import { useEffect, useRef } from "react";
-import { FormPassword, FormUserEmployee } from "../../../types/form";
+import { FormPassword, FormUserProfile } from "../../../types/form";
 import { User } from "../../../types/models";
 import LoadingHk2t from "../../../common/LoadingHk2t";
 import FormChangePassword, { FormChangePasswordHandle } from "../../../common/FormPassword/FormChangePassword";
@@ -21,7 +21,7 @@ export default function ProfileAdmin() {
     const formChangePassword = useRef<FormChangePasswordHandle | null>(null); 
    
     //func handle submit form
-    const handleUpdateProfile = (updatedProfile : FormUserEmployee) => {
+    const handleUpdateProfile = (updatedProfile : FormUserProfile) => {
         const formatUpdatedProfile : User = {
             ...updatedProfile,
             city : updatedProfile.city.value + '',
@@ -56,10 +56,6 @@ export default function ProfileAdmin() {
             toast.error(response.message , toastMSGObject());
         }
     },[response])
-
-    useEffect(() => {
-        dispatch(userAction.showInforUser() as any)
-    },[])
 
     return (
         <div className="bl_profile">
