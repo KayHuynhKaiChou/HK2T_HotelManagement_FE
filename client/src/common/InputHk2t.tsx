@@ -41,7 +41,7 @@ function InputHk2t(props : InputProps) {
         onFocus
     } = props
     
-    const {formState : {errors}} = form;
+    const {formState : { errors, isSubmitted}} = form;
     const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
 
     function renderInput(){
@@ -100,19 +100,31 @@ function InputHk2t(props : InputProps) {
     }
 
     function renderDatePicker(){
-        const datePicker = form.getValues(name)
         return (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DatePicker']}>
-                    <DatePicker 
-                        className={`un_input bl_datePicker ${className} ${hasError ? 'is_required_datePicker' : ''}`}
-                        minDate={minDate}
-                        onChange={onChangeDatePicker}
-                        disabled={disabled}
-                        value={dayjs(datePicker)}
-                    />
-                </DemoContainer>
-            </LocalizationProvider>
+            <Controller
+                name={name}
+                control={form.control}
+                render={({field : { value, onChange }}) => 
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['DatePicker']}>
+                            <DatePicker 
+                                className={`un_input bl_datePicker`}
+                                minDate={minDate}
+                                onChange={(value) => onChange(value && value.format('YYYY-MM-DD'))}
+                                disabled={disabled}
+                                value={dayjs(value)}
+                                slotProps={{
+                                    textField: {
+                                        error: !!hasError,
+                                        helperText: errors[name]?.message,
+                                    },
+                                }}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider>
+
+                }
+            />
         )
     }
 
@@ -121,9 +133,11 @@ function InputHk2t(props : InputProps) {
             <div className="un_input_label">
                 {label}
             </div>
-            {typeInput === 'date' && onChangeDatePicker 
-                ? renderDatePicker() 
-                : renderInput()}
+            {
+                typeInput === 'date' && onChangeDatePicker 
+                    ? renderDatePicker() 
+                    : renderInput()
+            }
         </div>
     )
 }
