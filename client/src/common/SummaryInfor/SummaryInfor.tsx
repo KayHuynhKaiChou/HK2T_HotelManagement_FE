@@ -7,6 +7,7 @@ import { uuid } from "../../utils"
 import { useRef } from "react"
 import { Person , Logout , History } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"
+import { persistor } from "../../redux/store"
 
 interface propsSummaryInfor {
     isShowDropdown ?: boolean;
@@ -28,6 +29,11 @@ export default function SummaryInfor({isShowDropdown = false , position = 'ADMIN
         const linkRedirect = position == 'ADMIN' ? '/admin/profile' : '/customer/profile' 
         navigate(linkRedirect);
         popoverRef.current?.onClose();
+    }
+
+    const handleLogout = () => {
+        persistor.purge();
+        window.location.reload();
     }
 
     return (
@@ -70,9 +76,11 @@ export default function SummaryInfor({isShowDropdown = false , position = 'ADMIN
                             <div className="bl_dropdown_item_ttl">booking history</div>
                         </div>
                     )}
-                    <div className="bl_dropdown_item">
+                    <div className="bl_dropdown_item" onClick={handleLogout}>
                         <Logout/>
-                        <div className="bl_dropdown_item_ttl">logout</div>
+                        <div className="bl_dropdown_item_ttl">
+                            logout
+                        </div>
                     </div>
                 </div>
             </PopoverHk2t>
