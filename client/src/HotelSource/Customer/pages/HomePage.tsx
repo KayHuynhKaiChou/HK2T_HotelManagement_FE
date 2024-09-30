@@ -7,11 +7,13 @@ import { typeRoomAction } from "../../../redux/actions/typeRoom";
 import { anotherPartServices } from "../../../utils/constants";
 import RegisterMemberCustomer from "../components/RegisterMemberCustomer";
 import { amenityAction } from "../../../redux/actions/amenity";
+import { userAction } from "../../../redux/actions/user";
 
 export default function HomePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(userAction.showInforUser() as any)
     dispatch(typeRoomAction.showAllTypeRoom() as any)
     dispatch(amenityAction.showAllAmenity() as any)
   },[])
