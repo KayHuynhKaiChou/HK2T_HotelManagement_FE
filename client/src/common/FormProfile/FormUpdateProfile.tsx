@@ -43,7 +43,6 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         gender: yup.number()
         .oneOf([1,2] as const)
         .required(),
-        link_avatar: yup.string().required(),
         city: yup.object().shape({
             label: yup.string().required('Please select city !'),
             value: yup.string().required('Please select city !'),
