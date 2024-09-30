@@ -12,12 +12,17 @@ import { toast } from 'react-toastify';
 import { MATH_ACTION } from '../../../types/enum'
 import useEffectSkipFirstRender from '../../../hooks/useEffectSkipFirstRender';
 import { useNavigate } from 'react-router-dom';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateRange } from '@mui/x-date-pickers-pro/models';
+import { useDispatch } from 'react-redux';
+import { formBookingAction } from '../../../redux/actions/formBooking';
 
 type QuantityCustomer = Pick<TypeRoom , 'adult_capacity' | 'kids_capacity'>
   
 export default function FormBookingCustomer() {
     //redux
     const {typeRooms, formBooking, user} = useSelector<RootState, RootState>(state => state);
+    const dispatch = useDispatch();
 
     //navigate
     const navigate = useNavigate()
@@ -87,14 +92,37 @@ export default function FormBookingCustomer() {
         }
     }
 
+    const handleUpdateDateRange = (dateRange: DateRange<Dayjs>) => {
+        const [checkin, checkout] = dateRange.map(date => date?.format('YYYY-MM-DD'))
+        dispatch(
+            formBookingAction.updateFormBooking("checkin_at", checkin || '')
+        )
+        dispatch(
+            formBookingAction.updateFormBooking("checkout_at", checkout || '')
+        )
+    }
+
+    const handleClosePopover = () => {
+        dispatch(
+            formBookingAction.updateFormBooking(
+                "adult_capacity", quantityCustomer.adult_capacity
+            )
+        )
+        dispatch(
+            formBookingAction.updateFormBooking(
+                "kid_capacity", quantityCustomer.kids_capacity
+            )
+        )
+    }
+
     const handleNavigateReservation = () => {
         let url = ''
-        if (user.email) {
+        if (user.token) {
             url = '/reservation'
         } else {
             url = '/sign_in'
         }
-        navigate('/reservation/person-infor')
+        navigate(url)
     }
 
     // useEffect
@@ -118,7 +146,13 @@ export default function FormBookingCustomer() {
             <div className="bl_formBookingGroup">
                 <div className="bl_formBookingGroup_inner">
                     <DateRangeIcon/>
-                    <DateRangePickerHk2t/>
+                    <DateRangePickerHk2t
+                        initalDateRange={[
+                            formBooking.checkin_at ? dayjs(formBooking.checkin_at) : dayjs(), 
+                            formBooking.checkout_at ? dayjs(formBooking.checkout_at) : dayjs().add(1, 'day')
+                        ]}
+                        handleCloseCalendar={handleUpdateDateRange}
+                    />
                 </div>
             </div>
             <div className="bl_formBookingGroup">
@@ -142,6 +176,7 @@ export default function FormBookingCustomer() {
                             vertical: 'top',
                             horizontal: 'center'
                         }}
+                        onClosePopover={handleClosePopover}
                     >
                         <div className="bl_dropdown_inner">
                             <div className="bl_dropdown_item form_booking">
@@ -176,11 +211,11 @@ export default function FormBookingCustomer() {
                     </PopoverHk2t>
                 </div>
             </div>
-            <div className="bl_formBookingGroup">
-                <div 
-                    className="bl_formBookingGroup_btn"
-                    onClick={handleNavigateReservation}
-                >
+            <div 
+                className="bl_formBookingGroup"
+                onClick={handleNavigateReservation}
+            >
+                <div className="bl_formBookingGroup_btn">
                     booking now
                 </div>
             </div>
