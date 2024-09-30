@@ -6,12 +6,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ComponentType, useEffect, useState } from "react";
 import ProfileCustomer from "../components/ProfileCustomer";
 import ChangePasswordCustomer from "../components/ChangePasswordCustomer";
+import UploadFileBtnHk2t from "../../../common/UploadFileBtnHk2t";
+import { useDispatch } from "react-redux";
+import { userAction } from "../../../redux/actions/user";
 
 export default function PersonalPage() {
     const { menu } = useParams();
     const navigate = useNavigate();
     const {response , user} = useSelector<RootState , RootState>(state => state);
+    const dispatch = useDispatch();
     const [MenuComponent, setMenuComponent] = useState<ComponentType>(() => ProfileCustomer);
+
+    const handleUploadImages = (images : Array<string | ArrayBuffer | null>) => {
+        const link_avatar = (images[0] + '').replace('data:', '').replace(/^.+,/, '')
+        dispatch(userAction.updateUser({ ...user, link_avatar}) as any)
+    }
 
     useEffect(() => {
         switch (menu) {
@@ -46,6 +55,11 @@ export default function PersonalPage() {
                         />
                         <div className="bl_commonInfor_fullName">
                             {`${user.firstname} ${user.surname}`}
+                        </div>
+                        <div className="bl_commonInfor_btnUpload">
+                            <UploadFileBtnHk2t
+                                onUploadImages={handleUploadImages}
+                            />
                         </div>
                     </div>
                     <div className="bl_sidebar_options">
