@@ -25,12 +25,12 @@ function App() {
             <Route path="person-infor" element={<InforCustomerPage/>} />
             <Route path="payment" element={<CompletedBookingPage/>} />
           </Route>
+          <Route path="customer/:menu" element={<PersonalPage/>}/>
         </Route>
         <Route path="admin" element={<AdminSigninPage/>}/>
         <Route path="admin/:menu" element={<AdminHomePage/>}/>
         <Route path="sign_in" element={<SigninPage/>}/>
         <Route path="sign_up" element={<SignupPage/>}/>
-        <Route path="customer/:menu" element={<PersonalPage/>}/>
       </Routes>
     </BrowserRouter>
   )

@@ -39,10 +39,6 @@ export default function ProfileCustomer() {
         }
     },[user])
 
-    useEffect(() => {
-        dispatch(userAction.showInforUser() as any)
-    },[])
-
     return (
         <div className="bl_profile">
             <div className="bl_profile_inner">

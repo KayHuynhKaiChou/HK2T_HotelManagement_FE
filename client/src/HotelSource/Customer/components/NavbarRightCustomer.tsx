@@ -9,7 +9,6 @@ import PersonInfor from "../../../common/SummaryInfor/SummaryInfor";
 export default function NavbarRightCustomer() {
     const {user} = useSelector<RootState , RootState>(state => state);
     const navigate = useNavigate();
-
     return (
         <>       
             {user.token && user.position == 4 ? (
@@ -19,18 +18,16 @@ export default function NavbarRightCustomer() {
                 />
             ) : (
                 <Box className="bl_navbarRightCustomer_wrap">
-                    <Box className="bl_navbarRightCustomer_act">
+                    <Box className="bl_navbarRightCustomer_act" onClick={() => navigate('/sign_in')}>
                         <AccountCircleIcon />
-                        <Typography 
+                        <Typography
                             sx={{ mx: "5px" }}
-                            onClick={() => navigate('/sign_in')}
                         >Sign In</Typography>
                     </Box>
-                    <Box className="bl_navbarRightCustomer_act">
+                    <Box className="bl_navbarRightCustomer_act" onClick={() => navigate('/sign_up')}>
                         <LoginIcon />
                         <Typography 
                             sx={{ mx: "5px" }}
-                            onClick={() => navigate('/sign_up')}
                         >Sign Up</Typography>
                     </Box>
                 </Box>
