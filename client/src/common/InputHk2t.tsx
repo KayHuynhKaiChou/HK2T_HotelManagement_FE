@@ -138,7 +138,7 @@ function InputHk2t(props : InputProps) {
                 {label}
             </div>
             {
-                typeInput === 'date' && onChangeDatePicker 
+                typeInput === 'date' 
                     ? renderDatePicker() 
                     : renderInput()
             }
