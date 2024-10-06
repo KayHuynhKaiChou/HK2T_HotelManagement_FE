@@ -64,11 +64,13 @@ export default function SelectHk2t({
                                 isDisabled={disabled}
                                 styles={selectStyles}                           
                             />
-                            <p style={{
-                                fontSize: "1rem",
-                                color: "#ff0000",
-                                letterSpacing: "0.03333em"
-                            }} >{errors[name]?.value.message}</p>
+                            {errors[name] && (
+                                <p style={{
+                                    fontSize: "1rem",
+                                    color: "#ff0000",
+                                    letterSpacing: "0.03333em"
+                                }} >{errors[name]?.value.message}</p>
+                            )}
                         </>
                     }
                 />
