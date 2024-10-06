@@ -41,11 +41,12 @@ function InputHk2t(props : InputProps) {
         onFocus
     } = props
     
-    const {formState : { errors, isSubmitted}} = form;
-    const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
-
+    
     function renderInput(){
         if(form){
+            const {formState : { errors, isSubmitted}} = form;
+            const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
+
             return (
                 <Controller
                     name={name}
@@ -100,6 +101,9 @@ function InputHk2t(props : InputProps) {
     }
 
     function renderDatePicker(){
+        if (!form) return <></>
+        const {formState : { errors, isSubmitted}} = form;
+        const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
         return (
             <Controller
                 name={name}
