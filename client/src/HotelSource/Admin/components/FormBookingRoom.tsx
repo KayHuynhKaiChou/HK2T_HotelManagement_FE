@@ -11,6 +11,7 @@ import { TypeRoom, User } from "../../../types/models";
 import { useMemo } from "react";
 import { OptionSelect } from "../../../types/supportUI";
 import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
+import { formatCurrency } from "../../../utils";
 
 interface FormBookingRoomProps {
     typeRooms : TypeRoom[];
@@ -32,16 +33,24 @@ export default function FormBookingRoom({
             value: yup.string().required()
         }).required('Please select email customer !'),
         checkin_at: yup.string()
-                .required('Please enter check in !'),
+                .required('Please choose check in !'),
         checkout_at: yup.string()
-                .required('Please enter check out !'),
+                .required('Please choose check out !'),
         adult_capacity: yup.number()
-                .required('Please enter quantity adult !'),
+                .typeError('Please enter quantity adult !')
+                .required('Please enter quantity adult !')
+                .moreThan(0, 'Quantity adult must be greater than 0')
+                .max(4, 'Max number of adult is 4'),
         kid_capacity: yup.number()
-                .required('Please enter quantity kids !'),
+                .typeError('Please enter quantity kids !')
+                .required('Please enter quantity kids !')
+                .moreThan(0, 'Quantity kids must be greater than 0')
+                .max(4, 'Max number of kids is 4'),
         type_room: yup.object().shape({ // ban đầu disable , khi chọn adult và kids sau sẽ filter ra list type room phù hợp        
             label: yup.string().required(),
-            value: yup.string().required()
+            value: yup.string().required(
+                'There are currently no options in the list, please enter the appropriate number of people.'
+            )
         }).required('Please select district !'),
         total_price: yup.number().required()
     });
@@ -81,6 +90,11 @@ export default function FormBookingRoom({
 
     // useMemo
     const optionTypeRoomFilter = useMemo<OptionSelect[]>(() => {
+        if(
+            watchAdultCapacity + '' === '' || 
+            watchKidCapacity + '' === ''
+        ) return []
+
         return typeRooms
             .filter(tRoom => 
                 tRoom.adult_capacity >= watchAdultCapacity && 
@@ -122,10 +136,28 @@ export default function FormBookingRoom({
             form.setValue("total_price" , totalPriceCal)
         }
     },[watchTypeRoom, totalDay])
+
+    useEffectSkipFirstRender(() => {
+        if (optionTypeRoomFilter.length === 0) {
+            form.setValue('type_room', {
+                label: '',
+                value: ''
+            })
+        } else {
+            form.setValue('type_room', {
+                label: optionTypeRoomFilter[0].label,
+                value: optionTypeRoomFilter[0].value + ''
+            })
+            form.clearErrors('type_room.label')
+            form.clearErrors('type_room.value')
+        }
+    }, [
+        optionTypeRoomFilter
+    ])
     
     return (
         <form 
-            onSubmit={form.handleSubmit(onActionReversation as SubmitHandler<FormBooking>)}
+            onSubmit={form.handleSubmit(onActionReversation)}
             className='bl_personInfor_form'
         >
             <div className="bl_personInfor_form_inner">
@@ -190,10 +222,6 @@ export default function FormBookingRoom({
                                 name='type_room' 
                                 placeholder='select type room' 
                                 form={form}
-                                disabled={
-                                    (watchAdultCapacity + '') === '' ||
-                                    (watchKidCapacity + '') === ''
-                                }
                             />
                         </Grid>
                     </Grid>
@@ -208,7 +236,7 @@ export default function FormBookingRoom({
                         Total day: {totalDay}
                     </div>
                     <div className="bl_total">
-                        Total price: {watchTotalPrice} vnđ
+                        Total price: {formatCurrency(watchTotalPrice)} vnđ
                     </div>
                 </div>
                 <ButtonHk2t
