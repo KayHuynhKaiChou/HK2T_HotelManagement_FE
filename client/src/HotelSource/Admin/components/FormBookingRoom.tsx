@@ -181,7 +181,6 @@ export default function FormBookingRoom({
                                 name='checkin_at' 
                                 typeInput='date' 
                                 minDate={dayjs()}
-                                onChangeDatePicker={(value: Dayjs | null) => handleChangeDatePicker("checkin_at", value)}
                             />
                         </Grid>
                         <Grid item sm={4}>
@@ -192,7 +191,6 @@ export default function FormBookingRoom({
                                 typeInput='date'
                                 minDate={watchCheckIn ? dayjs(watchCheckIn).add(1, 'day') : dayjs()}
                                 disabled={!watchCheckIn}
-                                onChangeDatePicker={(value: Dayjs | null) => handleChangeDatePicker("checkout_at", value)}
                             />
                         </Grid>
                     </Grid>
