@@ -11,7 +11,7 @@ import { TypeRoom, User } from "../../../types/models";
 import { useMemo } from "react";
 import { OptionSelect } from "../../../types/supportUI";
 import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
-import { formatCurrency } from "../../../utils";
+import { distanceTwoDate, formatCurrency } from "../../../utils";
 
 interface FormBookingRoomProps {
     typeRooms : TypeRoom[];
@@ -116,10 +116,8 @@ export default function FormBookingRoom({
             }))
     },[customers])
 
-    const totalDay = useMemo(() => {
-        const timeFrom = dayjs(watchCheckIn);
-        const timeTo = dayjs(watchCheckOut);
-        return timeTo.diff(timeFrom, 'day') || 0; 
+    const totalDate = useMemo(() => {
+        return distanceTwoDate(watchCheckIn, watchCheckOut)
     },[watchCheckIn , watchCheckOut])
 
     // use Effect
@@ -131,11 +129,12 @@ export default function FormBookingRoom({
 
     useEffectSkipFirstRender(() => {
         const typeRoomSelected = typeRooms.find(tRoom => (tRoom.id + '') === watchTypeRoom.value)
+        const numberOfNight = totalDate - 1 
         if(typeRoomSelected){
-            const totalPriceCal = (typeRoomSelected.base_price * totalDay) || 0
+            const totalPriceCal = (typeRoomSelected.base_price * numberOfNight) || 0
             form.setValue("total_price" , totalPriceCal)
         }
-    },[watchTypeRoom, totalDay])
+    },[watchTypeRoom, totalDate])
 
     useEffectSkipFirstRender(() => {
         if (optionTypeRoomFilter.length === 0) {
@@ -231,7 +230,10 @@ export default function FormBookingRoom({
             >
                 <div className="bl_contentTotal">
                     <div className="bl_total">
-                        Total day: {totalDay}
+                        Total date: {totalDate}
+                    </div>
+                    <div className="bl_total">
+                        Number of night: {totalDate - 1}
                     </div>
                     <div className="bl_total">
                         Total price: {formatCurrency(watchTotalPrice)} vnđ

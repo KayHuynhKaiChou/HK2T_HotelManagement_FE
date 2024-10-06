@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Amenity, Reversation, Room, TypeAmenity, TypeObjAmenity, TypeRoom, User } from '../types/models';
 import { defaultTypeAmenity, statusBooking } from './constants';
 import { isValidElement } from 'react';
+import dayjs from 'dayjs';
 
 export const uuid = () => {
   const id = uuidv4().replace(/-/g, '')
@@ -29,13 +30,10 @@ export const formatDateV2 = (date: Date) : string => {
   return `${dayName}, ${monthName} ${day}, ${year}`;
 }
 
-export const distanceTwoDate = (dateFirst: Date, dateLast: Date) => {
-  // Tính khoảng cách giữa 2 ngày bằng số milliseconds
-  const millisecondsPerDay = 1000 * 60 * 60 * 24; // Số milliseconds trong 1 ngày
-  const timeDifference = Math.abs(dateLast.getTime() - dateFirst.getTime()); // Khoảng cách giữa 2 ngày
-
-  // Chia số milliseconds cho số milliseconds trong 1 ngày để ra số ngày
-  return Math.ceil(timeDifference / millisecondsPerDay);
+export const distanceTwoDate = (dateFirst: string, dateLast: string) => {
+  const dateFrom = dayjs(dateFirst);
+  const dateTo = dayjs(dateLast);
+  return dateTo.diff(dateFrom, 'day')
 }
 
 export const formatCurrency = (amount: number) => {

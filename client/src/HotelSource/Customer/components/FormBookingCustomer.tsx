@@ -2,7 +2,7 @@ import HotelIcon from '@mui/icons-material/Hotel';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import Person3Icon from '@mui/icons-material/Person3';
 import DateRangePickerHk2t from '../../../common/DateRangePicker/DateRangePickerHk2t';
-import { toastMSGObject, uuid } from '../../../utils';
+import { distanceTwoDate, toastMSGObject, uuid } from '../../../utils';
 import PopoverHk2t, { PopoverHandle } from '../../../common/Popover/PopoverHk2t';
 import { MouseEvent, useMemo, useRef, useState } from 'react';
 import { RootState } from '../../../redux/reducers';
@@ -116,9 +116,19 @@ export default function FormBookingCustomer() {
     }
 
     const handleNavigateReservation = () => {
+        const distanceDate = distanceTwoDate(formBooking.checkin_at, formBooking.checkout_at)
+        const numberOfNight = distanceDate - 1
+        const selectedTypeRoom = typeRooms.find(typeRoom => typeRoom.id === formBooking.type_room_id)
+        if (selectedTypeRoom) {
+            const totalPrice = Number(selectedTypeRoom.base_price) * numberOfNight
+            dispatch(
+                formBookingAction.updateFormBooking("total_price", totalPrice)
+            )
+        }
+
         let url = ''
         if (user.token) {
-            url = '/reservation'
+            url = '/reservation/person-infor'
         } else {
             url = '/sign_in'
         }

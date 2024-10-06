@@ -26,15 +26,14 @@ export default function ReservationPage() {
     }, [formBooking.checkout_at])
 
     const checkinCountdown = useMemo(() => {
-        const today = new Date()
-        const checkinDate = new Date(formBooking.checkin_at)
-        return distanceTwoDate(today, checkinDate)
+        const today = new Date().toDateString()
+        return distanceTwoDate(today, formBooking.checkin_at)
     }, [formBooking.checkin_at])
 
     const numberOfNight = useMemo(() => {
         return distanceTwoDate(
-            new Date(formBooking.checkin_at),
-            new Date(formBooking.checkout_at)
+            formBooking.checkin_at,
+            formBooking.checkout_at
         ) - 1
     }, [
         formBooking.checkin_at,
@@ -43,7 +42,14 @@ export default function ReservationPage() {
 
     const selectedTypeRoom = useMemo(() => {
         return typeRooms.find(typeRoom => typeRoom.id === formBooking.type_room_id)
-    }, [])
+    }, [formBooking.type_room_id])
+
+    const costCancel = useMemo(() => {
+        if (selectedTypeRoom) {
+            return Number(selectedTypeRoom.base_price) - Number(selectedTypeRoom.base_price) * 0.4
+        }
+        return 0
+    }, [selectedTypeRoom])
 
     return (
         <div className="bl_ReservationPage_wrap">
@@ -121,16 +127,16 @@ export default function ReservationPage() {
                         <div className="bl_price_wrap">
                             <div className="bl_price_part">
                                 <div className="bl_p_name">Base price</div>
-                                <div className="bl_p_value">VND {formatCurrency(formBooking.total_price)}</div>
+                                <div className="bl_p_value">VND {formatCurrency(selectedTypeRoom?.base_price || 0)}</div>
                             </div>
                             <div className="bl_price_part">
                                 <div className="bl_p_name">Number of night</div>
-                                <div className="bl_p_value">2</div>
+                                <div className="bl_p_value">{numberOfNight}</div>
                             </div>
                         </div>
                         <div className="bl_price_total">
                             <div className="bl_total_name">Total</div>
-                            <div className="bl_total_value">VND 696.600</div>
+                            <div className="bl_total_value">VND {formatCurrency(formBooking.total_price)}</div>
                         </div>
                     </div>
                     <div className="bl_infor_common">
@@ -142,11 +148,11 @@ export default function ReservationPage() {
                     <div className="bl_infor_common">
                         <b>How much does it cost to cancel ?</b>
                         <div className="bl_note">
-                            Free cancellation before 6:00 PM, September 27
+                            Free cancellation before 6:00 PM, {checkinFormat.split(', ')[1]}
                         </div>
                         <div className="bl_after_dateStart">
-                            <div className="bl_date">Từ 18:00 ngày 27 tháng 9</div>
-                            <div className="bl_totalPrice">VND 696.600</div>
+                            <div className="bl_date">From 18:00, {checkinFormat.split(', ')[1]}</div>
+                            <div className="bl_totalPrice">VND {formatCurrency(costCancel)}</div>
                         </div>
                     </div>
                 </div>
