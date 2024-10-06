@@ -1,4 +1,4 @@
-import { formatDate } from "../../../utils";
+import { formatDateV1 } from "../../../utils";
 
 export default function IntroduceHotel() {
   return (
@@ -21,7 +21,7 @@ export default function IntroduceHotel() {
                         />
                         <div className="bl_content">
                             <div className="bl_content_dateNow">
-                                {formatDate(new Date())}
+                                {formatDateV1(new Date())}
                             </div>
                             <div className="bl_content_temperature">
                                 31℃

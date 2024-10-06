@@ -122,7 +122,7 @@ export default function FormBookingCustomer() {
         } else {
             url = '/sign_in'
         }
-        navigate(url)
+        navigate(url, { state: '/reservation/person-infor' })
     }
 
     // useEffect

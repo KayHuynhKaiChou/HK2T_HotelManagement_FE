@@ -117,16 +117,16 @@ export default function DateRangePickerHk2t({
     handleCloseCalendar
 } : DateRangePickerHk2tProps) {
 
+    if (!WrappedSingleInputDateRangeField.dateRange) {
+        WrappedSingleInputDateRangeField.dateRange = initalDateRange
+    }
+
     const onChangeDateRange = (value: DateRange<Dayjs>) => {
         const [_, endDate] = value ?? [null, null]
         if (endDate) {
             WrappedSingleInputDateRangeField.dateRange = value
         }
     }
-
-    useEffect(() => {
-        WrappedSingleInputDateRangeField.dateRange = initalDateRange
-    }, [])
     
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
