@@ -158,8 +158,8 @@ export default function FormBookingCustomer() {
                     <DateRangeIcon/>
                     <DateRangePickerHk2t
                         initalDateRange={[
-                            formBooking.checkin_at ? dayjs(formBooking.checkin_at) : dayjs(), 
-                            formBooking.checkout_at ? dayjs(formBooking.checkout_at) : dayjs().add(1, 'day')
+                            dayjs(formBooking.checkin_at), 
+                            dayjs(formBooking.checkout_at)
                         ]}
                         handleCloseCalendar={handleUpdateDateRange}
                     />

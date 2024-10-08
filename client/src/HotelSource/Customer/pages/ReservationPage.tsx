@@ -31,6 +31,7 @@ export default function ReservationPage() {
     }, [formBooking.checkin_at])
 
     const numberOfNight = useMemo(() => {
+        // from 22/8 to 23/8 is 2 date => 1 đêm
         return distanceTwoDate(
             formBooking.checkin_at,
             formBooking.checkout_at

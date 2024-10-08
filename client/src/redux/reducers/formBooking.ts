@@ -1,10 +1,11 @@
+import dayjs from "dayjs"
 import { FormBookingCustomer } from "../../types/form"
 import { FormBookingAction, formBookingType } from "../constants/formBookingType"
 
 const initState : FormBookingCustomer = {
     user_id: 9,
-    checkin_at: '',
-    checkout_at: '',
+    checkin_at: dayjs().format('YYYY-MM-DD'),
+    checkout_at: dayjs().add(1, 'day').format('YYYY-MM-DD'),
     adult_capacity: 1,
     kid_capacity: 1,
     type_room_id: 0,
