@@ -33,7 +33,7 @@ export const formatDateV2 = (date: Date) : string => {
 export const distanceTwoDate = (dateFirst: string, dateLast: string) => {
   const dateFrom = dayjs(dateFirst);
   const dateTo = dayjs(dateLast);
-  return dateTo.diff(dateFrom, 'day')
+  return dateTo.diff(dateFrom, 'day') + 1
 }
 
 export const formatCurrency = (amount: number) => {
