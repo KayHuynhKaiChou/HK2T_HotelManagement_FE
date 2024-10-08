@@ -7,16 +7,36 @@ import { Avatar } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/reducers";
 import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { convertAmenitiesArrayToObject, formatContentAmenitiesOfTypeAme, formatDateV2 } from "../../../utils";
+import { defaultTypeAmenity, defaultViewDirection } from "../../../utils/constants";
+import { TypeAmenity } from "../../../types/models";
 
 export default function InforCustomerPage() {
     //redux
-    const { user, formBooking, typeRooms } = useSelector<RootState , RootState>(state => state);
+    const { user, formBooking, typeRooms, amenities } = useSelector<RootState , RootState>(state => state);
 
     //navigate
     const navigate = useNavigate()
     const handleNextStep = () => {
         navigate('/reservation/payment')
     }
+
+    const selectedTypeRoom = useMemo(() => {
+        return typeRooms.find(typeRoom => typeRoom.id === formBooking.type_room_id)
+    }, [formBooking.type_room_id])
+
+    const checkInMemo = useMemo(() => {
+        return formatDateV2(new Date(formBooking.checkin_at))
+    }, [formBooking.checkin_at])
+
+    const viewDirection = useMemo(() => {
+        return selectedTypeRoom && defaultViewDirection[selectedTypeRoom.view_direction - 1].toLowerCase()
+    }, [selectedTypeRoom?.view_direction])
+
+    const amenitiesObj = useMemo(() => {
+        return convertAmenitiesArrayToObject(amenities)
+    }, [amenities])
 
     return (
         <div className="bl_grid_column">
@@ -25,7 +45,7 @@ export default function InforCustomerPage() {
                     <Avatar src={user.link_avatar} />
                     <div className="bl_email_wrap">
                         <div className="bl_notification">You are logged in</div>
-                        <div className="bl_email">lekimtan183@gmail.com</div>
+                        <div className="bl_email">{user.email}</div>
                     </div>
                 </div>
             </div>
@@ -33,19 +53,19 @@ export default function InforCustomerPage() {
                 <h3 className="bl_ttl">Your detail information</h3>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">Firstname</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">{user.firstname}</div>
                 </div>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">Surname</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">{user.surname}</div>
                 </div>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">Email</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">{user.email}</div>
                 </div>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">Phone</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">{user.phone || <i>( not mentioned )</i>}</div>
                 </div>
             </div>
             <div className="bl_infor_common">
@@ -67,26 +87,36 @@ export default function InforCustomerPage() {
                 </div>
             </div>
             <div className="bl_infor_common">
-                <h3 className="bl_ttl">Phòng Gia Đình</h3>
+                <h3 className="bl_ttl">{selectedTypeRoom?.title}</h3>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">Free cancel</div>
-                    <div className="bl_infor_value">trước 18:00, 27 tháng 9, 2024</div>
+                    <div className="bl_infor_value">Before 18:00, {checkInMemo}</div>
                 </div>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">view direction</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">{viewDirection}</div>
                 </div>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">size</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">{selectedTypeRoom?.size} ㎡</div>
                 </div>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">customers</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">
+                        {`${formBooking.adult_capacity} adults, ${formBooking.kid_capacity} kids`}
+                    </div>
                 </div>
                 <div className="bl_entity_infor">
                     <div className="bl_infor_name">amenities</div>
-                    <div className="bl_infor_value">Kay</div>
+                    <div className="bl_infor_value">
+                        {defaultTypeAmenity.map(typeAme => (
+                            <div className="bl_ame_wrap">
+                                {`${typeAme.toLowerCase()}: ${formatContentAmenitiesOfTypeAme(
+                                    amenitiesObj[typeAme.toLowerCase() as TypeAmenity]
+                                )}`}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
             <div className="bl_infor_common">

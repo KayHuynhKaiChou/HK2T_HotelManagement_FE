@@ -821,6 +821,7 @@
 
                 .bl_entity_infor {
                     @include flex-center;
+                    align-items: start;
                     margin-bottom: 16px;
 
                     .bl_infor_name {

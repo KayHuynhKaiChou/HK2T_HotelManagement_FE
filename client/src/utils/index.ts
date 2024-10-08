@@ -52,6 +52,21 @@ export const capitalizeFirstLetter = (text : String) => {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+export const formatContentAmenitiesOfTypeAme = (amenities: Amenity[]) => {
+  const concatContent = amenities.reduce(
+      (content, ame, index) => {
+          if (index === amenities.length - 1) {
+              content += ame.name
+          } else {
+              content += (ame.name + ' / ')
+          }
+          return content
+      },
+      ''
+  )
+  return concatContent
+}
+
 export const convertAmenitiesArrayToObject = (amenities : Amenity[]) : TypeObjAmenity => {
   return defaultTypeAmenity.reduce<TypeObjAmenity>((acc , typeAme , index) => {
     const amenitiesByType = amenities.filter(a => a.type === index + 1)

@@ -1,13 +1,14 @@
 import { useLocation, useParams } from "react-router-dom";
 import BreadcrumbsHk2t from "../../../common/Breadcrumbs/BreadcrumbsHk2t";
 import HomeIcon from '@mui/icons-material/Home';
-import { TypeRoom } from "../../../types/models";
+import { Amenity, TypeAmenity, TypeRoom } from "../../../types/models";
 import { useMemo } from "react";
 import CarouselHk2t from "../../../common/Carousel/CarouselHk2t";
 import { defaultTypeAmenity, defaultViewDirection, linkDefaultImage } from "../../../utils/constants";
 import parse from 'html-react-parser';
 import { RootState } from "../../../redux/reducers";
 import { useSelector } from "react-redux";
+import { convertAmenitiesArrayToObject, formatContentAmenitiesOfTypeAme } from "../../../utils";
 
 export default function DetailTypeRoomPage() {
     const { title: titleParam } = useParams();
@@ -15,7 +16,7 @@ export default function DetailTypeRoomPage() {
     const typeRoom : TypeRoom = location.state || {};
     //redux
     const {amenities : amenitiesStore} = useSelector<RootState , RootState>(state => state);
-    console.log(amenitiesStore)
+    
     const { 
         title, images, adult_capacity, kids_capacity, 
         size, view_direction, base_price, 
@@ -89,14 +90,9 @@ export default function DetailTypeRoomPage() {
     }, [preferential_services])
 
     const amenity = useMemo(() => {
-        const amenitiesByType = defaultTypeAmenity.map((_, index) => {
-            amenitiesStore
-        })
         return {
             title: 'Amenities',
-            contents: [
-                
-            ]
+            content: convertAmenitiesArrayToObject(amenitiesStore)
         }
     }, [amenities])
 
@@ -153,11 +149,31 @@ export default function DetailTypeRoomPage() {
                     </div>
                 </div>
                 <div className="bl_dtr_inforCom border_top">
-                    <div className="bl_inforCom_ttl">{specialOffers.title}</div>
-                    def
-                    <div className="bl_amenity_content">
-                        <div className="bl_cnt_type"></div>
-                        <div className="bl_cnt_amenities"></div>
+                    <div className="bl_inforCom_ttl">{amenity.title}</div>
+                    {defaultTypeAmenity.map((value) => (
+                        <div className="bl_amenity_content">
+                            <div className="bl_cnt_type">{value}</div>
+                            <div className="bl_cnt_amenities">
+                                {formatContentAmenitiesOfTypeAme(amenity.content[value.toLowerCase() as TypeAmenity])}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="bl_dtr_inforCom border_top">
+                    <div className="bl_inforCom_ttl">Contact information</div>
+                    <div className="bl_overview_content">
+                        <div className="bl_sub_content">
+                            <div className="bl_cnt_name contact">TEL</div>
+                            <div className="bl_cnt_value">+84-935-187-859</div>
+                        </div>
+                        <div className="bl_sub_content">
+                            <div className="bl_cnt_name contact">FAX</div>
+                            <div className="bl_cnt_value">+84-115-237-819</div>
+                        </div>
+                        <div className="bl_sub_content">
+                            <div className="bl_cnt_name contact">EMAIL</div>
+                            <div className="bl_cnt_value">hotelhk2t@gmail.com</div>
+                        </div>
                     </div>
                 </div>
             </div>
