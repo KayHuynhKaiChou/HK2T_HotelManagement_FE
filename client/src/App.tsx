@@ -11,27 +11,30 @@ import DetailTypeRoomPage from "./HotelSource/Customer/pages/DetailTypeRoomPage"
 import ReservationPage from "./HotelSource/Customer/pages/ReservationPage";
 import InforCustomerPage from "./HotelSource/Customer/pages/InforCustomerPage";
 import CompletedBookingPage from "./HotelSource/Customer/pages/CompletedBookingPage";
+import { LoadingHk2tScreenProvider } from "./common/Loading/LoadingHk2tScreen";
 
 function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<DefaultPage/>}>
-          <Route index element={<HomePage />} />
-          <Route path="rooms" element={<ListRoomPage/>} />
-          <Route path="rooms/:title" element={<DetailTypeRoomPage/>} />
-          <Route path="reservation/" element={<ReservationPage/>} >
-            <Route path="person-infor" element={<InforCustomerPage/>} />
-            <Route path="payment" element={<CompletedBookingPage/>} />
+      <LoadingHk2tScreenProvider>
+        <Routes>
+          <Route path="/" element={<DefaultPage/>}>
+            <Route index element={<HomePage />} />
+            <Route path="rooms" element={<ListRoomPage/>} />
+            <Route path="rooms/:title" element={<DetailTypeRoomPage/>} />
+            <Route path="reservation/" element={<ReservationPage/>} >
+              <Route path="person-infor" element={<InforCustomerPage/>} />
+              <Route path="payment" element={<CompletedBookingPage/>} />
+            </Route>
+            <Route path="customer/:menu" element={<PersonalPage/>}/>
           </Route>
-          <Route path="customer/:menu" element={<PersonalPage/>}/>
-        </Route>
-        <Route path="admin" element={<AdminSigninPage/>}/>
-        <Route path="admin/:menu" element={<AdminHomePage/>}/>
-        <Route path="sign_in" element={<SigninPage/>}/>
-        <Route path="sign_up" element={<SignupPage/>}/>
-      </Routes>
+          <Route path="admin" element={<AdminSigninPage/>}/>
+          <Route path="admin/:menu" element={<AdminHomePage/>}/>
+          <Route path="sign_in" element={<SigninPage/>}/>
+          <Route path="sign_up" element={<SignupPage/>}/>
+        </Routes>
+      </LoadingHk2tScreenProvider>
     </BrowserRouter>
   )
 }
