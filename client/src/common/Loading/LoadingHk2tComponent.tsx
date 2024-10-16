@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Oval } from 'react-loader-spinner';
 
-export default function LoadingHk2t() {
+export default function LoadingHk2tComponent() {
     useEffect(() => {
-        const loadingElement = document.querySelector('.un_loading');
+        const loadingElement = document.querySelector('.un_loading_comp');
         const parentElement = loadingElement?.parentElement
         parentElement!.style.position = "relative";
         parentElement!.style.opacity = "0.6"
@@ -15,7 +15,7 @@ export default function LoadingHk2t() {
     },[])
 
     return (
-        <div className='un_loading'>
+        <div className='un_loading_comp'>
             <Oval
                 height={80}
                 width={80}
