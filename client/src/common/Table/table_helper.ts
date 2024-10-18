@@ -8,6 +8,7 @@ export const getLimitRowsPerPage = (rows : {[key: string]: any}[] , pageSizeOpti
     const maxOpt = +pageSizeOptions[pageSizeOptions.length - 1]?.value;
 
     initValue = lengthRows < minOpt ? minOpt : lengthRows >= maxOpt ? maxOpt : initValue
+    if (initValue === minOpt || initValue === maxOpt) return initValue
     pageSizeOptions.forEach((pSizeOpt , i) => {
         if(lengthRows >= +pSizeOpt.value && lengthRows < +pageSizeOptions[i+1].value){
             initValue = +pSizeOpt.value
@@ -24,7 +25,13 @@ export const CustomTable = styled(Table)({
 
 export const CustomTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+        backgroundColor: theme.palette.action.hover,
+    },
+    '&.bl_row_selected': {
+        backgroundColor: '#ff9a00',
+        '& td': { // Đúng cú pháp để chọn các thẻ td con
+            color: '#fff !important', // Ví dụ: thay đổi màu chữ cho các thẻ td
+        }
     }
 }));
 

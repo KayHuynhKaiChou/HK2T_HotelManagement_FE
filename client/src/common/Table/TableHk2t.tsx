@@ -4,7 +4,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import FontAwesomeIconHk2t from "../FontAwesomeIconHk2t";
+import FontAwesomeIconHk2t from "../Icon/FontAwesomeIconHk2t";
 import { uuid } from "../../utils";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { colorsBtnCustom, defaultSortColumn, iconsSort } from "../../utils/constants";
@@ -21,6 +21,8 @@ import {
 import InputHk2t from "../InputHk2t";
 import ButtonHk2t from "../ButtonHk2t";
 import AddIcon from '@mui/icons-material/Add';
+import classNames from "classnames";
+import useEffectSkipFirstRender from "../../hooks/useEffectSkipFirstRender";
 
 interface propsTable {
     rows: { [key : string] : any}[];
@@ -49,12 +51,13 @@ export default function TableHk2t({
     const [rowsFilter , setRowsFilter] = useState<propsTable['rows']>(rows); // filter rows by search
     const [searchText , setSearchText] = useState<string>('');
     const [pageSizeOption , setPageSizeOption] = useState<OptionSelect['value']>(
-        getLimitRowsPerPage(rows , pageSizeOptions)
+        pageSizeOptions[0].value
     ); // limit length rows per page
     const [listNumberPage , setListNumberPage] = useState<number[]>([]); // ex : Previous 1 2 3 4 Next
     const [currentPage , setCurrentPage] = useState<number>(1);
     const [selectedCriteria , setSelectedCriteria] = useState<CriteriaType['condition'] | null>(null);
     const [sortedColumn , setSortedColumn] = useState<{id : ColumnType['id'] , type : TypeSort}>(defaultSortColumn);
+    const [rowId, setRowId] = useState()
 
     // useMemo ==================================================================
     const lengthRows = useMemo(() => rowsFilter.length ,[rowsFilter.length])
@@ -107,8 +110,8 @@ export default function TableHk2t({
         setRowsDetail([...rows].slice(fromRow , toRow))
         setRowsFilter([...rows]);
         searchText != '' && setSearchText('');
-        const limitRowsPerPage = getLimitRowsPerPage(rows , pageSizeOptions);
-        pageSizeOption != limitRowsPerPage && setPageSizeOption(limitRowsPerPage);
+        // const limitRowsPerPage = getLimitRowsPerPage(rows , pageSizeOptions);
+        pageSizeOption != pageSizeOptions[0].value && setPageSizeOption(pageSizeOptions[0].value);
         // listNumberPage.length > 0 && setListNumberPage([]);
         currentPage > 1 && setCurrentPage(1);
         selectedCriteria && setSelectedCriteria(null);
@@ -131,7 +134,7 @@ export default function TableHk2t({
     },[currentPage , pageSizeOption , lengthRows])
 
     // track sort asc / desc by column
-    useEffect(() => {
+    useEffectSkipFirstRender(() => {
         if(isLoadingTable) return;
         const foundSortedCol = columns.find(col => col.id === sortedColumn?.id);
         if(foundSortedCol){
@@ -157,7 +160,7 @@ export default function TableHk2t({
     },[sortedColumn])
 
     // when change search text , rows will filter by text
-    useEffect(() => {
+    useEffectSkipFirstRender(() => {
         if(isLoadingTable) return;
         if(columnDetail?.criteria){
             return;
@@ -166,20 +169,20 @@ export default function TableHk2t({
         let resultFilter = [];
         if(searchText == ''){
             resultFilter = [...rows]
-            limitRows = getLimitRowsPerPage(resultFilter , pageSizeOptions);
+            limitRows = Number(pageSizeOptions[0].value);
         }else{
             resultFilter = rows.filter(row => {
                 const originalValue = row[columnDetail?.nameCol].toLowerCase() as string;
                 return originalValue.includes(searchText.toLowerCase())
             })
-            limitRows = getLimitRowsPerPage(resultFilter, pageSizeOptions);
+            limitRows = Number(pageSizeOptions[0].value);
         }
         setPageSizeOption(limitRows);
         setRowsFilter(resultFilter);
     },[searchText , columnDetail])
 
     // when change criteria , rows will filter by criteria
-    useEffect(() => {
+    useEffectSkipFirstRender(() => {
         if(isLoadingTable) return;
         if(columnDetail?.criteria && selectedCriteria){
             const condition = selectedCriteria
@@ -188,13 +191,13 @@ export default function TableHk2t({
             const resultFilter = rows.filter(row => {
                 return row[columnDetail?.nameCol] >= compareFirst && row[columnDetail?.nameCol] <= compareLast
             })
-            const limitRows = getLimitRowsPerPage(resultFilter, pageSizeOptions);
+            const limitRows = Number(pageSizeOptions[0].value);
             setPageSizeOption(limitRows);
             setRowsFilter(resultFilter);
         }
     },[selectedCriteria , columnDetail])
 
-    useEffect(() => {
+    useEffectSkipFirstRender(() => {
         if(isLoadingTable) return;
         if(columnDetail?.criteria){
             setSelectedCriteria(columnDetail.criteria[0].condition)
@@ -222,7 +225,6 @@ export default function TableHk2t({
     }
     
     const handleChangePageSizeOption = (value : OptionSelect['value']) => {
-        console.log({value})
         setPageSizeOption(value);
     }
 
@@ -273,14 +275,14 @@ export default function TableHk2t({
             <div className="bl_tableContainer_header">
                 {pageSizeOptions.length !== 0 && (
                     <div className="bl_selectLimit">
-                        <div className="bl_subText">Hiển thị</div>
+                        <div className="bl_subText">Show</div>
                         <SelectHk2t
                             name="select_total_number_row_per_page"
                             options={pageSizeOptions}
                             value={pageSizeOption}
                             onChange={handleChangePageSizeOption}
                         />
-                        <div className="bl_subText">thành viên</div>
+                        <div className="bl_subText">members</div>
                     </div>
                 ) }
                 <div className="bl_act">
@@ -307,7 +309,7 @@ export default function TableHk2t({
                             <InputHk2t
                                 className="bl_searchTable_input"
                                 name="search"
-                                placeholder="Bạn cần tìm gì ?"
+                                placeholder="What do you find ?"
                                 value={searchText}
                                 onChange={handleChangeSearchText}
                             />
@@ -333,7 +335,8 @@ export default function TableHk2t({
             <CustomTable
                 className="bl_tableContainer_body" 
                 sx={{ minWidth: 650 }}
-                aria-label="simple table">
+                aria-label="simple table"
+            >
                 <TableHead>
                     <TableRow>
                         {columns.map(col => (
@@ -367,12 +370,14 @@ export default function TableHk2t({
                 <TableBody>
                     {rowsDetail.map((row) => (
                         <CustomTableRow
+                            className={classNames({ 'bl_row_selected' : row?.id === rowId })}
                             key={uuid()}
                         >
                             {columns.map(col => (
-                                <TableCell 
+                                <TableCell
                                     align={col.textAlign ?? 'left'} 
                                     className={col.nameCol === 'action' ? 'un_flex_center_children_cell' : undefined}
+                                    onClick={() => col.nameCol === 'action' && setRowId(row?.id)}
                                 >
                                     {row[col.nameCol]}
                                 </TableCell>
