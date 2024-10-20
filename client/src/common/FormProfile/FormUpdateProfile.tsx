@@ -11,15 +11,18 @@ import wards from '../../data/wards.json';
 import { forwardRef, useImperativeHandle, useMemo } from 'react';
 import RadioBtnHk2t from '../RadioBtnHk2t';
 import { uuid } from '../../utils';
-import { defaultGenders } from '../../utils/constants';
-import { FormUserProfile } from '../../types/form';
+import { colorsBtnCustom, defaultGenders, defaultPositions } from '../../utils/constants';
+import { ActionForm, FormUserProfile } from '../../types/form';
 import UploadFileBtnHk2t from '../UploadFileBtnHk2t';
 import ButtonHk2t from '../ButtonHk2t';
 import useEffectSkipFirstRender from '../../hooks/useEffectSkipFirstRender';
-import { Dayjs } from 'dayjs';
+import { POSITION } from '../../types/enum';
+import { useLocation } from 'react-router-dom';
+import classNames from 'classnames';
 
 interface FormUpdateProfileProps {
     user : User;
+    typeActionForm ?: ActionForm;
     onUpdateProfile : (values : FormUserProfile) => void;
 }
 
@@ -28,35 +31,35 @@ export interface FormUpdateProfileHandle {
 }
 
 const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfileProps>((props , ref) => {
-    const {user , onUpdateProfile} = props;
+    const { user, typeActionForm = 'UPDATE', onUpdateProfile } = props;
+    const { pathname } = useLocation();
     const schema = yup.object({
-        firstname: yup.string()
-        .required('Please enter firstname !'),
-        surname: yup.string()
-        .required('Please enter surname !'),
+        // firstname: yup.string()
+        // .required('Please enter firstname !'),
+        // surname: yup.string()
+        // .required('Please enter surname !'),
         email: yup.string()
         .required('Please enter email !'),
-        phone: yup.string()
-        .required('Please enter phone !'),
+        phone: yup.string(),
         birth_day: yup.string()
         .required('Please select date !'),
         gender: yup.number()
         .oneOf([1,2] as const)
         .required(),
-        city: yup.object().shape({
-            label: yup.string().required('Please select city !'),
-            value: yup.string().required('Please select city !'),
-        }).required('Please select city !'),
-        district: yup.object().shape({
-            label: yup.string().required('Please select district !'),
-            value: yup.string().required('Please select district !')
-        }).required('Please select district !'),
-        ward: yup.object().shape({
-            label: yup.string().required('Please select ward !'),
-            value: yup.string().required('Please select ward !'),
-        }).required('Please select ward !'),
-        address: yup.string()
-        .required('Please enter current address !'),
+        // city: yup.object().shape({
+        //     label: yup.string().required('Please select city !'),
+        //     value: yup.string().required('Please select city !'),
+        // }).required('Please select city !'),
+        // district: yup.object().shape({
+        //     label: yup.string().required('Please select district !'),
+        //     value: yup.string().required('Please select district !')
+        // }).required('Please select district !'),
+        // ward: yup.object().shape({
+        //     label: yup.string().required('Please select ward !'),
+        //     value: yup.string().required('Please select ward !'),
+        // }).required('Please select ward !'),
+        // address: yup.string()
+        // .required('Please enter current address !'),
     });
     
     const defaultLocation = {
@@ -71,9 +74,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         const wardName = wards.find(d => d.ward_id.toString() == user.ward)?.ward_name
         
         return {
-            firstname : user.firstname,
-            surname : user.surname,
-            email : user.email,
+            ...user,
             gender : user.gender || 1,
             phone : user.phone || '',
             birth_day : user.birth_day || '',
@@ -90,7 +91,12 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                 label : wardName || defaultLocation.ward.label, 
                 value : user.ward || defaultLocation.ward.value
             },
-            address : user.address || ''
+            address : user.address || '',
+            position : {
+                label : defaultPositions[user.position! - 1] || defaultPositions[POSITION.RECEPTIONIST - 1],
+                value : user.position || POSITION.RECEPTIONIST
+            },
+            status : user.status || 1
         }
     }
     
@@ -110,6 +116,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
     const selectedCity = useWatch({ control: form.control, name: "city" });
     const selectedDistrict = useWatch({ control: form.control, name: "district" });
     const selectedWard = useWatch({ control: form.control, name: "ward" });
+    const watchPosition = useWatch({ control: form.control, name: "position" });
 
     // useMemo hook
     const optionProvinces = useMemo(() => {
@@ -145,6 +152,26 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         :   []
     },[selectedDistrict])
 
+    const defaultPositionOptions = useMemo(() => {
+        return defaultPositions
+            .map((position, index) => {
+                return {
+                    label: position,
+                    value: index + 1
+                }
+            })
+            .filter(
+                (p) => p.value === POSITION.HOUSEKEEPER || p.value === POSITION.RECEPTIONIST
+            )
+    }, [])
+
+    const titleHeader = useMemo(() => {
+        if (pathname === '/admin/users') {
+            return typeActionForm === 'UPDATE' ? '( form update )' : '( form create )'
+        }
+        return ''
+    }, [typeActionForm])
+
     // useEffect hook
     useEffectSkipFirstRender(() => {
         const district = districts.find(d => d.district_id.toString() == selectedDistrict.value)
@@ -159,6 +186,28 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
             form.setValue("ward" , {label : '---Choose ward---' , value : ''})
         }
     },[selectedDistrict])
+
+    useEffectSkipFirstRender(() => {
+        let salary = 0
+        switch (watchPosition.value) {
+            case POSITION.ADMIN:
+                salary = 10000000
+                break;
+            case POSITION.HOUSEKEEPER:
+                salary = 5000000
+                break;
+            case POSITION.RECEPTIONIST:
+                salary = 7000000
+                break;
+            default:
+                break;
+        }
+        form.setValue('salary', salary)
+    }, [watchPosition])
+
+    useEffectSkipFirstRender(() => {
+        form.reset(generateFirstFormProfile())
+    },[typeActionForm, user])
 
     // func change state form
     const handleChangeGender = (gender : FormUserProfile['gender']) => {       
@@ -175,10 +224,13 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
             className='bl_personInfor_form'
         >
             <div className="bl_personInfor_form_inner">
-                <div className="bl_personInfor_header">personal information</div>
+                <div className="bl_personInfor_header">{`personal information ${titleHeader}`}</div>
                 <Divider className="bl_personInfor_divider"/>
                 <div className="bl_personInfor_body">
-                    {user.position != 4 && (
+                    {(
+                        user.position != POSITION.CUSTOMER &&
+                        pathname !== '/admin/users'
+                    ) && (
                         <>                       
                             <div className="bl_personInfor_body_background">
                                 <Avatar
@@ -239,7 +291,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                                 form={form}
                             />
                         </Grid>
-                        <Grid item sm={6} container alignItems={"center"}>
+                        <Grid item sm={4}>
                             <Grid
                                 sx={{
                                     color : "#707e9c;" , 
@@ -249,23 +301,58 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                             >
                                 Gender
                             </Grid>
-                            {defaultGenders.map((gender , index) => {
-                                const value = index + 1 as FormUserProfile['gender']
-                                return (
-                                    <Grid>
-                                        <RadioBtnHk2t
-                                            id={`select-gender-${uuid()}`}
-                                            name="gender"
-                                            label={gender}
-                                            value={value}
-                                            checked={selectedGender == value}
-                                            form={form}
-                                            onChange={() => handleChangeGender(value)}
-                                        />
-                                    </Grid>
-                                )
-                            })}
+                            <Grid container columnSpacing={3} sx={{margin : "16px 0 8px 0"}}>
+                                {defaultGenders.map((gender , index) => {
+                                    const value = index + 1 as FormUserProfile['gender']
+                                    return (
+                                        <Grid>
+                                            <RadioBtnHk2t
+                                                id={`select-gender-${uuid()}`}
+                                                name="gender"
+                                                label={gender}
+                                                value={value}
+                                                checked={selectedGender == value}
+                                                form={form}
+                                                onChange={() => handleChangeGender(value)}
+                                            />
+                                        </Grid>
+                                    )
+                                })}
+                            </Grid>
                         </Grid>
+                        {user.position !== POSITION.CUSTOMER && (
+                            <>
+                                <Grid item sm={4}>
+                                    {user.position === POSITION.ADMIN || pathname === '/admin/users' ? (
+                                        <SelectHk2t 
+                                            options={defaultPositionOptions} 
+                                            label='position' 
+                                            name='position' 
+                                            placeholder='position' 
+                                            form={form}
+                                        />
+                                    ) : (
+                                        <InputHk2t 
+                                            label='position' 
+                                            name='position' 
+                                            placeholder='position' 
+                                            form={form}
+                                            disabled
+                                        />
+                                    )}
+                                </Grid>
+                                <Grid item sm={4}>
+                                    <InputHk2t 
+                                        label='salary' 
+                                        name='salary' 
+                                        typeInput='number' 
+                                        placeholder='salary' 
+                                        form={form}
+                                        disabled={watchPosition.value === POSITION.CUSTOMER}
+                                    />
+                                </Grid>
+                            </>
+                        )}
                     </Grid>
                 </div>
             </div>
@@ -310,10 +397,17 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                     </Grid>
                 </Grid>
             </div>
-            <div className={`bl_btn__submit ${user.position != 4 ? 'for_employee' : 'for_customer'}`}>
+            <div className={classNames(
+                'bl_btn__submit', 
+                {
+                    'for_employee': user.position != POSITION.CUSTOMER || pathname === '/admin/users',
+                    'for_customer': user.position === POSITION.CUSTOMER && pathname !== '/admin/users'
+                }
+            )}>
                 <ButtonHk2t
+                    colorCustom={ form.formState.isDirty ? colorsBtnCustom['change'] : colorsBtnCustom['primary']}
                     variant="contained"
-                    content='update profile'
+                    content={`${typeActionForm === 'CREATE' ? 'create' : 'update'} profile`}
                     isUseForm={true}
                 /> 
             </div>

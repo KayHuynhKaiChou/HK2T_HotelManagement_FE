@@ -1,26 +1,23 @@
 import { Account, User } from "./models";
 import { OptionSelect } from "./supportUI";
 
-type CustomUser = Required<
+type CustomUser = 
     Omit<
-        User , 
-        "id" |
+        User ,
         "password" |
-        "salary" | 
         "token" | 
         "booked_rooms" | 
         "position" |
         "city" |
         "district" |
-        "ward" |
-        "status"
+        "ward"
     >
->
 
 export interface FormUserProfile extends CustomUser {
     city : OptionSelect;
     district : OptionSelect;
     ward : OptionSelect;
+    position : OptionSelect;
 }
 
 export interface FormPassword {

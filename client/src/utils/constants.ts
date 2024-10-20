@@ -117,8 +117,15 @@ export const colorsBtnCustom = {
             backgroundColor: "#000",
             borderColor: "#000"
         }
+    },
+    change : {
+        background: "#ff9a00",
+        borderColor: "#ff9a00",
+        hover: {
+            backgroundColor: "#ff9a009c",
+            borderColor: "#ff9a009c"
+        }
     }
-    
 }
 
 export const iconsSort = {
@@ -251,4 +258,10 @@ export const defaultEndows : {title: string, backgroundImg: string}[] = [
         title: 'Accumulate points and redeem rewards',
         backgroundImg: 'https://www.lottehotel.com/content/dam/lotte-hotel/common/member/pc-mai-rewards3.png'
     },
+]
+
+export const defaultSteps = [
+    'Choice type room',
+    'Personal information',
+    'Last step'
 ]

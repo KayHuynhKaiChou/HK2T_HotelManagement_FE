@@ -17,6 +17,7 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
     },
     'admin' : {
         // user
+        'create-user' : '/admin/user/add',
         'show-user' : '/admin/user/list',
         'update-user' : '/admin/user/update/:user_id',
         // amenity
@@ -35,6 +36,6 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'upload' : '/admin/type-room/:type_room_id/image'
     },
     'public' : {
-        'show-ame' : '/admin/amenity/list',
+        'show-ame' : '/public/amenity/list',
     }
 }

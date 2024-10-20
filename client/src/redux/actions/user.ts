@@ -86,7 +86,7 @@ const showInforUser = () : UserThunkAction => {
             })
             dispatch({
                 type : userType.SHOW,
-                payload : {...response.result , token : user.token}
+                payload : {...response.result, token : user.token}
             })
         }else{
             dispatch({

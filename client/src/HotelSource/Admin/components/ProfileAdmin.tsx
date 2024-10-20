@@ -3,13 +3,13 @@ import FormUpdateProfile, { FormUpdateProfileHandle } from "../../../common/Form
 import { RootState } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { userAction } from "../../../redux/actions/user";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { FormPassword, FormUserProfile } from "../../../types/form";
-import { User } from "../../../types/models";
-import LoadingHk2t from "../../../common/LoadingHk2t";
+import LoadingHk2tComponent from "../../../common/Loading/LoadingHk2tComponent";
 import FormChangePassword, { FormChangePasswordHandle } from "../../../common/FormPassword/FormChangePassword";
 import { toast } from "react-toastify";
-import { toastMSGObject } from "../../../utils";
+import { formatUpdatedProfile, toastMSGObject } from "../../../utils";
+import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
 
 export default function ProfileAdmin() {
     //redux
@@ -22,14 +22,8 @@ export default function ProfileAdmin() {
    
     //func handle submit form
     const handleUpdateProfile = (updatedProfile : FormUserProfile) => {
-        const formatUpdatedProfile : User = {
-            ...updatedProfile,
-            link_avatar : updatedProfile.link_avatar.replace('data:', '').replace(/^.+,/, ''),
-            city : updatedProfile.city.value + '',
-            district : updatedProfile.district.value + '',
-            ward : updatedProfile.ward.value + ''
-        }
-        dispatch(userAction.updateUser(formatUpdatedProfile) as any)
+        const resultFormat = formatUpdatedProfile(updatedProfile)
+        dispatch(userAction.updateUser(resultFormat) as any)
     }
 
     const handleChangePassword = async (password : FormPassword) => {
@@ -37,14 +31,14 @@ export default function ProfileAdmin() {
     } 
 
     //useEffect 
-    useEffect(() => { // update success and show toast
+    useEffectSkipFirstRender(() => { // update success and show toast
         const formState = formUpdateProfile.current!.form.formState!
         if(response.status == 200 && formState.isSubmitSuccessful){
             toast.success(response.message , toastMSGObject());
         }
     },[user])
 
-    useEffect(() => { // update success and show toast
+    useEffectSkipFirstRender(() => { // update success and show toast
         const formState = formChangePassword.current!.form.formState!
         if(response.status == 200 && formState.isSubmitSuccessful){
             formChangePassword.current?.form.reset({
@@ -62,7 +56,7 @@ export default function ProfileAdmin() {
         <div className="bl_profile">
             <div className="bl_profile_inner">
                 {response.isLoading && (
-                    <LoadingHk2t/>
+                    <LoadingHk2tComponent/>
                 )}               
                 <FormUpdateProfile
                     ref={formUpdateProfile}

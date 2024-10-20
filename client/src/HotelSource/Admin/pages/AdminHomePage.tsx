@@ -14,6 +14,12 @@ import { amenityAction } from '../../../redux/actions/amenity';
 import RoomAdmin from '../components/RoomAdmin';
 import { typeRoomAction } from '../../../redux/actions/typeRoom';
 import { userAction } from '../../../redux/actions/user';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/reducers';
+import GateWay from '../../../lib/api_gateway';
+import { User } from '../../../types/models';
+import { useQuery } from '@tanstack/react-query';
+import { queryKeyAllUser } from '../../../tanstack/key';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -28,14 +34,28 @@ export default function AdminHomePage() {
   const { menu } = useParams();
   const [open, setOpen] = useState(false);
   const [MenuComponent, setMenuComponent] = useState(<></>);
-
+  const {user} = useSelector<RootState , RootState>(state => state);
   const dispatch = useDispatch();
 
+  // handle redux
   useEffect(() => {
     dispatch(userAction.showInforUser() as any)
     dispatch(typeRoomAction.showAllTypeRoom() as any)
     dispatch(amenityAction.showAllAmenity() as any)
   },[])
+
+  // handle useQuery
+  const fetchGetAllUser = async () => {
+    const gateway = new GateWay('admin' , user.token)
+    const res = await gateway.get({action : 'show-user'});
+    return res.result
+  }
+
+  useQuery<User[]>({
+    queryKey : [queryKeyAllUser] , 
+    queryFn: fetchGetAllUser , 
+    staleTime: 24 * 60 * 60 * 1000
+  });
 
   const handleToggleNavbar = () => {
     setOpen(!open);
