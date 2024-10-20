@@ -2,8 +2,9 @@ import { ToastOptions, ToastPosition, Theme } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { Amenity, Reversation, Room, TypeAmenity, TypeObjAmenity, TypeRoom, User } from '../types/models';
 import { defaultTypeAmenity, statusBooking } from './constants';
-import { isValidElement } from 'react';
+import { isValidElement, MutableRefObject } from 'react';
 import dayjs from 'dayjs';
+import { FormUserProfile } from '../types/form';
 
 export const uuid = () => {
   const id = uuidv4().replace(/-/g, '')
@@ -51,6 +52,15 @@ export const capitalizeFirstLetter = (text : String) => {
   }
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
+
+export const formatUpdatedProfile = (updatedProfile : FormUserProfile) : User => ({
+  ...updatedProfile,
+  link_avatar : (updatedProfile.link_avatar + '').replace('data:', '').replace(/^.+,/, ''),
+  city : updatedProfile.city.value + '',
+  district : updatedProfile.district.value + '',
+  ward : updatedProfile.ward.value + '',
+  position : Number(updatedProfile.position.value) as 1 | 2 | 3 | 4
+})
 
 export const formatContentAmenitiesOfTypeAme = (amenities: Amenity[]) => {
   const concatContent = amenities.reduce(
@@ -119,3 +129,21 @@ export const toastMSGObject = ({
   progress,
   theme
 })
+
+// handle scroll
+const HEIGHT_MENU_HEADER = 64 as const;
+const PADDING_UPDOWN_12 = 24 as const;
+
+export const scrollToForm = (formRef: MutableRefObject<HTMLDivElement | null>) => {
+  if(formRef.current){
+    const bodyElement = document.body;
+    const offset = HEIGHT_MENU_HEADER + PADDING_UPDOWN_12; // Khoảng cách tùy chỉnh từ trên
+    const containerTop = bodyElement.getBoundingClientRect().top;
+    const targetTop = formRef.current.getBoundingClientRect().top;
+    const scrollPosition = bodyElement.scrollTop + (targetTop - containerTop) - offset;
+    // ko dùng đc bodyElement.scrollTo , dùng window
+    window.scrollTo({ top : scrollPosition , behavior : "smooth" })
+    //formRef.current.scrollIntoView({behavior : "smooth"}) 
+    //cách dùng scrollIntoView ko nên sài vì ko đạt đc yêu cầu mong muốn
+  } 
+}

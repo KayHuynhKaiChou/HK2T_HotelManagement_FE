@@ -1,6 +1,5 @@
 import { Backdrop, CircularProgress } from '@mui/material';
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { Oval } from 'react-loader-spinner';
 
 type LoadingContextProps = {
     show: (message?: string) => void;
