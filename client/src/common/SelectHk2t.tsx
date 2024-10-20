@@ -81,6 +81,7 @@ export default function SelectHk2t({
                     name={name}
                     isSearchable={false}
                     defaultValue={options.find(op => op.value == value)}
+                    value={options.find(op => op.value == value)}
                     onChange={handleChange}
                     options={options}
                     isDisabled={disabled}
