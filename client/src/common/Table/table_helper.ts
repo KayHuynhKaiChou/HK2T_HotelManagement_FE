@@ -45,7 +45,8 @@ export const mapColumnsToOptions = (columns : ColumnType[]) : OptionSelect[] => 
 }
 
 export const initSelectedIdColumnDetail = (columns : ColumnType[]) : ColumnType['id'] => {
-    return columns[0].id
+    const columnsFilter = columns.filter(col => col.isSearched)
+    return columnsFilter?.length > 0 ? columnsFilter[0].id : ''
 }
 
 export const mapCriteriaToOptionSelect = (criteria : ColumnType['criteria']) : OptionSelect[] => {
