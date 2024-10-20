@@ -11,7 +11,7 @@ export interface ColorButtonCustom {
 
 export interface CriteriaType {
     label : string;
-    condition : number[]; 
+    condition : any; 
 }
 
 export type TypeSort = 'NORMAL' | 'ASC' | 'DESC' ; 
@@ -22,6 +22,7 @@ export interface ColumnType {
     textAlign ?: 'left' | 'right' | 'center',
     width ?: number;
     isSorted ?: boolean;
+    isSearched ?: boolean;
     criteria ?: CriteriaType[];
 }
 
@@ -37,4 +38,10 @@ export interface MenuAdmin {
     endpoint : string;
     Icon : SvgIconComponent;
     childrenMenu : MenuAdmin[];
+}
+
+export interface BreadCrumbChild {        
+    href?: string;
+    label: string;
+    icon?: any;
 }

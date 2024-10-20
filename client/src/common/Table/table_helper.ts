@@ -36,10 +36,12 @@ export const CustomTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export const mapColumnsToOptions = (columns : ColumnType[]) : OptionSelect[] => {
-    return columns.map(col => ({
-        label: col.nameCol , 
-        value: col.id
-    }))
+    return columns
+        .filter(col => col.isSearched)
+        .map(col => ({
+            label: col.nameCol , 
+            value: col.id
+        }))
 }
 
 export const initSelectedIdColumnDetail = (columns : ColumnType[]) : ColumnType['id'] => {
@@ -47,5 +49,8 @@ export const initSelectedIdColumnDetail = (columns : ColumnType[]) : ColumnType[
 }
 
 export const mapCriteriaToOptionSelect = (criteria : ColumnType['criteria']) : OptionSelect[] => {
-    return criteria!.flatMap(cri => ({label : cri.label , value : cri.condition.join('-')}))
+    return criteria!.flatMap(cri => ({
+        label : cri.label, 
+        value : typeof cri.condition === 'string' ? cri.condition : cri.condition.join('-')
+    }))
 }

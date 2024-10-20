@@ -29,6 +29,7 @@ interface propsTable {
     columns: ColumnType[];
     pageSizeOptions : OptionSelect[];
     isLoadingTable?: boolean; 
+    rowSelected?: { [key : string] : any} & { id?: number}
     onActionAdd?: (...args: any[]) => void;
     onExportExcel?: (...args: any[]) => void;
 }
@@ -40,7 +41,8 @@ export default function TableHk2t({
     columns , 
     pageSizeOptions = [] , 
     isLoadingTable = false,
-    onActionAdd ,
+    rowSelected,
+    onActionAdd,
     onExportExcel
 }: propsTable) {
     // state ===================================================================
@@ -57,7 +59,6 @@ export default function TableHk2t({
     const [currentPage , setCurrentPage] = useState<number>(1);
     const [selectedCriteria , setSelectedCriteria] = useState<CriteriaType['condition'] | null>(null);
     const [sortedColumn , setSortedColumn] = useState<{id : ColumnType['id'] , type : TypeSort}>(defaultSortColumn);
-    const [rowId, setRowId] = useState()
 
     // useMemo ==================================================================
     const lengthRows = useMemo(() => rowsFilter.length ,[rowsFilter.length])
@@ -71,8 +72,8 @@ export default function TableHk2t({
     },[currentPage, pageSizeOption , lengthRows])
 
     const fromRow = useMemo(() => {
-        if(toRow == lengthRows){ // 107 == 107 
-            const remainRows = lengthRows % +pageSizeOption // 2
+        const remainRows = lengthRows % +pageSizeOption // 2
+        if(toRow == lengthRows && remainRows > 0){ // 107 == 107 
             return toRow - remainRows // => 107 - 2 = 105
         }
         return toRow - +pageSizeOption 
@@ -118,7 +119,7 @@ export default function TableHk2t({
         sortedColumn.id != defaultSortColumn.id && setSortedColumn(defaultSortColumn);
     },[rows]) // when prop rows change , we need reset all states become default as first time
 
-    useEffect(() => {
+    useEffectSkipFirstRender(() => {
         if(isLoadingTable) return;
         setCurrentPage(1)
     },[pageSizeOption , lengthRows]) // when change dropdown 
@@ -185,15 +186,25 @@ export default function TableHk2t({
     useEffectSkipFirstRender(() => {
         if(isLoadingTable) return;
         if(columnDetail?.criteria && selectedCriteria){
-            const condition = selectedCriteria
-            const compareFirst = condition![0];
-            const compareLast = condition![1];
-            const resultFilter = rows.filter(row => {
-                return row[columnDetail?.nameCol] >= compareFirst && row[columnDetail?.nameCol] <= compareLast
-            })
+            // filter by number (price , ...)
+            if (typeof selectedCriteria === 'object') {
+                const condition = selectedCriteria
+                const compareFirst = condition![0];
+                const compareLast = condition![1];
+                const resultFilter = rows.filter(row => {
+                    return row[columnDetail?.nameCol] >= compareFirst && row[columnDetail?.nameCol] <= compareLast
+                })
+                setRowsFilter(resultFilter);
+            } else {
+            // filter by const string 
+                const condition = selectedCriteria
+                const resultFilter = rows.filter(row => {
+                    return row[columnDetail?.nameCol] === condition
+                })
+                setRowsFilter(resultFilter);
+            }
             const limitRows = Number(pageSizeOptions[0].value);
             setPageSizeOption(limitRows);
-            setRowsFilter(resultFilter);
         }
     },[selectedCriteria , columnDetail])
 
@@ -238,8 +249,8 @@ export default function TableHk2t({
 
     const handleChangeSelectedCriteria = (value : OptionSelect['value']) => {
         const stringCondition = value as string
-        const formatArrayCondition = stringCondition.split('-').map(limit => Number(limit))
-        setSelectedCriteria(formatArrayCondition)
+        //const formatArrayCondition = stringCondition.split('-').map(limit => Number(limit))
+        setSelectedCriteria(stringCondition)
     }
 
     const handleChangeSortedColumn = (idCol : ColumnType['id']) => {
@@ -247,6 +258,10 @@ export default function TableHk2t({
             id : idCol,
             type : sortedColumn?.type === 'ASC' ? 'DESC' : 'ASC'
         })
+    }
+
+    const handleActionAdd = () => {
+        onActionAdd && onActionAdd()
     }
 
     // logic css
@@ -290,7 +305,7 @@ export default function TableHk2t({
                         <ButtonHk2t
                             content='add'
                             startIcon={<AddIcon/>}
-                            onClick={onActionAdd}
+                            onClick={handleActionAdd}
                         />
                     )}
                     {typeof onExportExcel === 'function' && (
@@ -318,7 +333,7 @@ export default function TableHk2t({
                                 name='select_range'
                                 className="bl_searchTable_select"
                                 options={mapCriteriaToOptionSelect(columnDetail.criteria)}
-                                value={selectedCriteria ? selectedCriteria.join('-') : ''}
+                                value={selectedCriteria}
                                 onChange={handleChangeSelectedCriteria}
                             />
                         )
@@ -370,14 +385,13 @@ export default function TableHk2t({
                 <TableBody>
                     {rowsDetail.map((row) => (
                         <CustomTableRow
-                            className={classNames({ 'bl_row_selected' : row?.id === rowId })}
+                            className={classNames({ 'bl_row_selected' : row?.id + '' === rowSelected?.id + '' })}
                             key={uuid()}
                         >
                             {columns.map(col => (
                                 <TableCell
                                     align={col.textAlign ?? 'left'} 
                                     className={col.nameCol === 'action' ? 'un_flex_center_children_cell' : undefined}
-                                    onClick={() => col.nameCol === 'action' && setRowId(row?.id)}
                                 >
                                     {row[col.nameCol]}
                                 </TableCell>
