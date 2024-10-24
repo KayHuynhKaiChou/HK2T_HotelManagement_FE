@@ -149,10 +149,14 @@
 
 // Sign in page
 .bl_signInPage_container{
+    background-image: url(../../../assets/images/authBackgroundCustomer.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     height: 100vh;
 
     .bl_signInForm{
+        background: #fff;
         margin: auto;
         padding: 40px;
         width: 600px;
