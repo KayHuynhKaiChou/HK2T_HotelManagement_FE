@@ -17,9 +17,9 @@ import { userAction } from '../../../redux/actions/user';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/reducers';
 import GateWay from '../../../lib/api_gateway';
-import { User } from '../../../types/models';
-import { useQuery } from '@tanstack/react-query';
-import { queryKeyAllUser } from '../../../tanstack/key';
+import { Reversation } from '../../../types/models';
+import { useQueries } from '@tanstack/react-query';
+import { queryKeyAllUser , queryKeyAllReversation} from '../../../tanstack/key';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -51,10 +51,25 @@ export default function AdminHomePage() {
     return res.result
   }
 
-  useQuery<User[]>({
-    queryKey : [queryKeyAllUser] , 
-    queryFn: fetchGetAllUser , 
-    staleTime: 24 * 60 * 60 * 1000
+  const fetchGetAllReversations = async () : Promise<Reversation[]> => {
+    const gateway = new GateWay('admin' , user.token);
+    const res = await gateway.get({action : 'show-re'});
+    return res.result as Reversation[];
+  }
+
+  useQueries({
+    queries: [
+      {
+        queryKey : [queryKeyAllUser], 
+        queryFn : fetchGetAllUser, 
+        staleTime: 24 * 60 * 60 * 1000
+      },
+      {
+        queryKey : [queryKeyAllReversation], 
+        queryFn : fetchGetAllReversations,
+        staleTime: 24 * 60 * 60 * 1000
+      }
+    ]
   });
 
   const handleToggleNavbar = () => {

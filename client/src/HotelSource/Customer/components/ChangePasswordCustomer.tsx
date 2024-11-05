@@ -7,7 +7,7 @@ import { RootState } from "../../../redux/reducers";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { toastMSGObject } from "../../../utils";
-import LoadingHk2t from "../../../common/LoadingHk2t";
+import LoadingHk2tComponent from "../../../common/Loading/LoadingHk2tComponent";
 
 export default function ChangePasswordCustomer() {
     //redux
@@ -41,7 +41,7 @@ export default function ChangePasswordCustomer() {
         <div className="bl_profile">
             <div className="bl_profile_inner">
                 {response.isLoading && (
-                    <LoadingHk2t/>
+                    <LoadingHk2tComponent/>
                 )}
                 <FormChangePassword
                     position="CUSTOMER"

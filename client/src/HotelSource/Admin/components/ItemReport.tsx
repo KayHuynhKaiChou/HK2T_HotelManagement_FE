@@ -1,5 +1,5 @@
 import { Icon } from "@mui/material"
-import FontAwesomeIconHk2t from "../../../common/FontAwesomeIconHk2t"
+import FontAwesomeIconHk2t from "../../../common/Icon/FontAwesomeIconHk2t"
 
 interface PropItemReport {
     total : number,

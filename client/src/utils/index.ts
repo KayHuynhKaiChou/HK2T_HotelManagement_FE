@@ -1,6 +1,6 @@
 import { ToastOptions, ToastPosition, Theme } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
-import { Amenity, Reversation, Room, TypeAmenity, TypeObjAmenity, TypeRoom, User } from '../types/models';
+import { Amenity, Reversation, Room, TypeAmenity, TypeObjAmenity, User } from '../types/models';
 import { defaultTypeAmenity, statusBooking } from './constants';
 import { isValidElement, MutableRefObject } from 'react';
 import dayjs from 'dayjs';
@@ -11,9 +11,10 @@ export const uuid = () => {
   return id
 }
 
-export const formatDateV1 = (dateObj : Date) : string => {
-  return `${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}`;
-}
+export const formatDateV1 = (dateObj: Date): string => {
+  const pad = (num: number) => num.toString().padStart(2, '0');
+  return `${pad(dateObj.getDate())}/${pad(dateObj.getMonth() + 1)}/${dateObj.getFullYear()} ${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`;
+};
 
 export const formatDateV2 = (date: Date) : string => {
   // Các mảng để lưu tên ngày và tên tháng
@@ -42,11 +43,11 @@ export const formatCurrency = (amount: number) => {
   return amount.toLocaleString('vi-VN'); // 'vi-VN' là mã ngôn ngữ cho Việt Nam
 }
 
-export const isJSXElement = (element: any): boolean => {
+export const isJSXElement = (element: never): boolean => {
   return isValidElement(element);
 }
 
-export const capitalizeFirstLetter = (text : String) => {
+export const capitalizeFirstLetter = (text : string) => {
   if (typeof text !== 'string' || text.length === 0) {
     return '';
   }
@@ -55,7 +56,8 @@ export const capitalizeFirstLetter = (text : String) => {
 
 export const formatUpdatedProfile = (updatedProfile : FormUserProfile) : User => ({
   ...updatedProfile,
-  link_avatar : (updatedProfile.link_avatar + '').replace('data:', '').replace(/^.+,/, ''),
+  salary : updatedProfile.salary && Number(updatedProfile.salary),
+  link_avatar : updatedProfile.link_avatar && (updatedProfile.link_avatar + '').replace('data:', '').replace(/^.+,/, ''),
   city : updatedProfile.city.value + '',
   district : updatedProfile.district.value + '',
   ward : updatedProfile.ward.value + '',
@@ -97,12 +99,13 @@ export const formatRoomsToResourcesCalender = (rooms : Room[]) => {
 
 export const formatReversationsToEventsCalender = (reservations : Reversation[] , users : User[]) => {
   return reservations.map(reservation => {
-    const title = users.find(u => u.id === reservation.user_id)?.email
+    const user = users.find(u => u.id === reservation.user_id)
     const status = reservation.status
+    const contentCommon = `${user && user.firstname + ' ' + user.surname} - ${formatCurrency(reservation.total_price)} VND - ${statusBooking[reservation.status - 1].name}`
     return {
       id: reservation.id,
       resourceId: reservation.room.id,
-      title,
+      title: contentCommon,
       start: reservation.checkin_at,
       end: reservation.checkout_at,
       backgroundColor: statusBooking[status - 1].color
@@ -119,7 +122,7 @@ export const toastMSGObject = ({
   draggable = true,
   progress = undefined,
   theme = "colored" as Theme,
-} = {}): ToastOptions<{}> => ({
+} = {}): ToastOptions<NonNullable<unknown>> => ({
   position,
   autoClose,
   hideProgressBar,
@@ -146,4 +149,16 @@ export const scrollToForm = (formRef: MutableRefObject<HTMLDivElement | null>) =
     //formRef.current.scrollIntoView({behavior : "smooth"}) 
     //cách dùng scrollIntoView ko nên sài vì ko đạt đc yêu cầu mong muốn
   } 
+}
+
+// link img QRViet
+export const getQRPayment = (
+    bankId : string,
+    accountNo : string,
+    template : string = 'compact2',
+    moneyBank : number,
+    content : string,
+    accountName : string
+) => {
+  return `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.jpg?amount=${moneyBank}&addInfo=${content}&accountName=${accountName}`;
 }

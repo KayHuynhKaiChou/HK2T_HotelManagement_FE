@@ -1,7 +1,7 @@
 import { useLocation, useParams } from "react-router-dom";
 import BreadcrumbsHk2t from "../../../common/Breadcrumbs/BreadcrumbsHk2t";
 import HomeIcon from '@mui/icons-material/Home';
-import { Amenity, TypeAmenity, TypeRoom } from "../../../types/models";
+import { TypeAmenity, TypeRoom } from "../../../types/models";
 import { useMemo } from "react";
 import CarouselHk2t from "../../../common/Carousel/CarouselHk2t";
 import { defaultTypeAmenity, defaultViewDirection, linkDefaultImage } from "../../../utils/constants";
@@ -37,7 +37,7 @@ export default function DetailTypeRoomPage() {
         )
         return images.map(img => (
             <div className="bl_img_wrap">
-                <img src={img.link} />
+                <img src={img} />
             </div>
         ))
     }, [images])
@@ -144,7 +144,7 @@ export default function DetailTypeRoomPage() {
                     <div className="bl_inforCom_ttl">{specialOffers.title}</div>
                     <div className="bl_overview_content">
                         <div className="bl_sub_content">
-                            {parse(specialOffers.content)}
+                            {parse(specialOffers.content || '')}
                         </div>
                     </div>
                 </div>

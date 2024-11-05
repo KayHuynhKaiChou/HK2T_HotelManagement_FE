@@ -23,9 +23,7 @@ input[type=number]::-webkit-inner-spin-button {
     @include flex-column;
 
     .un_input_label{
-        color: #707e9c;
-        font-weight: bold;
-        text-transform: capitalize;
+        @include label-input;
     }
 
     .un_input{
@@ -343,11 +341,17 @@ input[type=number]::-webkit-inner-spin-button {
                     .bl_contentTotal{
                         display: flex;
                         gap: 50px;
+
                         .bl_total{
                             color: #707e9c;
                             font-weight: bold;
                             font-size: 18px;
                         }
+                    }
+
+                    .bl_btn_booking {
+                        display: flex;
+                        gap: 20px;
                     }
                 }
 
@@ -530,4 +534,24 @@ input[type=number]::-webkit-inner-spin-button {
         }
     }
 }
+
+//calendar common
+.bl_resource_calendar {
+    cursor: pointer;
+    &:hover {
+        color: #5A738E;
+    }
+}
+
+.css-79ws1d-MuiModal-root{
+    z-index: 900;
+}
+
+.ellipsis {
+    white-space: nowrap;       /* Giữ văn bản trên một dòng */
+    overflow: hidden;          /* Ẩn phần văn bản bị tràn */
+    text-overflow: ellipsis;   /* Thêm dấu "..." khi văn bản tràn */
+    width: 100%;               /* Đặt chiều rộng mong muốn (ví dụ: 100%) */
+}
+
 

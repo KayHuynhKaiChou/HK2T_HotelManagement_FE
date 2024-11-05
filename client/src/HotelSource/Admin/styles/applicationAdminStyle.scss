@@ -199,3 +199,17 @@
 .bl_sliderImages_wrap{
     width: 612px;
 }
+
+// InforGeneratedAccount
+.bl_account_wrap{
+    @include flex-column;
+    gap: 15px;
+    .bl_account_field{
+        @include flex-center;
+
+        .bl_field_name {
+            min-width: 100px;
+            color: black;
+        }
+    }
+}
