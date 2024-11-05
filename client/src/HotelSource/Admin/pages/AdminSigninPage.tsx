@@ -24,6 +24,12 @@ export default function AdminSigninPage() {
     }
   }
 
+  useEffect(() => {
+    if (user.token) {
+      navigate('/admin/dashboard')
+    }
+  }, [])
+
   useEffectSkipFirstRender(() => {
     if(response.isLoading || response.status == 0) return;
     if(response.status == 200){

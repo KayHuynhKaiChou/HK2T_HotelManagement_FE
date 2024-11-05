@@ -11,7 +11,7 @@ export default function DefaultPage() {
     const {formBooking} = useSelector<RootState, RootState>(state => state);
     
     const isShowFormBooking = useMemo(() => {
-        return pathname !== '/' && !pathname.includes('/reservation')
+        return pathname !== '/' && !pathname.includes('/reservation') &&!pathname.includes('/customer')
     }, [pathname])
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Account } from "../../../types/models";
 import { useEffect, useState } from "react";
 import { useSelector , useDispatch } from 'react-redux';
@@ -9,6 +9,7 @@ import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
 
 export default function SigninPage() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const {response , user} = useSelector<RootState , RootState>(state => state);
   const dispatch = useDispatch();
   const [msgSignin , setMsgSignin] = useState<string>('');
@@ -26,7 +27,7 @@ export default function SigninPage() {
   useEffectSkipFirstRender(() => {
     if(response.isLoading || response.status == 0) return;
     if(response.status == 200){
-      navigate('/')
+      state === '/reservation/person-infor' ? navigate(state) : navigate('/')
     }else{
       setMsgSignin(response.message)
     }
