@@ -1,4 +1,4 @@
-import { Account, User } from "./models";
+import { Account, Amenity, User } from "./models";
 import { OptionSelect } from "./supportUI";
 
 type CustomUser = 
@@ -32,14 +32,20 @@ export interface FormSignup extends Account{
     confirmPassword : string;
 }
 
-export type ActionForm = 'CREATE' | 'UPDATE' 
+export interface FormAmenityPayload extends Omit<Amenity , 'type'>{
+    type : OptionSelect
+}
+
+export type ActionForm = 'CREATE' | 'UPDATE'
+
+export type ActionFormBooking = ActionForm | 'BOOKING'
 
 export interface FormBooking {
     email : OptionSelect;
     checkin_at : string;
     checkout_at : string;
-    adult_capacity : number;
-    kid_capacity : number;
+    adult_number : number;
+    kid_number : number;
     type_room : OptionSelect;
     total_price : number;
 }
