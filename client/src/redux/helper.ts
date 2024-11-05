@@ -7,11 +7,12 @@ export const refetchList = <T extends { id?: number }>(
 ) => {
     switch (method) {
         case 'CREATE':
-            list.push(interactedObj)
+            list.unshift(interactedObj)
             break;
         case "UPDATE":
             const indexUpdatedObj = list.findIndex(obj => obj.id === interactedObj.id)
-            list[indexUpdatedObj] = interactedObj
+            list.splice(indexUpdatedObj, 1)
+            list.unshift(interactedObj)
             break;
         default:
             break;
