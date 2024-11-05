@@ -31,6 +31,12 @@
     margin-top: 4px !important;
 }
 
+@mixin label-input {
+    color: #707e9c;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
 @mixin button-submit-employee {
     display: flex;
     justify-content: end;
