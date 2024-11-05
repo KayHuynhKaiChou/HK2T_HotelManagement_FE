@@ -9,7 +9,7 @@ import {
     SingleInputDateRangeFieldProps,
 } from '@mui/x-date-pickers-pro/SingleInputDateRangeField';
 import { DateRange, FieldType } from '@mui/x-date-pickers-pro/models';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef } from 'react';
 import {
   DateRangePickerDay as MuiDateRangePickerDay,
   DateRangePickerDayProps,
@@ -122,6 +122,7 @@ export default function DateRangePickerHk2t({
     }
 
     const onChangeDateRange = (value: DateRange<Dayjs>) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [_, endDate] = value ?? [null, null]
         if (endDate) {
             WrappedSingleInputDateRangeField.dateRange = value

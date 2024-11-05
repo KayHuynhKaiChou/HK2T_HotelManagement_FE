@@ -117,6 +117,7 @@ function InputHk2t(props : InputProps) {
                                 onChange={(value) => onChange(value && value.format('YYYY-MM-DD'))}
                                 disabled={disabled}
                                 value={dayjs(value)}
+                                format="DD/MM/YYYY"
                                 slotProps={{
                                     textField: {
                                         error: !!hasError,
