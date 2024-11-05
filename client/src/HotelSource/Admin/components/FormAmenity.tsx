@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { colorsBtnCustom, defaultTypeAmenity, defaultstatus } from "../../../utils/constants";
-import RadioBtnHk2t from "../../../common/RadioBtnHk2t";
+import RadioBtnHk2t from "../../../common/RadioBtnHk2t.tsx";
 import { uuid } from "../../../utils";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import SelectHk2t from "../../../common/SelectHk2t";

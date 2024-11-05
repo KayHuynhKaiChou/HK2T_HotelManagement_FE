@@ -14,7 +14,7 @@ import InputHk2t from '../../../common/InputHk2t';
 import ButtonHk2t from '../../../common/ButtonHk2t';
 import CheckboxHk2t from '../../../common/CheckboxHk2t';
 import RichTextEditorHk2t from '../../../common/RichTextEditor/RichTextEditorHk2t';
-import RadioBtnHk2t from '../../../common/RadioBtnHk2t';
+import RadioBtnHk2t from '../../../common/RadioBtnHk2t.tsx';
 import UploadFileBtnHk2t from '../../../common/UploadFileBtnHk2t';
 // util
 import { uuid } from '../../../utils';
