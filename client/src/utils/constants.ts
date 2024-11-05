@@ -3,6 +3,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { ColumnType, MenuAdmin, OptionSelect, TypeSort } from '../types/supportUI';
+import {STATUS} from "../types/enum.ts";
 
 export const listMenuAdmin : MenuAdmin[] = [
     {
@@ -125,6 +126,14 @@ export const colorsBtnCustom = {
             backgroundColor: "#ff9a009c",
             borderColor: "#ff9a009c"
         }
+    },
+    open : {
+        background: "#eedb2d",
+        borderColor: "#eedb2d",
+        hover: {
+            backgroundColor: "#c9ba35",
+            borderColor: "#c9ba35"
+        }
     }
 }
 
@@ -159,21 +168,35 @@ export const namesImageBanner = ['viewHotel' , 'roomHotel' , 'swimmingPoolHotel'
 
 export const statusBooking = [
     {
+        name : 'WAITING',
+        color : '#777777'
+    },
+    {
         name : 'OPEN',
+        color : colorsBtnCustom.open.background
+    },
+    {
+        name : 'IN PROGRESS',
         color : colorsBtnCustom.primary.background
     },
     {
-        name : 'INPROGRESS',
-        color : colorsBtnCustom.warning.background
-    },
-    {
         name : 'END',
-        color : colorsBtnCustom.success.background
+        color : '#00de0b'
     }, 
     {
         name : 'CANCEL',
         color : colorsBtnCustom.danger.background
     }
+]
+
+export const enableFieldWithStatus = [
+    STATUS.WAITING,
+]
+
+export const statusShowBtnCancel = [
+    STATUS.WAITING,
+    STATUS.OPEN,
+    STATUS.IN_PROGRESS
 ]
 
 export const defaultGenders : string[] = [
