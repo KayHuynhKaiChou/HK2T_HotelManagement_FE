@@ -22,14 +22,17 @@ import { queryKeyAllUser } from "../../../tanstack/key";
 import { useLoadingHk2tScreen } from "../../../common/Loading/LoadingHk2tScreen";
 
 const initNewUser = {
-  email: '',
-  firstname: '',
-  surname: '',
-  address: '',
-  birth_day: '',
-  booked_rooms: [],
-  city: '',
-  district: ''
+  id: 0,
+  firstname: "",
+  surname: "",
+  phone: "",
+  birth_day: "",
+  link_avatar: "",
+  email: "",
+  password: "",
+  salary: 0,
+  updated_at: "",
+  created_at: ""
 }
 
 export default function UserAdmin() {
@@ -40,7 +43,7 @@ export default function UserAdmin() {
   const listUsers = queryClient.getQueryData<User[]>([queryKeyAllUser]);
 
   // state
-  const [typeActionForm, setTypeActionForm] = useState<ActionForm>('CREATE')
+  const [typeActionForm, setTypeActionForm] = useState<ActionForm>('CREATE');
   const [selectedUser, setSelectedUser] = useState<User>(
     initNewUser
   );
@@ -117,6 +120,7 @@ export default function UserAdmin() {
             <ButtonHk2t
               typeCustom="icon"
               Icon={Edit}
+              // disabled={typeActionForm === 'UPDATE' && user.id === selectedUser.id}
               onClick={() => handleEdit(user)}
             />
           )
@@ -125,29 +129,28 @@ export default function UserAdmin() {
   },[listUsers])
 
   // change state
-  const changeTypeActionForm = (actForm : ActionForm) => { 
-    setTimeout(() => {
-      scrollToForm(formProfileWrapRef);
-    }, 800);
-    setTypeActionForm(actForm)
-    actForm === 'CREATE' && setSelectedUser(initNewUser)
-  }
-
-  const handleEdit = (editedUser : User) => {
-    const handleEditLogic = () => {
-      setSelectedUser(editedUser)
-      changeTypeActionForm("UPDATE")
+  const changeTypeActionForm = (actForm : ActionForm, userParam: User) => { 
+    const handleChangeTypeRoomLogic = () => {
+      setTimeout(() => {
+        scrollToForm(formProfileWrapRef);
+      }, 800);
+      setTypeActionForm(actForm)
+      setSelectedUser(userParam)
     }
     const isDirtyForm = formUpdateProfile.current?.form.formState.isDirty
     if (isDirtyForm) {
       dialog.show(
         <p>{MESSAGE.CONFIRM_SUBMIT}</p>,
-        handleEditLogic,
+        handleChangeTypeRoomLogic,
         'CONFIRM'
       )
     } else {
-      handleEditLogic()
+      handleChangeTypeRoomLogic()
     }
+  }
+
+  const handleEdit = (editedUser : User) => {
+    changeTypeActionForm("UPDATE", editedUser)
   }
 
   const handleActionTypeRoom = (values : FormUserProfile) => {
@@ -258,7 +261,8 @@ export default function UserAdmin() {
         columns={false ? columnsLoading : columns}
         pageSizeOptions={defaultPageSizeOptions}
         rowSelected={selectedUser}
-        onActionAdd={() => changeTypeActionForm("CREATE")}
+        disabledBtnAdd={typeActionForm === 'CREATE'}
+        onActionAdd={() => changeTypeActionForm("CREATE", initNewUser)}
       />
       <div className="un_padding_updown_12"></div>
       <div 
@@ -267,6 +271,7 @@ export default function UserAdmin() {
       >
         <div className="bl_profile_inner">
           <FormUpdateProfile
+            key={selectedUser.id}
             ref={formUpdateProfile}
             typeActionForm={typeActionForm}
             user={selectedUser}

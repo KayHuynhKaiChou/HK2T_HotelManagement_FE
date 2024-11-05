@@ -28,7 +28,8 @@ interface propsTable {
     rows: { [key : string] : any}[];
     columns: ColumnType[];
     pageSizeOptions : OptionSelect[];
-    isLoadingTable?: boolean; 
+    isLoadingTable?: boolean;
+    disabledBtnAdd?: boolean;
     rowSelected?: { [key : string] : any} & { id?: number}
     onActionAdd?: (...args: any[]) => void;
     onExportExcel?: (...args: any[]) => void;
@@ -41,6 +42,7 @@ export default function TableHk2t({
     columns , 
     pageSizeOptions = [] , 
     isLoadingTable = false,
+    disabledBtnAdd = false,
     rowSelected,
     onActionAdd,
     onExportExcel
@@ -306,6 +308,7 @@ export default function TableHk2t({
                             content='add'
                             startIcon={<AddIcon/>}
                             onClick={handleActionAdd}
+                            disabled={disabledBtnAdd}
                         />
                     )}
                     {typeof onExportExcel === 'function' && (
@@ -393,7 +396,10 @@ export default function TableHk2t({
                                     align={col.textAlign ?? 'left'} 
                                     className={col.nameCol === 'action' ? 'un_flex_center_children_cell' : undefined}
                                 >
-                                    {row[col.nameCol]}
+                                    {
+                                        (col?.render && col.render(row[col.nameCol])) || 
+                                        row[col.nameCol]
+                                    }
                                 </TableCell>
                             ))}
                         </CustomTableRow>

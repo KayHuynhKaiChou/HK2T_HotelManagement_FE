@@ -76,9 +76,6 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         return {
             ...user,
             gender : user.gender || 1,
-            phone : user.phone || '',
-            birth_day : user.birth_day || '',
-            link_avatar : user.link_avatar || '',
             city : {
                 label : provinceName || defaultLocation.city.label , 
                 value : user.city || defaultLocation.city.value
@@ -103,9 +100,10 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
     // hook form
     const form : UseFormReturn<FormUserProfile> = useForm({
         defaultValues: generateFirstFormProfile(),
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         resolver: yupResolver(schema)
-    }) as UseFormReturn<FormUserProfile>
+    })
 
     // useImperativeHandle hook
     useImperativeHandle(ref , () => ({ form }))
@@ -176,14 +174,22 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
     useEffectSkipFirstRender(() => {
         const district = districts.find(d => d.district_id.toString() == selectedDistrict.value)
         if(district?.province_id.toString() !== selectedCity.value){
-            form.setValue("district" , {label : '---Choose district---' , value : ''})
+            form.setValue(
+                "district" , 
+                {label : '---Choose district---' , value : ''},
+                { shouldDirty: true }
+            )
         }
     },[selectedCity])
 
     useEffectSkipFirstRender(() => {
         const ward = wards.find(w => w.ward_id.toString() == selectedWard.value)
         if(ward?.district_id.toString() !== selectedDistrict.value){
-            form.setValue("ward" , {label : '---Choose ward---' , value : ''})
+            form.setValue(
+                "ward" , 
+                {label : '---Choose ward---' , value : ''},
+                { shouldDirty: true }
+            )
         }
     },[selectedDistrict])
 
@@ -202,20 +208,25 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
             default:
                 break;
         }
-        form.setValue('salary', salary)
+        form.setValue('salary', salary, { shouldDirty: true })
     }, [watchPosition])
 
     useEffectSkipFirstRender(() => {
-        form.reset(generateFirstFormProfile())
-    },[typeActionForm, user])
+        // reset là reset defaultValue của form , nhưng param truyền vào reset(param) phải cùng
+        // kiểu (đủ số field của 1 obj, ko dc thiếu bất kì 1 field nào) với defaultValue ban đầu ,
+        // khi đó isDirty sẽ thành false trở lại 
+        if (form.formState.isSubmitSuccessful) {
+            form.reset(generateFirstFormProfile())
+        }
+    },[user])
 
     // func change state form
     const handleChangeGender = (gender : FormUserProfile['gender']) => {       
-        form.setValue("gender", gender)
+        form.setValue("gender", gender, { shouldDirty: true })
     }
 
     const handleUploadImages = (images : Array<string | ArrayBuffer | null>) => {
-        form.setValue("link_avatar", images[0] + '')
+        form.setValue("link_avatar", images[0] + '', { shouldDirty: true })
     }
 
     return (

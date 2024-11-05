@@ -39,7 +39,7 @@ export const mapColumnsToOptions = (columns : ColumnType[]) : OptionSelect[] => 
     return columns
         .filter(col => col.isSearched)
         .map(col => ({
-            label: col.nameCol , 
+            label: col.label || col.nameCol , 
             value: col.id
         }))
 }
