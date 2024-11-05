@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import CarouselHk2t from "../../../common/Carousel/CarouselHk2t";
+import { linkDefaultImage } from "../../../utils/constants";
 
 interface SliderImagesRoomProps {
     imageLinks : string[];
@@ -12,7 +13,6 @@ interface SliderImagesRoomProps {
 //     'https://cf.bstatic.com/xdata/images/hotel/max1024x768/540577071.jpg?k=6399cb737b84570939a6476f242836f5c46ac7249d00fac413edcd8ea4fc6dd9&o=',
 //     'https://cf.bstatic.com/xdata/images/hotel/max1024x768/348609918.jpg?k=50e8c52f5a61b645c52d6542c618cb138988a90bc15ecc31c2566098a158697f&o='
 // ]
-const linkDefaultImage = 'https://cdn.pixabay.com/photo/2017/11/10/05/24/add-2935429_960_720.png'
  
 export default function SliderImagesRoom({imageLinks , onChangeImage} : SliderImagesRoomProps) {
     const [indexSlider , setIndexSlider] = useState<number>(0);

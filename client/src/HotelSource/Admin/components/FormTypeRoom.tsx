@@ -1,5 +1,5 @@
 // react-hook-form
-import { useForm  , SubmitHandler, UseFormReturn} from 'react-hook-form'
+import { useForm  , SubmitHandler, UseFormReturn, useWatch} from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 // MUI
@@ -22,10 +22,10 @@ import { uuid } from '../../../utils';
 import { colorsBtnCustom, defaultstatus, defaultViewDirection } from '../../../utils/constants';
 import SliderImagesRoom from './SliderImagesRoom';
 import { ActionForm } from '../../../types/form';
-import GateWay from '../../../lib/api_gateway';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/reducers';
 import { Delete } from '@mui/icons-material';
+import { uploadImageService } from '../../../lib/api/image';
 
 interface FormTypeRoomProps {
     selectedTypeRoom ?: TypeRoom;
@@ -44,18 +44,13 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     const formInnerRef = useRef<HTMLFormElement | null>(null);
     const [indexImage , setIndexImage] = useState<number>(0);
 
-    const imageSchema = yup.object().shape({
-        id: yup.number().required('ID is required'),
-        link: yup.string().url('Must be a valid URL').required('Link is required')
-    });
-
     const schema = yup.object({
         title: yup.string()
                 .required('Please enter title !'),
         size: yup.number()
                 .required('Please enter size !'),
-        preferential_services: yup.string()
-                .required('Please enter text editor !'),
+        // preferential_services: yup.string()
+        //         .required('Please enter text editor !'),
         view_direction: yup.number()
                 .oneOf([1,2] as const)
                 .required(),
@@ -68,32 +63,18 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
         amenities: yup.array()
                 .of(yup.number())
                 .required()
-                .min(1, 'Must contain at least one amenity'),
-        images: yup.array()
-                .of(imageSchema)
+                .min(1, 'Must contain at least one amenity !'),
+        images: yup.array().of(yup.string())
                 .required()
-                .min(1, 'Must contain at least one image'),
+                .min(1, 'Must contain at least one image !'),
         status: yup.number()
                 .oneOf([0,1] as const)
                 .required()
     });
 
-    const defaultValues : TypeRoom = {
-        title : '',
-        preferential_services : '',
-        view_direction : 1,
-        size : 0,
-        adult_capacity : 0,
-        kids_capacity : 0,
-        base_price : 0,
-        amenities : [],
-        images : [],
-        status : 0
-    }
-
     // hook form
     const form : UseFormReturn<TypeRoom> = useForm({
-        defaultValues,
+        defaultValues: selectedTypeRoom,
         resolver: yupResolver(schema)
     }) as UseFormReturn<TypeRoom>
 
@@ -101,20 +82,27 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
     useImperativeHandle(ref , () => ({ form }))
 
     // use watch
-    const uploadedImages = form.watch("images" , []);
-    const selectedViewDirection = form.watch("view_direction" , 1);
-    const selectedAmenities = form.watch("amenities" , []);
-    const inputtedPreferentialServices = form.watch("preferential_services",'');
-    const selectedStatus = form.watch("status" , 0)
+    const uploadedImages = useWatch({ control: form.control, name: "images"});
+    const selectedViewDirection = useWatch({ control: form.control, name: "view_direction"});
+    const selectedAmenities = useWatch({ control: form.control, name: "amenities"});
+    const inputtedPreferentialServices = useWatch({ control: form.control, name: "preferential_services"});
+    const selectedStatus = useWatch({ control: form.control, name: "status"})
+
+    // error fields
+    const { errors } = form.formState
 
     // func change state form
     const handleDeleteImage = () => {
         const filterImages = uploadedImages.filter((_ , index) => index !== indexImage)
-        form.setValue("images",filterImages)
+        form.setValue(
+            "images",
+            filterImages,
+            { shouldDirty: true }
+        )
     }
 
     const handleChangeViewDirection = (value : TypeRoom['view_direction']) => {       
-        form.setValue("view_direction", value);
+        form.setValue("view_direction", value, { shouldDirty: true });
     }
     
     const handleChangeCheckAmenity = (id : number) => {
@@ -124,38 +112,43 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
         }else{
             currentSelectedAmenities.push(id);
         }
-        form.setValue("amenities" , currentSelectedAmenities)
+        form.setValue(
+            "amenities", 
+            currentSelectedAmenities, 
+            { shouldDirty: true }
+        )
     }
 
     const handleChangePreferentialServices = (textEditor : string) => {
-        form.setValue("preferential_services" , textEditor)
+        form.setValue("preferential_services" , textEditor, { shouldDirty: true })
     }
 
     const handleChangeStatus = (index : TypeRoom['status']) => {
-        form.setValue("status" , index)
+        form.setValue("status" , index , { shouldDirty: true })
     }
 
     const handleUploadImages = async (base64s : Array<string | ArrayBuffer | null>) => {
-        const gateway = new GateWay('admin' , user.token)
-        
         const promiseImages = base64s.map((base64) => {
             return new Promise(
                 async (resolve , reject) => {
                     try {
-                        const res = await gateway.post(
-                            {action : 'upload' , type_room_id : selectedTypeRoom?.id + ''} ,
-                            {link : base64}
-                        );
-                        resolve(res.result)
+                        let data = new FormData()
+                        data.append('image', (base64 + '').replace('data:', '').replace(/^.+,/, ''))
+                        const res = await uploadImageService(data)
+                        resolve(res.data.url)
                     } catch (error) {
                         reject(error)
                     }
                 }
             )
-        }) as Promise<{id: number , link: string}>[]
+        }) as Promise<string>[]
 
         const images = await Promise.all(promiseImages)
-        form.setValue("images" , [...uploadedImages , ...images])
+        form.setValue(
+            "images" , 
+            [...uploadedImages , ...images],
+            { shouldDirty: true }
+        )       
     }
 
     // useMemo
@@ -165,26 +158,18 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
 
     // useEffect
     useEffectSkipFirstRender(() => {
-        if(form.formState.isSubmitSuccessful && typeActionForm === 'CREATE'){
-            form.reset(defaultValues)
-        }
-    },[form.formState.isSubmitSuccessful])
-
-    useEffectSkipFirstRender(() => {
-        if(typeActionForm === 'CREATE'){
-            form.reset(defaultValues)
-        }else{
+        if (form.formState.isSubmitSuccessful) {
             form.reset(selectedTypeRoom)
         }
-    },[typeActionForm , selectedTypeRoom])
+    },[selectedTypeRoom])
 
-    useEffectSkipFirstRender(() => {
-        console.log(form.formState.defaultValues , form.getValues())
-    },[form.getValues()])
+    const handleError = (e: any) => {
+        console.log(e)
+    }
 
     return (
         <form 
-            onSubmit={form.handleSubmit(onActionTypeRoom as SubmitHandler<TypeRoom>)}
+            onSubmit={form.handleSubmit(onActionTypeRoom as SubmitHandler<TypeRoom>, handleError)}
             className='bl_personInfor_form'
             ref={formInnerRef}
         >
@@ -279,8 +264,8 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                 {defaultstatus.map((status , index) => (
                                     <Grid item>
                                         <RadioBtnHk2t
-                                            id={`select-gender-${uuid()}`}
-                                            name="gender"
+                                            id={`select-status-${uuid()}`}
+                                            name="status"
                                             label={status}
                                             value={index}
                                             checked={selectedStatus == index}
@@ -295,29 +280,36 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                             <Grid item sm={12} container alignItems={"flex-start"}>
                                 <Grid
                                     item
-                                    sx={{
-                                        color : "#707e9c;" , 
-                                        fontWeight : "bold",
-                                        marginRight : 4
-                                    }}
+                                    sm={6}
+                                    sx={{color : "#707e9c", fontWeight : "bold"}}
                                 >
-                                    Room images
+                                    Images
                                 </Grid>
-                                <UploadFileBtnHk2t
-                                    onUploadImages={handleUploadImages}
-                                />
-                                <ButtonHk2t
-                                    startIcon={<Delete/>}
-                                    content='Delete'
-                                    colorCustom={colorsBtnCustom['danger']}
-                                    sx={{marginLeft : '10px'}}
-                                    disabled={uploadedImages.length == 0}
-                                    onClick={handleDeleteImage}
-                                />
+                                <Grid
+                                    item
+                                    sm={6}
+                                    container
+                                    justifyContent={'flex-end'}
+                                >
+                                    <UploadFileBtnHk2t
+                                        onUploadImages={handleUploadImages}
+                                    />
+                                    <ButtonHk2t
+                                        startIcon={<Delete/>}
+                                        content='Delete'
+                                        colorCustom={colorsBtnCustom['danger']}
+                                        sx={{marginLeft : '10px'}}
+                                        disabled={uploadedImages.length == 0}
+                                        onClick={handleDeleteImage}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Grid item sm={12} sx={{color: "#ff0000", fontSize: "1rem"}}>
+                                {errors?.images && errors.images.message}
                             </Grid>
                             <Grid item sm={12} style={{overflowX : 'auto'}}>
                                 <SliderImagesRoom 
-                                    imageLinks={uploadedImages.map(img => img.link)}
+                                    imageLinks={uploadedImages}
                                     onChangeImage={(index : number) => setIndexImage(index)}
                                 />
                             </Grid>
@@ -329,12 +321,16 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                 item
                                 sm={12}
                                 sx={{
-                                    color : "#707e9c;" , 
-                                    fontWeight : "bold",
                                     marginRight : 4
                                 }}
+                                container
                             >
-                                Amenities
+                                <Grid item sm={3} sx={{color : "#707e9c;" , fontWeight : "bold",}}>
+                                    Amenities
+                                </Grid>
+                                <Grid item sm={9} sx={{color: "#ff0000", fontSize: "1rem"}}>
+                                    {errors?.amenities && errors.amenities.message}
+                                </Grid>
                             </Grid>
                             {Object.keys(typesObjAmenity).map((key) => {
                                 const keyTypeObjAmenity = key as TypeAmenity 
@@ -368,11 +364,11 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
                                     marginRight : 4
                                 }}
                             >
-                                Text Editor
+                                Preferential Services
                             </Grid>
                             <Grid item sm={12}>
                                 <RichTextEditorHk2t
-                                    textEditor={inputtedPreferentialServices}
+                                    textEditor={inputtedPreferentialServices || ''}
                                     onChangeTextEditor={handleChangePreferentialServices}
                                 />
                             </Grid>
@@ -382,6 +378,7 @@ const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props ,
             </div>
             <div className="bl_btn__submit for_employee">
                 <ButtonHk2t
+                    colorCustom={ form.formState.isDirty ? colorsBtnCustom['change'] : colorsBtnCustom['primary']}
                     variant="contained"
                     content={`${keyWordForm} type room`}
                     isUseForm={true}

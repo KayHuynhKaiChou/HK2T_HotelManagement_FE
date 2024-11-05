@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import FormTypeRoom from "./FormTypeRoom";
+import FormTypeRoom, { FormTypeRoomHandle } from "./FormTypeRoom";
 import { RootState } from "../../../redux/reducers";
 import { TypeRoom } from "../../../types/models";
 import { toast } from "react-toastify";
-import { convertAmenitiesArrayToObject, toastMSGObject, uuid } from "../../../utils";
+import { convertAmenitiesArrayToObject, formatCurrency, scrollToForm, toastMSGObject, uuid } from "../../../utils";
 import { useMutation } from "@tanstack/react-query";
 import { useMemo, useRef, useState } from "react";
 import TableHk2t from "../../../common/Table/TableHk2t";
@@ -15,76 +15,121 @@ import { defaultPageSizeOptions, defaultstatus, defaultViewDirection } from "../
 import { ActionForm } from "../../../types/form";
 import { useDispatch } from "react-redux";
 import { typeRoomAction } from "../../../redux/actions/typeRoom";
+import { MESSAGE } from "../../../utils/messages";
+import { useDialogHk2t } from "../../../common/Dialog/dialogHk2t";
+import { useLoadingHk2tScreen } from "../../../common/Loading/LoadingHk2tScreen";
+import { ResponseFormat } from "../../../types/response";
 
-const HEIGHT_MENU_HEADER = 64 as const;
-const PADDING_UPDOWN_12 = 24 as const;
+const initValues : TypeRoom = {
+  id: 0,
+  title : '',
+  preferential_services : '',
+  view_direction : 1,
+  size : 0,
+  adult_capacity : 0,
+  kids_capacity : 0,
+  base_price : 0,
+  amenities : [],
+  images : [],
+  status : 1,
+  created_at : '',
+  updated_at : ''
+}
 
 export default function TypeRoomAdmin() {
   const {amenities, typeRooms} = useSelector<RootState , RootState>(state => state);
   const dispatch = useDispatch();
   const [typeActionForm , setTypeActionForm] = useState<ActionForm>('CREATE');
-  const [selectedTypeRoom , setSelectedTypeRoom] = useState<TypeRoom | undefined>(undefined);
+  const [selectedTypeRoom , setSelectedTypeRoom] = useState<TypeRoom>(initValues);
   const formTypeRoomWrapRef = useRef<HTMLDivElement | null>(null);
+  const formTypeRoomRef = useRef<FormTypeRoomHandle | null>(null);
+
+  //common useContext
+  const dialog = useDialogHk2t();
+  const loading = useLoadingHk2tScreen();
+
   // map data
   const typesObjAmenity = useMemo(() => {
     return convertAmenitiesArrayToObject(amenities)
   },[amenities])
-
-  // handle scroll
-  const scrollToForm = () => {
-    if(formTypeRoomWrapRef.current){
-      const bodyElement = document.body;
-      const offset = HEIGHT_MENU_HEADER + PADDING_UPDOWN_12; // Khoảng cách tùy chỉnh từ trên
-      const containerTop = bodyElement.getBoundingClientRect().top;
-      const targetTop = formTypeRoomWrapRef.current.getBoundingClientRect().top;
-      const scrollPosition = bodyElement.scrollTop + (targetTop - containerTop) - offset;
-      // ko dùng đc bodyElement.scrollTo , dùng window
-      window.scrollTo({ top : scrollPosition , behavior : "smooth" })
-      //formTypeRoomWrapRef.current.scrollIntoView({behavior : "smooth"}) 
-      //cách dùng scrollIntoView ko nên sài vì ko đạt đc yêu cầu mong muốn
-    } 
-  }
-
+  
   // change state
-  const changeTypeActionForm = (actForm : ActionForm) => { 
-    scrollToForm();   
-    setTypeActionForm(actForm)
+  const changeTypeActionForm = (actForm : ActionForm, typeRoomParam : TypeRoom) => { 
+    const handleChangeTypeRoomLogic = () => {
+      setTimeout(() => {
+        scrollToForm(formTypeRoomWrapRef);   
+      }, 800);
+      setTypeActionForm(actForm)
+      setSelectedTypeRoom(typeRoomParam)
+    }
+    const isDirtyForm = formTypeRoomRef.current?.form.formState.isDirty
+    if (isDirtyForm) {
+      dialog.show(
+        <b>{MESSAGE.CONFIRM_SUBMIT}</b>,
+        handleChangeTypeRoomLogic,
+        'CONFIRM'
+      )
+    } else {
+      handleChangeTypeRoomLogic()
+    }
   }
 
   const handleEdit = (editedTypeRoom : TypeRoom) => {
-    setSelectedTypeRoom(editedTypeRoom)
-    changeTypeActionForm("UPDATE")
+    changeTypeActionForm("UPDATE", editedTypeRoom)    
   }
 
   // mutation for action create
-  const mutationCreateTypeRoom = useMutation<TypeRoom , unknown , TypeRoom>({
+  const mutationCreateTypeRoom = useMutation<ResponseFormat , unknown , TypeRoom>({
     mutationFn: async (data: TypeRoom) => {
-      dispatch(typeRoomAction.createNewTypeRoom(data) as any)
-      return data
+      const response = await dispatch(typeRoomAction.createNewTypeRoom(data) as any).then()
+      if (response.status === 200) {
+        return response;
+      } else if (response.status === 400){
+        throw new Error(response.message);
+      } else {
+        throw new Error(MESSAGE.USER.CHANGE_STATUS.FAIL)
+      }
+    },
+    onSettled: () => {
+      loading.hide()
     },
     onSuccess: () => {
-      toast.success("Thêm sản phẩm mới thành công", toastMSGObject());
+      toast.success(MESSAGE.TYPE_ROOM.CREATE.SUCCESS, toastMSGObject());
+      setSelectedTypeRoom(initValues)
+      window.scrollTo({ top : 0 , behavior : "smooth" })
     },
     onError: () => {
-      toast.error("Thêm sản phẩm mới thất bại", toastMSGObject());
+      toast.error(MESSAGE.TYPE_ROOM.CREATE.FAIL, toastMSGObject());
     }
   });
 
   // mutation for action update
-  const mutationUpdateTypeRoom = useMutation<TypeRoom , unknown , TypeRoom>({
+  const mutationUpdateTypeRoom = useMutation<ResponseFormat , unknown , TypeRoom>({
     mutationFn: async (data: TypeRoom) => {
-      dispatch(typeRoomAction.updateTypeRoom(selectedTypeRoom?.id + '' ,data) as any)
-      return data
+      const response = await dispatch(typeRoomAction.updateTypeRoom(selectedTypeRoom?.id + '' ,data) as any)
+      if (response.status === 200) {
+        return response;
+      } else if (response.status === 400){
+        throw new Error(response.message);
+      } else {
+        throw new Error(MESSAGE.USER.CHANGE_STATUS.FAIL)
+      }
     },
-    onSuccess: () => {
-      toast.success("Chỉnh sửa sản phẩm thành công", toastMSGObject());
+    onSettled: () => {
+      loading.hide()
+    },
+    onSuccess: (response) => {
+      toast.success(MESSAGE.TYPE_ROOM.UPDATE.SUCCESS, toastMSGObject());
+      setSelectedTypeRoom(response.result)
+      window.scrollTo({ top : 0 , behavior : "smooth" })
     },
     onError: () => {
-      toast.error("Chỉnh sửa sản phẩm thất bại", toastMSGObject());
+      toast.error(MESSAGE.TYPE_ROOM.UPDATE.FAIL, toastMSGObject());
     },
   });
 
   const handleActionTypeRoom = (values : TypeRoom) => {
+    loading.show()
     typeActionForm === 'CREATE' 
       ? mutationCreateTypeRoom.mutate(values)
       : mutationUpdateTypeRoom.mutate(values)
@@ -102,13 +147,14 @@ export default function TypeRoomAdmin() {
       {
         id : `field-title-${uuid()}`,
         nameCol : 'title',
-        width : 450
+        width : 450,
+        isSearched : true
       },
       {
         id : `field-size-${uuid()}`,
         nameCol : 'size',
         label : 'size (m²)',
-        width : 250,
+        width : 150,
         textAlign : 'center',
         isSorted : true
       },
@@ -116,13 +162,19 @@ export default function TypeRoomAdmin() {
         id : `field-view_direction-${uuid()}`,
         nameCol : 'view_direction',
         label : 'view direction',
-        textAlign : 'center'
+        textAlign : 'center',
+        isSearched : true,
+        criteria : defaultViewDirection.map(vd => ({
+          label: vd,
+          condition: vd
+        }))
       },
       {
         id : `field-adult_capacity-${uuid()}`,
         nameCol : 'adult_capacity',
         label : 'quantity adult',
         width : 30,
+        isSorted : true,
         textAlign : 'center'
       },
       {
@@ -130,18 +182,27 @@ export default function TypeRoomAdmin() {
         nameCol : 'kids_capacity',
         label : 'quantity kids',
         width : 30,
+        isSorted : true,
         textAlign : 'center'
       },
       {
         id : `field-base_price-${uuid()}`,
         nameCol : 'base_price',
         label : 'base price (vnđ)',
-        width : 300
+        width : 300,
+        isSorted : true,
+        render : (value) => <b>{formatCurrency(value)}</b>
       },
       {
         id : `field-status-${uuid()}`,
         nameCol : 'status',
-        width : 80
+        width : 80,
+        render : (value) => (
+          <Chip 
+            color={!!value ? 'success' : 'error'} 
+            label={defaultstatus[value]}
+          />
+        )
       },
       {
         id : `field-edit-${uuid()}`,
@@ -166,16 +227,12 @@ export default function TypeRoomAdmin() {
           adult_capacity : typeRoom.adult_capacity,
           kids_capacity : typeRoom.kids_capacity,
           base_price : typeRoom.base_price,        
-          status : (
-            <Chip 
-              color={!!typeRoom.status ? 'success' : 'error'} 
-              label={defaultstatus[typeRoom.status]}
-            />
-          ),
+          status : typeRoom.status,
           edit : (
             <ButtonHk2t
               typeCustom="icon"
               Icon={Edit}
+              // disabled={typeActionForm === 'UPDATE' && typeRoom.id === selectedTypeRoom.id}
               onClick={() => handleEdit(typeRoom)}
             />
           )
@@ -189,7 +246,9 @@ export default function TypeRoomAdmin() {
         rows={rows}
         columns={columns}
         pageSizeOptions={defaultPageSizeOptions}
-        onActionAdd={() => changeTypeActionForm("CREATE")}
+        rowSelected={selectedTypeRoom}
+        disabledBtnAdd={typeActionForm === 'CREATE'}
+        onActionAdd={() => changeTypeActionForm("CREATE", initValues)}
         onExportExcel={() => {}}
       />
       <div className="un_padding_updown_12"></div>
@@ -199,6 +258,8 @@ export default function TypeRoomAdmin() {
       >
         <div className="bl_profile_inner">
           <FormTypeRoom
+            key={selectedTypeRoom.id + uuid()}
+            ref={formTypeRoomRef}
             selectedTypeRoom={selectedTypeRoom}
             typeActionForm={typeActionForm}
             typesObjAmenity={typesObjAmenity}

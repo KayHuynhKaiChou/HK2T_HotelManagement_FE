@@ -10,7 +10,10 @@ export function typeRoomReducer(
     switch (action.type) {
         case typeRoomType.SHOW:
         case typeRoomType.CREATE:
-            return action?.payload!
+        case typeRoomType.UPDATE:
+            return [
+                ...(action?.payload || [])
+            ]
         default:
             return state
     }

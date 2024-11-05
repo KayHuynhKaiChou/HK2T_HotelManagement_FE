@@ -24,6 +24,7 @@ export interface ColumnType {
     isSorted ?: boolean;
     isSearched ?: boolean;
     criteria ?: CriteriaType[];
+    render ?: (value: any) => JSX.Element;
 }
 
 export type ColumnTypeProps = Omit<ColumnType , 'typeSort'>

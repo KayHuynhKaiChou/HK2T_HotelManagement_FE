@@ -5,6 +5,7 @@ import { ResponseAction, responseType } from "../constants/responseType"
 import { Action } from 'redux';
 import { RootState } from "../reducers";
 import { TypeRoomAction, typeRoomType } from "../constants/typeRoomType";
+import { refetchList } from "../helper";
 
 export type typeRoomThunkAction<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<TypeRoomAction['type'] | ResponseAction['type']>>;
 
@@ -12,7 +13,7 @@ const showAllTypeRoom = () : typeRoomThunkAction => {
     return async (dispatch , getState) => {
         const {user} = getState();
         dispatch({ type : responseType.START })
-        const gateway = new GateWay('admin' , user.token);
+        const gateway = new GateWay('user' , user.token);
         const response = await gateway.get({action : 'show-tr'});
  
         if (response.status == 200){
@@ -41,7 +42,7 @@ const showAllTypeRoom = () : typeRoomThunkAction => {
 
 const createNewTypeRoom = (typeRoom : TypeRoom) : typeRoomThunkAction => {
     return async (dispatch , getState) => {
-        const {user} = getState();
+        const {user, typeRooms} = getState();
         dispatch({ type : responseType.START })
         const gateway = new GateWay('admin' , user.token);
         const response = await gateway.post({action : 'create-tr'} , typeRoom);
@@ -56,7 +57,11 @@ const createNewTypeRoom = (typeRoom : TypeRoom) : typeRoomThunkAction => {
             })
             dispatch({
                 type : typeRoomType.CREATE,
-                payload : response.result
+                payload : refetchList(
+                    [...typeRooms],
+                    'CREATE',
+                    response.result
+                )
             })
         }else{
             dispatch({
@@ -67,12 +72,13 @@ const createNewTypeRoom = (typeRoom : TypeRoom) : typeRoomThunkAction => {
                 }
             })
         }
+        return response
     }
 }
 
 const updateTypeRoom = (idTypeRoom : string, typeRoom : TypeRoom) : typeRoomThunkAction => {
     return async (dispatch , getState) => {
-        const {user} = getState();
+        const {user, typeRooms} = getState();
         dispatch({ type : responseType.START })
         const gateway = new GateWay("admin" , user.token)
         const response = await gateway.post({ action : "update-tr" , type_room_id : idTypeRoom} , typeRoom)
@@ -86,8 +92,12 @@ const updateTypeRoom = (idTypeRoom : string, typeRoom : TypeRoom) : typeRoomThun
                 }
             })
             dispatch({
-                type : typeRoomType.CREATE,
-                payload : response.result
+                type : typeRoomType.UPDATE,
+                payload : refetchList(
+                    [...typeRooms],
+                    'UPDATE',
+                    response.result
+                )
             })
         }else{
             dispatch({
@@ -98,6 +108,7 @@ const updateTypeRoom = (idTypeRoom : string, typeRoom : TypeRoom) : typeRoomThun
                 }
             })
         }
+        return response
     }
 }
 
