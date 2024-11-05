@@ -6,14 +6,17 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'update' : '/user/profile',
         'change-password' : '/user/change-password',
         'show-tr' : '/public/type-room/list',
-        'create-re' : '/user/reservation/add'
+        'create-re' : '/user/reservation/add',
+        'show-available-room' : '/user/available-room'
     },
     'employee' : {
         'sign-in' : '/employee/sign-in'
     },
     'customer' : {
         'sign-in' : '/customer/sign-in',
-        'sign-up' : '/customer/sign-up'
+        'sign-up' : '/customer/sign-up',
+        'show-list-re' : '/customer/reservation/list',
+        'cancel' : '/customer/reservation/:reservation_id/cancel'
     },
     'admin' : {
         // user
@@ -32,6 +35,7 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         'create-room' : '/admin/room/add',
         // reservation
         'show-re' : '/admin/reservation/list',
+        'update-re': '/admin/reservation/:reservation_id/update',
         // upload image
         'upload' : '/admin/type-room/:type_room_id/image'
     },
