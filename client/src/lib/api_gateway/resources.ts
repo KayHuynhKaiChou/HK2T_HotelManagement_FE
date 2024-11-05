@@ -36,6 +36,8 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         // reservation
         'show-re' : '/admin/reservation/list',
         'update-re': '/admin/reservation/:reservation_id/update',
+        'cancel' : '/admin/reservation/:reservation_id/cancel',
+        'open' : '/admin/reservation/:reservation_id/open',
         // upload image
         'upload' : '/admin/type-room/:type_room_id/image'
     },
