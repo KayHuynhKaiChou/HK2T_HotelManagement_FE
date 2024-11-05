@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import { createContext, ReactNode, useCallback, useContext, useRef, useState } from "react";
 import { noop } from "../../utils/noop";
 import ButtonHk2t from "../ButtonHk2t";
@@ -65,6 +65,7 @@ export const DialogHk2tProvider: React.FC<{ children: ReactNode }> = ({ children
                 <DialogContent dividers>
                     <DialogContentText 
                         id="alert-dialog-description"
+                        style={{ color: 'black' }}
                     >
                         {contentComp}
                     </DialogContentText>

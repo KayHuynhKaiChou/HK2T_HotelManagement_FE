@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useRef } from "react";
 import { uuid } from "../utils";
 import ButtonHk2t from "./ButtonHk2t";
 import { Upload } from "@mui/icons-material";
@@ -16,9 +16,10 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
     } = props
 
     const uid = uuid();
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = async (event : ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files && event.target.files;
+        const files = event?.target?.files && event.target.files;
         if (files) {
             const promises = Array.from(files).map((file) => {
                 return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
@@ -41,6 +42,10 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
                 console.error("Error reading files: ", error);
             }
         }
+        // Reset giá trị của input file để đảm bảo sự kiện `onChange` được kích hoạt lại khi chọn cùng file
+        if(inputRef.current) {
+            inputRef.current.value = ''
+        }
     };
 
     const handleClickBtn = () => {
@@ -50,6 +55,7 @@ export default function UploadFileBtnHk2t(props : UploadFileBtnHk2tProps) {
     return (
         <div className='un_uploadFile_wrap'>
             <input
+                ref={inputRef}
                 id={`uploadFile-${uid}`}
                 disabled={disabled}
                 type="file"
