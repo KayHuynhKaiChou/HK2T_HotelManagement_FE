@@ -10,7 +10,9 @@ export function amenityReducer(
     switch (action.type) {
         case amenityType.SHOW:
         case amenityType.CREATE:
-            return action?.payload!
+            return [
+                ...(action?.payload || [])
+            ]
         default:
             return state
     }

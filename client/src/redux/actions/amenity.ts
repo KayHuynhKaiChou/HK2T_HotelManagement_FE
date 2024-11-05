@@ -5,6 +5,7 @@ import { ResponseAction, responseType } from "../constants/responseType"
 import { Action } from 'redux';
 import { RootState } from "../reducers";
 import { AmenityAction, amenityType } from "../constants/amenityType";
+import { refetchList } from "../helper";
 
 export type amenityThunkAction<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<AmenityAction['type'] | ResponseAction['type']>>;
 
@@ -12,7 +13,7 @@ const showAllAmenity = () : amenityThunkAction => {
     return async (dispatch , getState) => {
         const {user} = getState();
         dispatch({ type : responseType.START })
-        const gateway = new GateWay('admin' , user.token);
+        const gateway = new GateWay('public' , user.token);
         const response = await gateway.get({action : 'show-ame'});
  
         if (response.status == 200){
@@ -41,7 +42,7 @@ const showAllAmenity = () : amenityThunkAction => {
 
 const createNewAmenity = (amenity : Amenity) : amenityThunkAction => {
     return async (dispatch , getState) => {
-        const {user} = getState();
+        const {user, amenities} = getState();
         dispatch({ type : responseType.START })
         const gateway = new GateWay('admin' , user.token);
         const response = await gateway.post({action : 'create-ame'} , amenity);
@@ -56,7 +57,11 @@ const createNewAmenity = (amenity : Amenity) : amenityThunkAction => {
             })
             dispatch({
                 type : amenityType.CREATE,
-                payload : response.result
+                payload : refetchList(
+                    [...amenities],
+                    'CREATE',
+                    amenity
+                )
             })
         }else{
             dispatch({

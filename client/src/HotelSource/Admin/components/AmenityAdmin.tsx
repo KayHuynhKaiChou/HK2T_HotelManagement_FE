@@ -4,23 +4,43 @@ import FormAmenity from "./FormAmenity";
 import { RootState } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { amenityAction } from "../../../redux/actions/amenity";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ColumnType } from "../../../types/supportUI";
-import { capitalizeFirstLetter, uuid } from "../../../utils";
+import { capitalizeFirstLetter, toastMSGObject, uuid } from "../../../utils";
 import { Chip } from "@mui/material";
-import ButtonHk2t from "../../../common/ButtonHk2t";
-import { Edit } from "@mui/icons-material";
+import { toast } from "react-toastify";
 import { defaultPageSizeOptions, defaultstatus, defaultTypeAmenity } from "../../../utils/constants";
 import TableHk2t from "../../../common/Table/TableHk2t";
+import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
+import { useLoadingHk2tScreen } from "../../../common/Loading/LoadingHk2tScreen";
+import { MESSAGE } from "../../../utils/messages";
+import { FormAmenityPayload } from "../../../types/form";
 
 export default function AmenityAdmin() {
     //redux
-    const {amenities} = useSelector<RootState , RootState>(state => state);
+    const {amenities, response} = useSelector<RootState , RootState>(state => state);
     const dispatch = useDispatch();
 
-    const handleActionAmenity = (formAmenity : Amenity) => {
-        dispatch(amenityAction.createNewAmenity(formAmenity) as any)
+    // common context
+    const loading = useLoadingHk2tScreen();
+
+    const handleActionAmenity = (formAmenity : FormAmenityPayload) => {
+        loading.show()
+        const formatFormAmenity = {
+            ...formAmenity,
+            type: Number(formAmenity.type.value)
+        }
+        dispatch(amenityAction.createNewAmenity(formatFormAmenity) as any)
     }
+
+    useEffectSkipFirstRender(() => {
+        if (response.status === 200) {
+            toast.success(MESSAGE.AMENITY.CREATE.SUCCESS, toastMSGObject());
+        } else {
+            toast.error(MESSAGE.AMENITY.CREATE.FAIL, toastMSGObject())
+        }
+        loading.hide()
+    },[amenities, response.status])
 
     // define columns and rows
     const columns = useMemo<ColumnType[]>(() => {
@@ -34,18 +54,30 @@ export default function AmenityAdmin() {
             {
                 id : `field-name-${uuid()}`,
                 nameCol : 'name',
+                isSearched : true,
                 width : 750
             },
             {
                 id : `field-type-${uuid()}`,
                 nameCol : 'type',
+                isSearched : true,
+                criteria : defaultTypeAmenity.map(typeAme => ({
+                    label: typeAme,
+                    condition: typeAme
+                })),
                 width : 150,
                 textAlign : 'center'
             },
             {
                 id : `field-status-${uuid()}`,
                 nameCol : 'status',
-                width : 80
+                width : 80,
+                render : (value) => (
+                    <Chip 
+                      color={!!value ? 'success' : 'error'} 
+                      label={defaultstatus[value]}
+                    />
+                )
             }
         ]
     },[])
@@ -59,12 +91,7 @@ export default function AmenityAdmin() {
                 stt : index + 1,
                 name : capitalizeFirstLetter(ame.name),
                 type : defaultTypeAmenity[ame.type - 1],     
-                status : (
-                    <Chip 
-                      color={!!ame.status ? 'success' : 'error'} 
-                      label={defaultstatus[ame.status]}
-                    />
-                )
+                status : ame.status
             }
         })
     },[amenities])
@@ -72,7 +99,6 @@ export default function AmenityAdmin() {
     return (
         <>
             <TableHk2t
-                isLoadingTable={false}
                 columns={columns}
                 rows={rows}
                 pageSizeOptions={defaultPageSizeOptions}
