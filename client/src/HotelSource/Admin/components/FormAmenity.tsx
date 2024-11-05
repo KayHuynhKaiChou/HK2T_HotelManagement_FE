@@ -1,17 +1,18 @@
 import { Divider, Grid } from "@mui/material";
 import InputHk2t from "../../../common/InputHk2t";
-import { Amenity } from "../../../types/models";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { defaultTypeAmenity, defaultstatus } from "../../../utils/constants";
+import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { colorsBtnCustom, defaultTypeAmenity, defaultstatus } from "../../../utils/constants";
 import RadioBtnHk2t from "../../../common/RadioBtnHk2t";
 import { uuid } from "../../../utils";
 import ButtonHk2t from "../../../common/ButtonHk2t";
 import SelectHk2t from "../../../common/SelectHk2t";
+import { FormAmenityPayload } from "../../../types/form";
+import { useMemo } from "react";
 
 interface FormAmenityProps {
-    onActionProfile : (values : Amenity) => void;
+    onActionProfile : (values : FormAmenityPayload) => void;
 }
 
 export default function FormAmenity({
@@ -20,25 +21,37 @@ export default function FormAmenity({
 
     const schema = yup.object({
         name: yup.string()
-                .required('Please enter firstname !'),
-        type: yup.number()
-                .required('Please select type !'),
+            .required('Please enter name !'),
         status:  yup.number()
-                .oneOf([0,1] as const)
-                .required(),
+            .required(),
+        type: yup.object().shape({
+            label: yup.string().required('Please select city !'),
+            value: yup.string().required('Please select city !'),
+        }).required('Please select city !') 
     });
 
     // hook form
-    const form = useForm({
+    //@ts-ignore
+    const form : UseFormReturn<FormAmenityPayload> = useForm({
         defaultValues: {
             name : '',
-            type : 0,
-            status : 0
+            type : {
+                label: defaultTypeAmenity[0],
+                value: '1'
+            },
+            status : 1
         },
         resolver: yupResolver(schema)
     })
 
     const selectedStatus = form.watch("status")
+
+    const defaultTypeAmenityOptions = useMemo(() => {
+        return defaultTypeAmenity.map((ta, index) => ({
+            label: ta,
+            value: index + 1
+        }))
+    },[])
 
     const handleChangeStatus = (status : number) => {
         form.setValue("status" , status)
@@ -46,7 +59,7 @@ export default function FormAmenity({
     
     return (
         <form 
-            onSubmit={form.handleSubmit(onActionProfile as SubmitHandler<Amenity>)}
+            onSubmit={form.handleSubmit(onActionProfile as SubmitHandler<FormAmenityPayload>)}
             className='bl_personInfor_form'
         >
             <div className="bl_personInfor_form_inner">
@@ -64,7 +77,7 @@ export default function FormAmenity({
                         </Grid>
                         <Grid item sm={4}>
                             <SelectHk2t 
-                                options={defaultTypeAmenity.map(ta => ({label : ta , value : ta}))} 
+                                options={defaultTypeAmenityOptions} 
                                 label='type amenity' 
                                 name='type' 
                                 placeholder='select type amenity' 
@@ -102,6 +115,7 @@ export default function FormAmenity({
             </div>
             <div className="bl_btn__submit for_employee">
                 <ButtonHk2t
+                    colorCustom={ form.formState.isDirty ? colorsBtnCustom['change'] : colorsBtnCustom['primary']}
                     variant="contained"
                     content='Create amenity'
                     isUseForm={true}
