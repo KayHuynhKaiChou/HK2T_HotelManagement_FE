@@ -5,7 +5,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-import { uuid } from "../../../utils";
 import {Tooltip} from "@mui/material";
 
 interface CalenderHotelProps {
@@ -35,23 +34,23 @@ export default function CalenderHotel({
     )
   }
 
-  const handleDateSelect = (selectInfo : DateSelectArg) => {
-    const title = prompt('Please enter a new title for your event')
-    const calendarApi = selectInfo.view.calendar
+  // const handleDateSelect = (selectInfo : DateSelectArg) => {
+  //   const title = prompt('Please enter a new title for your event')
+  //   const calendarApi = selectInfo.view.calendar
 
-    calendarApi.unselect() // clear date selection
-    console.log(selectInfo.resource?._resource)
-    if (title) {
-      calendarApi.addEvent({
-        id: uuid(),
-        resourceId: selectInfo.resource?._resource.id,
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        color: 'red'
-      })
-    }
-  }
+  //   calendarApi.unselect() // clear date selection
+  //   console.log(selectInfo.resource?._resource)
+  //   if (title) {
+  //     calendarApi.addEvent({
+  //       id: uuid(),
+  //       resourceId: selectInfo.resource?._resource.id,
+  //       title,
+  //       start: selectInfo.startStr,
+  //       end: selectInfo.endStr,
+  //       color: 'red'
+  //     })
+  //   }
+  // }
 
   return (
     <FullCalendar

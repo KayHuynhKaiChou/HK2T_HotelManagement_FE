@@ -3,7 +3,7 @@
 
 export function sliceBySize<T>(array: T[], size = 1): T[][] {
     return array.reduce(
-        (acc : T[][] , value : T , index : number) => (index % size ? acc : [...acc , array.slice(index , index + size)]),
+        (acc : T[][] , _ : T , index : number) => (index % size ? acc : [...acc , array.slice(index , index + size)]),
         []
     )
 }

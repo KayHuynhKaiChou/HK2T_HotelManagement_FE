@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useRef, useState } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 import Slider from "react-slick";
  
 interface CarouselHk2tProps {
@@ -43,7 +43,7 @@ export default function CarouselHk2t({
         waitForAnimate: false,
         prevArrow: <CustomArrow classNameCustom={'bl_prevArrow'}/>,
         nextArrow: <CustomArrow classNameCustom={'bl_nextArrow'}/>,
-        beforeChange: (current : any, next : any) => onChangeIndexSlider && onChangeIndexSlider(next)
+        beforeChange: (_ : any, next : any) => onChangeIndexSlider && onChangeIndexSlider(next)
     };
    
     return (

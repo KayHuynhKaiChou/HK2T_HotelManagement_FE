@@ -5,7 +5,7 @@ interface PrivateRouteProps {
 export default function PrivateRoute({children} : PrivateRouteProps) {
   return (
     <div>
-      
+      {children}
     </div>
   )
 }

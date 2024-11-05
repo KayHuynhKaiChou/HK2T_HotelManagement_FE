@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import FormBookingCustomer from "./FormBookingCustomer";
 import { namesImageBanner } from "../../../utils/constants";
 
 export default function BannerCustomer() {

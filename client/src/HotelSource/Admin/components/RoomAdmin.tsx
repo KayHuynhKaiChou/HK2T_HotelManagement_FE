@@ -80,21 +80,21 @@ export default function RoomAdmin() {
     const listUsers = queryClient.getQueryData<User[]>([queryKeyAllUser]);
     const listReversations = queryClient.getQueryData<Reversation[]>([queryKeyAllReversation]);
 
-    const fetchGetAllAvailableRooms = async () : Promise<Room[]> => {
-        const gateway = new GateWay('user' , user.token);
-        const res = await gateway.get({action : 'show-available-room'});
-        const responseRooms = res.result as RoomResponse[];
-        return responseRooms.map(resRoom => {
-            const foundTypeRoom = typeRooms.find(typeRoom => typeRoom!.id === resRoom.type_room_id) as Room['type_room']
-            return {
-                id : resRoom.id,
-                floor : resRoom.floor,
-                status : resRoom.status,
-                room_number : resRoom.room_number,
-                type_room : foundTypeRoom
-            }
-        })
-    }
+    // const fetchGetAllAvailableRooms = async () : Promise<Room[]> => {
+    //     const gateway = new GateWay('user' , user.token);
+    //     const res = await gateway.get({action : 'show-available-room'});
+    //     const responseRooms = res.result as RoomResponse[];
+    //     return responseRooms.map(resRoom => {
+    //         const foundTypeRoom = typeRooms.find(typeRoom => typeRoom!.id === resRoom.type_room_id) as Room['type_room']
+    //         return {
+    //             id : resRoom.id,
+    //             floor : resRoom.floor,
+    //             status : resRoom.status,
+    //             room_number : resRoom.room_number,
+    //             type_room : foundTypeRoom
+    //         }
+    //     })
+    // }
 
     const fetchGetAllRooms = async () : Promise<Room[]> => {
         const gateway = new GateWay('admin' , user.token);

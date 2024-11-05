@@ -1,6 +1,6 @@
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import { MenuAdmin } from "../../../types/supportUI"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 

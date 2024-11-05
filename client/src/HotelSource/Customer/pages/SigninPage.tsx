@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Account } from "../../../types/models";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector , useDispatch } from 'react-redux';
 import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";

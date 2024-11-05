@@ -22,8 +22,6 @@ import { uuid } from '../../../utils';
 import { colorsBtnCustom, defaultstatus, defaultViewDirection } from '../../../utils/constants';
 import SliderImagesRoom from './SliderImagesRoom';
 import { ActionForm } from '../../../types/form';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/reducers';
 import { Delete } from '@mui/icons-material';
 import { uploadImageService } from '../../../lib/api/image';
 
@@ -40,7 +38,6 @@ export interface FormTypeRoomHandle {
 
 const FormTypeRoom = forwardRef<FormTypeRoomHandle , FormTypeRoomProps>((props , ref) => {
     const {selectedTypeRoom , typesObjAmenity , typeActionForm , onActionTypeRoom} = props;
-    const {user} = useSelector<RootState , RootState>(state => state);
     const formInnerRef = useRef<HTMLFormElement | null>(null);
     const [indexImage , setIndexImage] = useState<number>(0);
 

@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { Amenity } from "../../../types/models";
 import FormAmenity from "./FormAmenity";
 import { RootState } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";

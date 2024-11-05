@@ -5,8 +5,8 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
-import { DateValidationError, PickerChangeHandlerContext, PickerValidDate } from '@mui/x-date-pickers/models';
+import dayjs from 'dayjs';
+import { PickerValidDate } from '@mui/x-date-pickers/models';
 
 interface InputProps {
     form?: any;
@@ -20,7 +20,6 @@ interface InputProps {
     iconInput?: JSX.Element;
     minDate?: PickerValidDate;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onChangeDatePicker?:(value: Dayjs | null, context: PickerChangeHandlerContext<DateValidationError>) => void
     onFocus?: () => void
 }
 
@@ -37,14 +36,13 @@ function InputHk2t(props : InputProps) {
         iconInput,
         minDate = dayjs('1900-01-01'),
         onChange,
-        onChangeDatePicker,
         onFocus
     } = props
     
     
     function renderInput(){
         if(form){
-            const {formState : { errors, isSubmitted}} = form;
+            const {formState : { errors }} = form;
             const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
 
             return (
@@ -102,7 +100,7 @@ function InputHk2t(props : InputProps) {
 
     function renderDatePicker(){
         if (!form) return <></>
-        const {formState : { errors, isSubmitted}} = form;
+        const {formState : { errors }} = form;
         const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
         return (
             <Controller

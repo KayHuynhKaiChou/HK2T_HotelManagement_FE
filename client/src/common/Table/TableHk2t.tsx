@@ -12,8 +12,7 @@ import SelectHk2t from "../SelectHk2t";
 import { OptionSelect , ColumnType , CriteriaType, TypeSort } from "../../types/supportUI";
 import { 
     CustomTable, 
-    CustomTableRow, 
-    getLimitRowsPerPage, 
+    CustomTableRow,
     initSelectedIdColumnDetail, 
     mapColumnsToOptions, 
     mapCriteriaToOptionSelect

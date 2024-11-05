@@ -1,7 +1,6 @@
 import { OptionSelect } from '../types/supportUI';
 import { Controller } from 'react-hook-form';
 import Select, { SingleValue } from 'react-select';
-import { colors, FormHelperText } from '@mui/material';
 interface propsSelect {
     form?: any;
     name : string;
@@ -38,7 +37,7 @@ export default function SelectHk2t({
             const hasError = errors[name]; // thằng này sẽ lưu kiểu boolean do đó ta cần thêm !!
             
             const selectStyles = {
-                control: (provided: any, state: any) => ({
+                control: (provided: any) => ({
                     ...provided,
                     marginTop: '16px',
                     marginBottom: '8px',
