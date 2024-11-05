@@ -9,7 +9,7 @@ import provinces from '../../data/provinces.json';
 import districts from '../../data/districts.json';
 import wards from '../../data/wards.json';
 import { forwardRef, useImperativeHandle, useMemo } from 'react';
-import RadioBtnHk2t from '../RadioBtnHk2t.tsx';
+import RadioBtnHk2t from '../../common/RadioBtnHk2t/RadioBtnHk2t';
 import { uuid } from '../../utils';
 import { colorsBtnCustom, defaultGenders, defaultPositions } from '../../utils/constants';
 import { ActionForm, FormUserProfile } from '../../types/form';

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducers";
+import { RootState } from "../../redux/reducers";
 
 interface RadioBtnHk2t {
     id: string;
