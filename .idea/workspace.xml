@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="cb9a1698-d807-4df0-8a70-35c3a831dc9f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/CalenderHotel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/CalenderHotel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/FormAmenity.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/FormAmenity.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/FormBookingRoom.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/FormBookingRoom.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/ItemReport.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/ItemReport.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/RoomAdmin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/components/RoomAdmin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/pages/AdminHomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/pages/AdminHomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/pages/AdminSigninPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/pages/AdminSigninPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Admin/styles/applicationAdminStyle.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Admin/styles/applicationAdminStyle.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/ChangePasswordCustomer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/ChangePasswordCustomer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/FormBookingCustomer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/FormBookingCustomer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/ListTypeRoomCustomer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/ListTypeRoomCustomer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/ProfileCustomer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/ProfileCustomer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/TypeRoomInforCommonCustomer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/components/TypeRoomInforCommonCustomer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/CompletedBookingPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/CompletedBookingPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/DefaultPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/DefaultPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/DetailTypeRoomPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/DetailTypeRoomPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/InforCustomerPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/InforCustomerPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/ListRoomPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/ListRoomPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/PersonalPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/PersonalPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/ReservationPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/ReservationPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/SigninPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/pages/SigninPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/HotelSource/Customer/styles/applicationCustomerStyle.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/HotelSource/Customer/styles/applicationCustomerStyle.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/common/SummaryInfor/SummaryInfor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/common/SummaryInfor/SummaryInfor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/redux/helper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/redux/helper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/redux/reducers/formBooking.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/redux/reducers/formBooking.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/styles/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/styles/_variables.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/styles/applicationCommonStyle.scss" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/styles/applicationCommonStyle.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/types/enum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/types/enum.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/utils/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/utils/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/utils/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/utils/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/utils/messages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/utils/messages.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2oQG7pCLmu5p406WAXbyZ7LWad9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.23726.96" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cb9a1698-d807-4df0-8a70-35c3a831dc9f" name="Changes" comment="" />
+      <created>1730794224998</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730794224998</updated>
+      <workItem from="1730794226818" duration="15000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

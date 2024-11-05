@@ -8,13 +8,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/reducers";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
-import { convertAmenitiesArrayToObject, formatContentAmenitiesOfTypeAme, formatDateV2 } from "../../../utils";
-import { defaultTypeAmenity, defaultViewDirection } from "../../../utils/constants";
-import { TypeAmenity } from "../../../types/models";
+import { formatDateV2 } from "../../../utils";
+import TypeRoomInforBooking from "../components/TypeRoomInforBooking.tsx";
 
 export default function InforCustomerPage() {
     //redux
-    const { user, formBooking, typeRooms, amenities } = useSelector<RootState , RootState>(state => state);
+    const { user, formBooking, typeRooms} = useSelector<RootState , RootState>(state => state);
 
     //navigate
     const navigate = useNavigate()
@@ -23,20 +22,12 @@ export default function InforCustomerPage() {
     }
 
     const selectedTypeRoom = useMemo(() => {
-        return typeRooms.find(typeRoom => typeRoom.id === formBooking.type_room_id)
-    }, [formBooking.type_room_id])
+        return typeRooms.find(tr => tr.id === formBooking.type_room_id) || typeRooms[0]
+    },[formBooking.type_room_id])
 
     const checkInMemo = useMemo(() => {
         return formatDateV2(new Date(formBooking.checkin_at))
     }, [formBooking.checkin_at])
-
-    const viewDirection = useMemo(() => {
-        return selectedTypeRoom && defaultViewDirection[selectedTypeRoom.view_direction - 1].toLowerCase()
-    }, [selectedTypeRoom?.view_direction])
-
-    const amenitiesObj = useMemo(() => {
-        return convertAmenitiesArrayToObject(amenities)
-    }, [amenities])
 
     return (
         <div className="bl_grid_column">
@@ -77,8 +68,7 @@ export default function InforCustomerPage() {
                 <div className="bl_tip_content">
                     <CheckedSuccessSvg />
                     <p>
-                        Flexible: You can cancel for free until 6:00 PM, September 27,
-                        2024, so lock in a great rate today.
+                        {`Flexible: You can cancel for free until 6:00 PM, ${checkInMemo}, so lock in a great rate today.`}
                     </p>
                 </div>
                 <div className="bl_tip_content">
@@ -86,39 +76,12 @@ export default function InforCustomerPage() {
                     <p>No payment today. You will pay during your break.</p>
                 </div>
             </div>
-            <div className="bl_infor_common">
-                <h3 className="bl_ttl">{selectedTypeRoom?.title}</h3>
-                <div className="bl_entity_infor">
-                    <div className="bl_infor_name">Free cancel</div>
-                    <div className="bl_infor_value">Before 18:00, {checkInMemo}</div>
-                </div>
-                <div className="bl_entity_infor">
-                    <div className="bl_infor_name">view direction</div>
-                    <div className="bl_infor_value">{viewDirection}</div>
-                </div>
-                <div className="bl_entity_infor">
-                    <div className="bl_infor_name">size</div>
-                    <div className="bl_infor_value">{selectedTypeRoom?.size} ㎡</div>
-                </div>
-                <div className="bl_entity_infor">
-                    <div className="bl_infor_name">customers</div>
-                    <div className="bl_infor_value">
-                        {`${formBooking.adult_capacity} adults, ${formBooking.kid_capacity} kids`}
-                    </div>
-                </div>
-                <div className="bl_entity_infor">
-                    <div className="bl_infor_name">amenities</div>
-                    <div className="bl_infor_value">
-                        {defaultTypeAmenity.map(typeAme => (
-                            <div className="bl_ame_wrap">
-                                {`${typeAme.toLowerCase()}: ${formatContentAmenitiesOfTypeAme(
-                                    amenitiesObj[typeAme.toLowerCase() as TypeAmenity]
-                                )}`}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            <TypeRoomInforBooking
+                typeRoom={selectedTypeRoom}
+                kid_number={formBooking.kid_number}
+                adult_number={formBooking.adult_number}
+                checkin_at={formBooking.checkin_at}
+            />
             <div className="bl_infor_common">
                 <h3 className="bl_ttl">Your time to</h3>
                 <div className="bl_tip_content">

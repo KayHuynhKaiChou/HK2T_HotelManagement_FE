@@ -8,6 +8,7 @@ import { useRef } from "react"
 import { Person , Logout , History } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"
 import { persistor } from "../../redux/store"
+import {POSITION} from "../../types/enum.ts";
 
 interface propsSummaryInfor {
     isShowDropdown ?: boolean;
@@ -25,9 +26,13 @@ export default function SummaryInfor({isShowDropdown = false , position = 'ADMIN
         isShowDropdown && popoverRef.current?.onOpen(event);
     }
 
-    const handleRedirectProfilePage = () => {
-        const linkRedirect = position == 'ADMIN' ? '/admin/profile' : '/customer/profile' 
-        navigate(linkRedirect);
+    const handleRedirectProfilePage = (linkRedirect: string) => {
+        if (linkRedirect === 'profile') {
+            navigate(position == 'ADMIN' ? '/admin/profile' : '/customer/profile');
+
+        } else {
+            navigate('/customer/booking-history');
+        }
         popoverRef.current?.onClose();
     }
 
@@ -62,15 +67,15 @@ export default function SummaryInfor({isShowDropdown = false , position = 'ADMIN
                 <div className="bl_dropdown_inner">
                     <div 
                         className="bl_dropdown_item"
-                        onClick={handleRedirectProfilePage}
+                        onClick={() => handleRedirectProfilePage('profile')}
                     >
                         <Person/>
                         <div className="bl_dropdown_item_ttl">profile</div>
                     </div>
-                    {user.position == 4 && (
+                    {user.position == POSITION.CUSTOMER && (
                         <div 
                             className="bl_dropdown_item"
-                            onClick={handleRedirectProfilePage}
+                            onClick={() => handleRedirectProfilePage('booking-history')}
                         >
                             <History/>
                             <div className="bl_dropdown_item_ttl">booking history</div>

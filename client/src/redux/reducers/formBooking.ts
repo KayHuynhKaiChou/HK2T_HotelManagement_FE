@@ -6,8 +6,8 @@ const initState : FormBookingCustomer = {
     user_id: 9,
     checkin_at: dayjs().format('YYYY-MM-DD'),
     checkout_at: dayjs().add(1, 'day').format('YYYY-MM-DD'),
-    adult_capacity: 1,
-    kid_capacity: 1,
+    adult_number: 1,
+    kid_number: 1,
     type_room_id: 0,
     total_price: 0
 }

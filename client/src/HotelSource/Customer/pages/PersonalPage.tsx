@@ -9,26 +9,34 @@ import ChangePasswordCustomer from "../components/ChangePasswordCustomer";
 import UploadFileBtnHk2t from "../../../common/UploadFileBtnHk2t";
 import { useDispatch } from "react-redux";
 import { userAction } from "../../../redux/actions/user";
+import BookingHistoryCustomer from "../components/BookingHistoryCustomer.tsx";
 
 export default function PersonalPage() {
     const { menu } = useParams();
     const navigate = useNavigate();
-    const {response , user} = useSelector<RootState , RootState>(state => state);
+    const {user} = useSelector<RootState , RootState>(state => state);
     const dispatch = useDispatch();
     const [MenuComponent, setMenuComponent] = useState<ComponentType>(() => ProfileCustomer);
+    const [nameOptionSelected, setNameOptionSelected] = useState('update profile')
 
     const handleUploadImages = (images : Array<string | ArrayBuffer | null>) => {
         const link_avatar = (images[0] + '').replace('data:', '').replace(/^.+,/, '')
-        dispatch(userAction.updateUser({ ...user, link_avatar}) as any)
+        dispatch(userAction.updateUser({ link_avatar } as any) as any)
     }
 
     useEffect(() => {
         switch (menu) {
             case 'profile':
-                setMenuComponent(() => ProfileCustomer)
+                setMenuComponent(() => ProfileCustomer);
+                setNameOptionSelected("update profile");
                 break;
             case 'password':
-                setMenuComponent(() => ChangePasswordCustomer)
+                setMenuComponent(() => ChangePasswordCustomer);
+                setNameOptionSelected("change password");
+                break;
+            case 'booking-history':
+                setMenuComponent(() => BookingHistoryCustomer);
+                setNameOptionSelected("change password");
                 break;
             default:
                 setMenuComponent(() => <></>)
@@ -43,7 +51,7 @@ export default function PersonalPage() {
                     <div className="bl_infor_name">
                         {`Hello, ${user.firstname} ${user.surname}`}
                     </div>
-                    <div className="bl_infor_optionSelect">Change Password</div>
+                    <div className="bl_infor_optionSelect">{nameOptionSelected}</div>
                 </div>
             </div>
             <div className="bl_personalPage_inner un_paddingDefault">
@@ -72,7 +80,7 @@ export default function PersonalPage() {
                         </div>
                         <div 
                             className="bl_option"
-                            onClick={() => navigate('/customer/')}
+                            onClick={() => navigate('/customer/booking-history')}
                         >
                             <HistoryOutlined/>
                             booking history

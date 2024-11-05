@@ -37,7 +37,7 @@ export default function ListTypeRoomCustomer() {
                 className="bl_inforTypeRoom_wrap"
             >
                 <div className="bl_inforTypeRoom">
-                    <img src={tRoom.images[0].link} alt="" />
+                    <img src={tRoom.images[0]} alt="" />
                     <div className="bl_content">
                         <div className="bl_content_ttl">
                             {`${tRoom.title} (${defaultViewDirection[tRoom.view_direction - 1]?.toLowerCase()} direction)`}

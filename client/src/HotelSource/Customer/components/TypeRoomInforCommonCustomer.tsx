@@ -29,14 +29,14 @@ export default function TypeRoomInforCommonCustomer({
     )
     return images.map(img => (
         <div className="bl_img_wrap">
-            <img src={img.link} />
+            <img src={img} />
         </div>
     ))
   }, [images])
 
   const handleNavigateToDetailTR = () => {
     handleSelectTypeRoom()
-    let titleURL = title.replace('Phòng','Room').toLowerCase().replaceAll(/\s+/g, '-');
+    const titleURL = title.replace('Phòng','Room').toLowerCase().replaceAll(/\s+/g, '-');
     navigate(`/rooms/${titleURL}`,{ state: typeRoom })
   }
 

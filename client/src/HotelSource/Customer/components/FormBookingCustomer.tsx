@@ -4,20 +4,20 @@ import Person3Icon from '@mui/icons-material/Person3';
 import DateRangePickerHk2t from '../../../common/DateRangePicker/DateRangePickerHk2t';
 import { distanceTwoDate, toastMSGObject, uuid } from '../../../utils';
 import PopoverHk2t, { PopoverHandle } from '../../../common/Popover/PopoverHk2t';
-import { MouseEvent, useMemo, useRef, useState } from 'react';
+import {MouseEvent, useMemo, useRef, useState} from 'react';
 import { RootState } from '../../../redux/reducers';
 import { useSelector } from 'react-redux';
-import { TypeRoom } from '../../../types/models';
 import { toast } from 'react-toastify';
-import { MATH_ACTION } from '../../../types/enum'
+import { MATH_ACTION, POSITION } from '../../../types/enum'
 import useEffectSkipFirstRender from '../../../hooks/useEffectSkipFirstRender';
 import { useNavigate } from 'react-router-dom';
 import dayjs, { Dayjs } from 'dayjs';
 import { DateRange } from '@mui/x-date-pickers-pro/models';
 import { useDispatch } from 'react-redux';
 import { formBookingAction } from '../../../redux/actions/formBooking';
+import { FormBooking } from '../../../types/form';
 
-type QuantityCustomer = Pick<TypeRoom , 'adult_capacity' | 'kids_capacity'>
+type QuantityCustomer = Pick<FormBooking , 'adult_number' | 'kid_number'>
   
 export default function FormBookingCustomer() {
     //redux
@@ -30,8 +30,8 @@ export default function FormBookingCustomer() {
     //state
     const [quantityCustomer, setQuantityCustomer] = useState<QuantityCustomer>(
         { 
-            adult_capacity: formBooking.adult_capacity, 
-            kids_capacity: formBooking.kid_capacity 
+            adult_number: formBooking.adult_number, 
+            kid_number: formBooking.kid_number 
         }
     )
 
@@ -46,11 +46,11 @@ export default function FormBookingCustomer() {
         formBooking.type_room_id
     ])
 
-    const contentCapacityCustomers = useMemo(() => {
-        return `${quantityCustomer.adult_capacity} adults - ${quantityCustomer.kids_capacity} children`
+    const contentNumberCustomers = useMemo(() => {
+        return `${quantityCustomer.adult_number} adults - ${quantityCustomer.kid_number} children`
     },[
-        quantityCustomer.adult_capacity,
-        quantityCustomer.kids_capacity
+        quantityCustomer.adult_number,
+        quantityCustomer.kid_number
     ])
 
     // func change state
@@ -64,8 +64,9 @@ export default function FormBookingCustomer() {
 
         switch (action) {
             case MATH_ACTION.PLUS:
+                // eslint-disable-next-line no-case-declarations
                 const quantityIncrease = quantityCustomer[fieldName] + 1
-                if (quantityIncrease > selectedTypeRoom[fieldName]) {
+                if (quantityIncrease > selectedTypeRoom[fieldName.includes('adult') ? 'adult_capacity' : 'kids_capacity']) {
                     toast.success("Maximum occupancy for this room is 2 adults.", toastMSGObject())
                     return
                 }
@@ -75,8 +76,9 @@ export default function FormBookingCustomer() {
                 })
                 break;
             case MATH_ACTION.MINUS:
+                // eslint-disable-next-line no-case-declarations
                 const quantityDecrease = quantityCustomer[fieldName] - 1
-                if (fieldName === 'adult_capacity' && quantityDecrease === 0) {
+                if (fieldName === 'adult_number' && quantityDecrease === 0) {
                     toast.warning("Must have at least 1 adult", toastMSGObject())
                     return
                 }
@@ -105,12 +107,12 @@ export default function FormBookingCustomer() {
     const handleClosePopover = () => {
         dispatch(
             formBookingAction.updateFormBooking(
-                "adult_capacity", quantityCustomer.adult_capacity
+                "adult_number", quantityCustomer.adult_number
             )
         )
         dispatch(
             formBookingAction.updateFormBooking(
-                "kid_capacity", quantityCustomer.kids_capacity
+                "kid_number", quantityCustomer.kid_number
             )
         )
     }
@@ -127,7 +129,7 @@ export default function FormBookingCustomer() {
         }
 
         let url = ''
-        if (user.token) {
+        if (user.token && user.position === POSITION.CUSTOMER) {
             url = '/reservation/person-infor'
         } else {
             url = '/sign_in'
@@ -138,8 +140,8 @@ export default function FormBookingCustomer() {
     // useEffect
     useEffectSkipFirstRender(() => {
         setQuantityCustomer({
-            adult_capacity : 1,
-            kids_capacity : 1
+            adult_number : 1,
+            kid_number : 1
         })
     },[
         formBooking.type_room_id
@@ -173,7 +175,7 @@ export default function FormBookingCustomer() {
                         className="bl_formBooking_infor"
                         onClick={handleOpenPopover}
                     >
-                        {contentCapacityCustomers}
+                        {contentNumberCustomers}
                     </div>
                     <PopoverHk2t
                         id={uidPopover}
@@ -194,12 +196,12 @@ export default function FormBookingCustomer() {
                                 <div className="bl_dropdown_textFieldNumber">
                                     <div 
                                         className="bl_act_btn"
-                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.PLUS, "adult_capacity")}
+                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.PLUS, "adult_number")}
                                     >+</div>
-                                    <div className="bl_quantityPerson">{quantityCustomer.adult_capacity}</div>
+                                    <div className="bl_quantityPerson">{quantityCustomer.adult_number}</div>
                                     <div 
                                         className="bl_act_btn"
-                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.MINUS, "adult_capacity")}
+                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.MINUS, "adult_number")}
                                     >-</div>
                                 </div>
                             </div>
@@ -208,12 +210,12 @@ export default function FormBookingCustomer() {
                                 <div className="bl_dropdown_textFieldNumber">
                                     <div 
                                         className="bl_act_btn"
-                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.PLUS, "kids_capacity")}
+                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.PLUS, "kid_number")}
                                     >+</div>
-                                    <div className="bl_quantityPerson">{quantityCustomer.kids_capacity}</div>
+                                    <div className="bl_quantityPerson">{quantityCustomer.kid_number}</div>
                                     <div 
                                         className="bl_act_btn"
-                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.MINUS, "kids_capacity")}
+                                        onClick={() => handleChangeNumberCustomer(MATH_ACTION.MINUS, "kid_number")}
                                     >-</div>
                                 </div>
                             </div>
