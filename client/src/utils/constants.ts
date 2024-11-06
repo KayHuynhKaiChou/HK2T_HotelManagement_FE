@@ -4,6 +4,9 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { ColumnType, MenuAdmin, OptionSelect, TypeSort } from '../types/supportUI';
 import {STATUS} from "../types/enum.ts";
+import banner1 from "../assets/images/viewHotel.png";
+import banner2 from "../assets/images/roomHotel.png";
+import banner3 from "../assets/images/swimmingPoolHotel.png";
 
 export const listMenuAdmin : MenuAdmin[] = [
     {
@@ -164,7 +167,7 @@ export const defaultPages = [
     }
 ] as const;
 
-export const namesImageBanner = ['viewHotel' , 'roomHotel' , 'swimmingPoolHotel'];
+export const namesImageBanner = [banner1, banner2, banner3];
 
 export const statusBooking = [
     {

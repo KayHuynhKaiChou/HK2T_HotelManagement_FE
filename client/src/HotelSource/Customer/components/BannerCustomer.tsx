@@ -14,7 +14,7 @@ export default function BannerCustomer() {
                 }else{
                     indexNameImage++;
                 }
-                bannerEle.current.style.backgroundImage = `url(src/assets/images/${namesImageBanner[indexNameImage]}.png)`
+                bannerEle.current.style.backgroundImage = `url(${namesImageBanner[indexNameImage]})`
             }
         },10000)
     },[])
