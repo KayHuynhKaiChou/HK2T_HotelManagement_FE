@@ -6,6 +6,7 @@ import FormBookingRoom, {FormBookingRoomHandle} from "./FormBookingRoom";
 import { RootState } from "../../../redux/reducers";
 import {useMemo, useRef, useState} from "react";
 import {
+    formatCurrency,
     formatReversationsToEventsCalender,
     formatRoomsToResourcesCalender,
     scrollToForm,
@@ -21,8 +22,14 @@ import { ResponseFormat } from "../../../types/response";
 import { MESSAGE } from "../../../utils/messages";
 import { POSITION, STATUS } from "../../../types/enum";
 import dayjs from "dayjs";
+import emailjs from '@emailjs/browser';
+import { statusBooking } from "../../../utils/constants";
 
 type RoomResponse = Omit<Room , 'type_room'> & {type_room_id : number}
+
+const YOUR_SERVICE_ID = import.meta.env.VITE_YOUR_SERVICE_ID;
+const YOUR_TEMPLATE_ID = import.meta.env.VITE_YOUR_TEMPLATE_ID;
+const PUBLIC_KEY_USER_ID = import.meta.env.VITE_PUBLIC_KEY_USER_ID;
 
 const initReversation = {
     id: 0,
@@ -288,6 +295,39 @@ export default function RoomAdmin() {
             setCountKey(countKey + 1)
             await queryClient.invalidateQueries([queryKeyAllReversation] as RefetchQueryFilters);
             window.scrollTo({ top : 0 , behavior : "smooth" })
+
+            const emailPIC = listUsers?.find(user => user.id === selectedReversation.user_id)?.email
+
+            const templateParams = {
+                subject: MESSAGE.SEND_EMAIL.DEPOSIT,
+                id: selectedReversation.id,
+                room_name: 'Room' + selectedReversation.room.room_number,
+                type_room_name: selectedReversation.room.type_room.title,
+                adults_number: selectedReversation.adult_number,
+                kids_number: selectedReversation.kid_number,
+                checkin: selectedReversation.checkin_at.split("T")[0],
+                checkout: selectedReversation.checkout_at.split("T")[0],
+                total_price: formatCurrency(selectedReversation.total_price) + " ( You only need pay " + formatCurrency(selectedReversation.total_price / 2) + " vnđ )",
+                email_to: emailPIC
+            }
+
+            emailjs
+                .send(
+                    YOUR_SERVICE_ID,        // Thay bằng Service ID từ EmailJS
+                    YOUR_TEMPLATE_ID,       // Thay bằng Template ID từ EmailJS
+                    templateParams,
+                    PUBLIC_KEY_USER_ID
+                )
+                .then(
+                    (response) => {
+                        toast.success(MESSAGE.SEND_EMAIL.SUCCESS + templateParams.email_to, toastMSGObject());
+                        console.log(response)
+                    },
+                    (error) => {
+                        // toast.success('Gửi email thất bại!', toastMSGObject());
+                        console.log(error)
+                    }
+                );
         }
 
         loading.hide();
