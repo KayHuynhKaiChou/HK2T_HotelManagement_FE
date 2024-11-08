@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DashboardAdmin from '../components/DashboardAdmin';
 import UserAdmin from '../components/UserAdmin';
 import NavbarLeftAdmin from '../components/NavbarLeftAdmin';
@@ -20,6 +20,7 @@ import GateWay from '../../../lib/api_gateway';
 import { Reversation } from '../../../types/models';
 import { useQueries } from '@tanstack/react-query';
 import { queryKeyAllUser , queryKeyAllReversation} from '../../../tanstack/key';
+import { POSITION } from '../../../types/enum';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -36,13 +37,7 @@ export default function AdminHomePage() {
   const [MenuComponent, setMenuComponent] = useState(<></>);
   const {user} = useSelector<RootState , RootState>(state => state);
   const dispatch = useDispatch();
-
-  // handle redux
-  useEffect(() => {
-    dispatch(userAction.showInforUser() as any)
-    dispatch(typeRoomAction.showAllTypeRoom() as any)
-    dispatch(amenityAction.showAllAmenity() as any)
-  },[])
+  const navigate = useNavigate();
 
   // handle useQuery
   const fetchGetAllUser = async () => {
@@ -75,6 +70,19 @@ export default function AdminHomePage() {
   const handleToggleNavbar = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {
+    if (user.position === POSITION.CUSTOMER || !user.token) {
+      navigate('/admin')
+    }
+  }, [])
+
+  // handle redux
+  useEffect(() => {
+    dispatch(userAction.showInforUser() as any)
+    dispatch(typeRoomAction.showAllTypeRoom() as any)
+    dispatch(amenityAction.showAllAmenity() as any)
+  },[])
 
   useEffect(() => {
     switch (menu) {
