@@ -34,6 +34,10 @@ export const MESSAGE = {
             'CANCEL_SUCCESS' : 'You have successfully canceled !'
         }
     },
-    CONFIRM_SUBMIT : 'Your changes have not summited yet, you still wanna change to another part'
+    CONFIRM_SUBMIT : 'Your changes have not summited yet, you still wanna change to another part',
+    SEND_EMAIL : {
+        'DEPOSIT' : 'Admin Hotel Hk2t has received your deposit',
+        'SUCCESS' : 'Send email reply to '
+    }
     
 }
