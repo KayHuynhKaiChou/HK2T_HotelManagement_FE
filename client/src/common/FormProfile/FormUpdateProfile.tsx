@@ -211,14 +211,14 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
         form.setValue('salary', salary, { shouldDirty: true })
     }, [watchPosition])
 
-    useEffectSkipFirstRender(() => {
-        // reset là reset defaultValue của form , nhưng param truyền vào reset(param) phải cùng
-        // kiểu (đủ số field của 1 obj, ko dc thiếu bất kì 1 field nào) với defaultValue ban đầu ,
-        // khi đó isDirty sẽ thành false trở lại 
-        if (form.formState.isSubmitSuccessful) {
-            form.reset(generateFirstFormProfile())
-        }
-    },[user])
+    // useEffectSkipFirstRender(() => {
+    //     // reset là reset defaultValue của form , nhưng param truyền vào reset(param) phải cùng
+    //     // kiểu (đủ số field của 1 obj, ko dc thiếu bất kì 1 field nào) với defaultValue ban đầu ,
+    //     // khi đó isDirty sẽ thành false trở lại 
+    //     if (form.formState.isSubmitSuccessful) {
+    //         form.reset(generateFirstFormProfile())
+    //     }
+    // },[user])
 
     // func change state form
     const handleChangeGender = (gender : FormUserProfile['gender']) => {       
@@ -283,7 +283,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                                 name='email' 
                                 placeholder='email' 
                                 form={form} 
-                                disabled
+                                disabled={typeActionForm === 'UPDATE'}
                             />
                         </Grid>
                         <Grid item sm={4}>

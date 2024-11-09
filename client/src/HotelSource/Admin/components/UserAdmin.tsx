@@ -20,6 +20,7 @@ import { useDialogHk2t } from "../../../common/Dialog/dialogHk2t";
 import InforGeneratedAccount from "./InforGeneratedAccount";
 import { queryKeyAllUser } from "../../../tanstack/key";
 import { useLoadingHk2tScreen } from "../../../common/Loading/LoadingHk2tScreen";
+import { POSITION } from "../../../types/enum";
 
 const initNewUser = {
   id: 0,
@@ -47,6 +48,7 @@ export default function UserAdmin() {
   const [selectedUser, setSelectedUser] = useState<User>(
     initNewUser
   );
+  const [countKey, setCountKey] = useState(0)
 
   // ref
   const formProfileWrapRef = useRef<HTMLDivElement | null>(null);
@@ -103,6 +105,7 @@ export default function UserAdmin() {
   const rows = useMemo(() => {
     if(!listUsers) return [];
     return listUsers
+      .filter(user => user.position !== POSITION.ADMIN)
       .map(user => {
         return {
           id : user.id,
@@ -136,6 +139,7 @@ export default function UserAdmin() {
       }, 800);
       setTypeActionForm(actForm)
       setSelectedUser(userParam)
+      setCountKey(countKey + 1)
     }
     const isDirtyForm = formUpdateProfile.current?.form.formState.isDirty
     if (isDirtyForm) {
@@ -217,6 +221,7 @@ export default function UserAdmin() {
       )
       setSelectedUser(initNewUser)
       await queryClient.invalidateQueries([queryKeyAllUser] as RefetchQueryFilters);
+      setCountKey(countKey + 1)
     },
     onError: (error) => {
       toast.error((error + '').split(':')[1].trim(), toastMSGObject());
@@ -245,6 +250,7 @@ export default function UserAdmin() {
       setSelectedUser(response.result)
       await queryClient.invalidateQueries([queryKeyAllUser] as RefetchQueryFilters);
       window.scrollTo({ top : 0 , behavior : "smooth" })
+      setCountKey(countKey + 1)
     },
     onError: (error) => {
       toast.error((error + '').split(':')[1].trim(), toastMSGObject());
@@ -271,7 +277,7 @@ export default function UserAdmin() {
       >
         <div className="bl_profile_inner">
           <FormUpdateProfile
-            key={selectedUser.id}
+            key={selectedUser.id + '-' + countKey}
             ref={formUpdateProfile}
             typeActionForm={typeActionForm}
             user={selectedUser}

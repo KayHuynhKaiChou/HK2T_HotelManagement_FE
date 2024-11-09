@@ -249,7 +249,6 @@ export default function TypeRoomAdmin() {
         rowSelected={selectedTypeRoom}
         disabledBtnAdd={typeActionForm === 'CREATE'}
         onActionAdd={() => changeTypeActionForm("CREATE", initValues)}
-        onExportExcel={() => {}}
       />
       <div className="un_padding_updown_12"></div>
       <div 
