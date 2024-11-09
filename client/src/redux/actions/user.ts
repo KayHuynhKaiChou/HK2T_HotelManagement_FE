@@ -162,10 +162,20 @@ const changePassword = (password : FormPassword) : UserThunkAction => {
     }
 }
 
+const reserInforUser = () : UserThunkAction => {
+    return async (dispatch , getState) => {
+        dispatch({
+            type : userType.RESET,
+            payload : null
+        })
+    }
+}
+
 export const userAction = {
     signInUser,
     signUpUser,
     showInforUser,
     updateUser,
-    changePassword
+    changePassword,
+    reserInforUser
 }

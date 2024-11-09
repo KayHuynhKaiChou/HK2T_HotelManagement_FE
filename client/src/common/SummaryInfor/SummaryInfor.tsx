@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/reducers"
 import { User } from "../../types/models"
 import { Avatar } from "@mui/material"
@@ -9,6 +9,7 @@ import { Person , Logout , History } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"
 import { persistor } from "../../redux/store"
 import {POSITION} from "../../types/enum.ts";
+import { userAction } from "../../redux/actions/user.ts"
 
 interface propsSummaryInfor {
     isShowDropdown ?: boolean;
@@ -17,6 +18,7 @@ interface propsSummaryInfor {
 
 export default function SummaryInfor({isShowDropdown = false , position = 'ADMIN'} : propsSummaryInfor) {
     const user = useSelector<RootState, User>(state => state.user);
+    const dispatch = useDispatch();
     const uidPopover = `popover-person-info-${uuid()}`;
     const popoverRef = useRef<PopoverHandle | null>(null);
     const classSizeAvatar = 'bl_sizeAvatar_' + (isShowDropdown ? 'default' : 'scale');
@@ -36,9 +38,12 @@ export default function SummaryInfor({isShowDropdown = false , position = 'ADMIN
         popoverRef.current?.onClose();
     }
 
-    const handleLogout = () => {
-        persistor.purge();
-        window.location.reload();
+    const handleLogout = async () => {
+        await persistor.purge();
+        // Reset the user state in Redux
+        dispatch(userAction.reserInforUser() as any);
+        let linkPage = user.position === POSITION.CUSTOMER ? '/' : '/admin'
+        navigate(linkPage)
     }
 
     return (
