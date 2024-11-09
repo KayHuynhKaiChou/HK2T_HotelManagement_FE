@@ -536,13 +536,19 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 //calendar common
-.bl_resource_calendar {
+.un_resource_calendar {
     cursor: pointer;
     &:hover {
         color: #5A738E;
     }
 }
 
+.un_areaHeaderCalender {
+    @include flex-center;
+    gap: 20px;
+}
+
+// modal common
 .css-79ws1d-MuiModal-root{
     z-index: 900;
 }

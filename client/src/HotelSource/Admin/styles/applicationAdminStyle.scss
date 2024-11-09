@@ -305,3 +305,15 @@
         }
     }
 }
+
+// Form Room
+.bl_formRoom {
+    
+    &_inner {
+        margin-bottom: 60px;
+    }
+    .bl_btn__submit {
+        @include flex-center;
+        justify-content: end;
+    }
+}

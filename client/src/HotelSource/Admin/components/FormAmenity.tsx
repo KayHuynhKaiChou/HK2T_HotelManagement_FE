@@ -2,7 +2,7 @@ import { Divider, Grid } from "@mui/material";
 import InputHk2t from "../../../common/InputHk2t";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { SubmitHandler, useForm, UseFormReturn, useWatch } from "react-hook-form";
 import { colorsBtnCustom, defaultTypeAmenity, defaultstatus } from "../../../utils/constants";
 import RadioBtnHk2t from "../../../common/RadioBtnHk2t/RadioBtnHk2t";
 import { uuid } from "../../../utils";
@@ -44,7 +44,7 @@ export default function FormAmenity({
         resolver: yupResolver(schema)
     })
 
-    const selectedStatus = form.watch("status")
+    const selectedStatus = useWatch({ control: form.control, name: "status"});
 
     const defaultTypeAmenityOptions = useMemo(() => {
         return defaultTypeAmenity.map((ta, index) => ({

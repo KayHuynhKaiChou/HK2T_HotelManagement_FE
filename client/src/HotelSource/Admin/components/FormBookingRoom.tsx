@@ -293,7 +293,7 @@ const FormBookingRoom = forwardRef<FormBookingRoomHandle , FormBookingRoomProps>
             </div>
             <div 
                 className="bl_btn__submit for_employee" 
-                style={{justifyContent:"space-between"}}
+                style={{justifyContent:"space-between", marginTop: 60}}
             >
                 <div className="bl_contentTotal">
                     <div className="bl_total">

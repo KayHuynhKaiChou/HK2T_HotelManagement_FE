@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import GateWay from "../../../lib/api_gateway";
-import {ActionFormBooking, FormBooking} from "../../../types/form";
+import {ActionForm, ActionFormBooking, FormBooking, FormRoomPayload} from "../../../types/form";
 import CalenderHotel from "./CalenderHotel";
 import FormBookingRoom, {FormBookingRoomHandle} from "./FormBookingRoom";
 import { RootState } from "../../../redux/reducers";
@@ -23,7 +23,8 @@ import { MESSAGE } from "../../../utils/messages";
 import { POSITION, STATUS } from "../../../types/enum";
 import dayjs from "dayjs";
 import emailjs from '@emailjs/browser';
-import { statusBooking } from "../../../utils/constants";
+import ModalHk2T from "../../../common/Modal/ModalHk2t";
+import FormRoom from "./FormRoom";
 
 type RoomResponse = Omit<Room , 'type_room'> & {type_room_id : number}
 
@@ -60,7 +61,7 @@ const initReversation = {
             created_at : '',
             updated_at : ''
         },
-        room_number : 0,
+        room_number : '',
         floor : 0,
         status : 1
     }
@@ -70,9 +71,12 @@ export default function RoomAdmin() {
     const {typeRooms, user} = useSelector<RootState , RootState>(state => state);
 
     // state
-    const [typeActionForm, setTypeActionForm] = useState<ActionFormBooking>('CREATE')
-    const [selectedReversation, setSelectedReversation] = useState<Reversation>(initReversation as Reversation)
-    const [countKey, setCountKey] = useState(1)
+    const [typeActionForm, setTypeActionForm] = useState<ActionFormBooking>('CREATE');
+    const [typeActionFormRoom, setTypeActionFormRoom] = useState<ActionForm>('CREATE');
+    const [selectedReversation, setSelectedReversation] = useState<Reversation>(initReversation as Reversation);
+    const [selectedRoom, setSelectedRoom] = useState<FormRoomPayload>();
+    const [countKey, setCountKey] = useState(1);
+    const [open, setOpen] = useState(false);
 
     // ref
     const formBookingWrapRef = useRef<HTMLDivElement | null>(null);
@@ -119,13 +123,108 @@ export default function RoomAdmin() {
         })
     }
 
-    const { data: listRooms} = useQuery<Room[]>({
+    const { data: listRooms, refetch: refetchListRooms} = useQuery<Room[]>({
         queryKey : [queryKeyAllRoom], 
         queryFn : fetchGetAllRooms,
         staleTime: 24 * 60 * 60 * 1000
     })
 
-    // mutation for action create
+    const handleOpenFormCreateRoom = () => {
+        setSelectedRoom(undefined)
+        setOpen(true);
+        setTypeActionFormRoom('CREATE')
+    }
+
+    const handleSelectRoom = (roomId: number) => {
+        const foundRoom = listRooms?.find(room => room.id === roomId)
+        if (foundRoom) {
+            setSelectedRoom({
+                id: foundRoom.id,
+                type_room: {
+                    label: foundRoom.type_room.title,
+                    value: foundRoom.type_room.id || 0
+                },
+                room_number: foundRoom.room_number,
+                floor: foundRoom.floor
+            })
+        }
+        setOpen(true);
+        setTypeActionFormRoom('UPDATE');
+    }
+
+    const mutationCreateRoom = useMutation<ResponseFormat , unknown , FormRoomPayload>({
+        mutationFn: async (data: FormRoomPayload) => {
+            const payload = {
+                type_room_id : Number(data.type_room.value),
+                room_number : data.room_number,
+                floor : data.floor
+            }
+            const gateway = new GateWay('admin' , user.token)
+            const response = await gateway.post({action : 'create-room'} , payload);
+            if (response.status === 200) {
+                return response;
+            } else if (response.status === 400){
+                throw new Error(response.message);
+            } else {
+                throw new Error(MESSAGE.ROOM.CREATE.FAIL)
+            }
+        },
+        onSettled: () => {
+            loading.hide()
+        },
+        onSuccess: async () => {
+            toast.success(MESSAGE.ROOM.CREATE.SUCCESS, toastMSGObject());
+            // await queryClient.invalidateQueries([queryKeyAllRoom] as RefetchQueryFilters);
+            await refetchListRooms()
+            await queryClient.invalidateQueries([queryKeyAllReversation] as RefetchQueryFilters);
+            setOpen(false)
+            setSelectedRoom(undefined)
+        },
+        onError: (error) => {
+            toast.error((error + '').split(':')[1].trim(), toastMSGObject());
+        }
+    })
+
+    const mutationUpdateRoom = useMutation<ResponseFormat , unknown , FormRoomPayload>({
+        mutationFn: async (data: FormRoomPayload) => {
+            const payload = {
+                type_room_id : Number(data.type_room.value),
+                room_number : data.room_number,
+                floor : data.floor
+            }
+            const gateway = new GateWay('admin' , user.token)
+            const response = await gateway.post({action : 'update-room', room_id: selectedRoom?.id + ''} , payload);
+            if (response.status === 200) {
+                return response;
+            } else if (response.status === 400){
+                throw new Error(response.message);
+            } else {
+                throw new Error(MESSAGE.ROOM.UPDATE.FAIL)
+            }
+        },
+        onSettled: () => {
+            loading.hide()
+        },
+        onSuccess: async () => {
+            toast.success(MESSAGE.ROOM.UPDATE.SUCCESS, toastMSGObject());
+            // await queryClient.invalidateQueries([queryKeyAllRoom] as RefetchQueryFilters);
+            await refetchListRooms()
+            await queryClient.invalidateQueries([queryKeyAllReversation] as RefetchQueryFilters);
+            setOpen(false)
+        },
+        onError: (error) => {
+            toast.error((error + '').split(':')[1].trim(), toastMSGObject());
+        }
+    })
+
+    const handleActionRoom = (values : FormRoomPayload) => {
+        loading.show();
+        typeActionFormRoom === 'CREATE' 
+            ? mutationCreateRoom.mutate(values)
+            : mutationUpdateRoom.mutate(values)
+    }
+
+    // mutation for action create reservation
     const mutationBookingRoom = useMutation<ResponseFormat , unknown , FormBooking>({
         mutationFn: async (data: FormBooking) => {
             const payload = {
@@ -166,6 +265,7 @@ export default function RoomAdmin() {
         }
     });
 
+    // mutation for action update reservation
     const mutationUpdateReservation = useMutation<ResponseFormat , unknown , FormBooking>({
         mutationFn: async (data: FormBooking) => {
             const payload = {
@@ -362,6 +462,8 @@ export default function RoomAdmin() {
                     events={events}
                     onSelectEvent={handleSelectedReversation}
                     onSelectDateRange={handleSelectDateRange}
+                    onSelectRoom={handleSelectRoom}
+                    onOpenFormCreateRoom={handleOpenFormCreateRoom}
                 />
             )}
             <div className="un_padding_updown_12"></div>
@@ -385,6 +487,21 @@ export default function RoomAdmin() {
                     )}
                 </div>
             </div>
+            <ModalHk2T
+                header={`Form ${typeActionFormRoom.toLowerCase()} room`}
+                heightBody="320px"
+                widthModal="650px"
+                open={open}
+                onClose={() => setOpen(false)}
+            >
+                <FormRoom
+                    typeRooms={typeRooms}
+                    listRooms={listRooms || []}
+                    typeActionFormRoom={typeActionFormRoom}
+                    selectedRoom={selectedRoom}
+                    onActionRoom={handleActionRoom}
+                />
+            </ModalHk2T>
         </>
     )
 }

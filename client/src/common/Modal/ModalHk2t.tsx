@@ -6,30 +6,36 @@ import {ReactNode} from "react";
 
 interface ModalHk2TProps {
     header?: string;
+    heightBody?: string;
+    widthModal?: string;
+    heightModal?: string;
     open: boolean;
     onClose: () => void;
     children: ReactNode;
 }
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 1200,
-    height: 650,
-    bgcolor: 'background.paper',
-    borderRadius: '20px',
-    boxShadow: 24,
-    padding: '30px',
-};
-
 function ModalHk2T({
     header,
+    heightBody = '550px',
+    widthModal = '1200px',
+    heightModal = 'fit-content',
     children,
     open,
     onClose
 } : ModalHk2TProps) {
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: widthModal,
+        height: heightModal,
+        bgcolor: 'background.paper',
+        borderRadius: '20px',
+        boxShadow: 24,
+        padding: '30px',
+    };
 
     return (
         <Modal
@@ -49,8 +55,8 @@ function ModalHk2T({
                     id="modal-modal-description"
                     style={{
                         marginTop: 10,
-                        overflowY: 'scroll',
-                        height: '550px'
+                        overflowY: 'auto',
+                        height: heightBody
                     }}
                 >
                     {children}

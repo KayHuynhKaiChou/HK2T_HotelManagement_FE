@@ -6,19 +6,25 @@ import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import {Tooltip} from "@mui/material";
+import ButtonHk2t from "../../../common/ButtonHk2t";
+import AddIcon from '@mui/icons-material/Add';
 
 interface CalenderHotelProps {
   resources : any;
   events : any;
   onSelectEvent ?: (id: number) => void;
   onSelectDateRange ?: (startDate: string, endDate: string, resourceId: string) => void;
+  onSelectRoom ?: (roomId: number) => void
+  onOpenFormCreateRoom ?: () => void;
 }
 
 export default function CalenderHotel({
   resources , 
   events , 
   onSelectEvent ,
-  onSelectDateRange
+  onSelectDateRange ,
+  onSelectRoom ,
+  onOpenFormCreateRoom
 } : CalenderHotelProps ) {
 
   const handleSelect = ({event} : EventClickArg) => {
@@ -28,9 +34,9 @@ export default function CalenderHotel({
 
   const handleSelectDateRange = (selectInfo : DateSelectArg) => {
     onSelectDateRange && onSelectDateRange(
-        selectInfo.startStr,
-        selectInfo.endStr,
-        selectInfo.resource ? selectInfo.resource.id : '0'
+      selectInfo.startStr,
+      selectInfo.endStr,
+      selectInfo.resource ? selectInfo.resource.id : '0'
     )
   }
 
@@ -62,8 +68,18 @@ export default function CalenderHotel({
       }}
       height="auto"
       initialView='resourceTimelineMonth'
-      resourceAreaHeaderContent='Rooms'
+      resourceAreaHeaderContent={() => (
+        <div className="un_areaHeaderCalender">
+          <div className="un_labelHeader">Rooms</div>
+          <ButtonHk2t
+            content='add'
+            startIcon={<AddIcon/>}
+            onClick={onOpenFormCreateRoom}
+          />
+        </div>
+      )}
       resources={resources}
+      resourceOrder={"title"}
       events={events}
       editable={true}
       selectable={true}
@@ -77,7 +93,8 @@ export default function CalenderHotel({
         return (
           <Tooltip title={titleToolTip} placement="top-start">
             <div 
-              className="ellipsis bl_resource_calendar"
+              className="ellipsis un_resource_calendar"
+              onClick={() => onSelectRoom && onSelectRoom(Number(resourceInfo.resource.id))}
             >
               {resourceInfo.resource.title}
             </div>

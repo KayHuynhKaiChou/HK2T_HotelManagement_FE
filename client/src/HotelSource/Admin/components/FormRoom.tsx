@@ -1,83 +1,141 @@
-// import { Divider, Grid } from "@mui/material";
-// import InputHk2t from "../../../common/InputHk2t";
-// import { Room } from "../../../types/models";
-// import { yupResolver } from '@hookform/resolvers/yup';
-// import * as yup from "yup";
-// import { SubmitHandler, useForm } from "react-hook-form";
-// import ButtonHk2t from "../../../common/ButtonHk2t";
+import { Divider, Grid } from "@mui/material";
+import InputHk2t from "../../../common/InputHk2t";
+import { Room, TypeRoom } from "../../../types/models";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { SubmitHandler, useForm, UseFormReturn, useWatch } from "react-hook-form";
+import ButtonHk2t from "../../../common/ButtonHk2t";
+import { ActionForm, FormRoomPayload } from "../../../types/form";
+import { forwardRef, useImperativeHandle } from "react";
+import RadioBtnHk2t from "../../../common/RadioBtnHk2t/RadioBtnHk2t";
+import { uuid } from "../../../utils";
+import SelectHk2t from "../../../common/SelectHk2t";
 
-// interface FormRoomProps {
-//     onActionRoom : (values : Room) => void;
-// }
+interface FormRoomProps {
+    typeActionFormRoom : ActionForm;
+    listRooms : Room[];
+    typeRooms : TypeRoom[];
+    selectedRoom ?: FormRoomPayload;
+    onActionRoom : (values : FormRoomPayload) => void;
+}
 
-// export default function FormRoom({onActionRoom} : FormRoomProps) {
+export interface FormRoomHandle {
+    form : UseFormReturn<FormRoomPayload>;
+}
 
-//     const schema = yup.object({
-//         name: yup.string()
-//                 .required('Please enter firstname !'),
-//         status:  yup.number()
-//                 .oneOf([0,1] as const)
-//                 .required(),
-//     });
+const FormRoom = forwardRef<FormRoomHandle , FormRoomProps>((props , ref) => {
+    const { 
+        typeActionFormRoom, 
+        listRooms,
+        typeRooms, 
+        selectedRoom, 
+        onActionRoom 
+    } = props;
 
-//     // hook form
-//     const form = useForm({
-//         defaultValues: {
-//             name : '',
-//             status : 0
-//         },
-//         resolver: yupResolver(schema)
-//     })
+    const schema = yup.object({
+        type_room: yup.object().shape({
+            label: yup.string(),
+            value: yup.number()
+        }).required('Please select district !'),
+        room_number: yup.string()
+                .required('Please enter room number !')
+                .test(
+                    'unique-room-number',
+                    'Room number already exists!',
+                    (value) => !listRooms.some(room => room.room_number.toLowerCase() === value.toLowerCase())
+                ),
+        floor:  yup.number()
+                .oneOf([1,2,3] as const)
+                .required(),
+    });
 
-//     const selectedStatus = form.watch("status")
+    // hook form
+    const form : UseFormReturn<FormRoomPayload> = useForm({
+        defaultValues: {
+            type_room : selectedRoom ? {
+                ...selectedRoom.type_room as any
+            } : {
+                label: typeRooms[0].title,
+                value: typeRooms[0].id || 0
+            },
+            room_number : selectedRoom ? selectedRoom.room_number : '',
+            floor : selectedRoom ? selectedRoom.floor : 1
+        },
+        resolver: yupResolver(schema)
+    }) as any
 
-//     const handleChangeStatus = (status : number) => {
-//         form.setValue("status" , status)
-//     }
+    // useImperativeHandle hook
+    useImperativeHandle(ref , () => ({ form }))
+
+    //useWatch
+    const selectedFloor = useWatch({ control: form.control, name: "floor"});
     
-//     return (
-//         <form 
-//             onSubmit={form.handleSubmit(onActionRoom as SubmitHandler<Room>)}
-//             className='bl_personInfor_form'
-//         >
-//             <div className="bl_personInfor_form_inner">
-//                 <div className="bl_personInfor_header">Form create Room</div>
-//                 <Divider className="bl_personInfor_divider"/>
-//                 <div className="bl_personInfor_body">
-//                     <Grid container columnSpacing={3}>
-//                         <Grid item sm={4}>
-//                             <InputHk2t 
-//                                 label='name' 
-//                                 name='name' 
-//                                 placeholder='name Room' 
-//                                 form={form} 
-//                             />
-//                         </Grid>
-//                         <Grid item sm={4}>
-//                         </Grid>
-//                         <Grid item sm={4}>
-//                             <Grid
-//                                 sx={{
-//                                     color : "#707e9c;" , 
-//                                     fontWeight : "bold",
-//                                     margin: "0 30px"
-//                                 }}
-//                             >
-//                                 Status
-//                             </Grid>
-//                             <Grid container columnSpacing={3}>
-//                             </Grid>
-//                         </Grid>
-//                     </Grid>
-//                 </div>
-//             </div>
-//             <div className="bl_btn__submit for_employee">
-//                 <ButtonHk2t
-//                     variant="contained"
-//                     content='Create type room'
-//                     isUseForm={true}
-//                 /> 
-//             </div>
-//         </form>
-//     )
-// }
+    return (
+        <form 
+            onSubmit={form.handleSubmit(onActionRoom as SubmitHandler<FormRoomPayload>)}
+            className='bl_formRoom'
+        >
+            <div className="bl_formRoom_inner">
+                <Grid container columnSpacing={3}>
+                    <Grid item sm={6}>
+                        <InputHk2t 
+                            label='room number' 
+                            name='room_number' 
+                            placeholder='room number (ex: A1, B2, ...)' 
+                            form={form} 
+                        />
+                    </Grid>
+                    <Grid item sm={6}>
+                        <Grid
+                            sx={{
+                                color : "#707e9c;" , 
+                                fontWeight : "bold",
+                                marginLeft: "8px"
+                            }}
+                        >
+                            Floor
+                        </Grid>
+                        <Grid container columnSpacing={3}>
+                            <Grid container columnSpacing={3} sx={{margin : "16px 0 8px 0"}}>
+                                {[1,2,3].map(floor => (
+                                    <Grid item>
+                                        <RadioBtnHk2t
+                                            id={`select-floor-${uuid()}`}
+                                            name="floor"
+                                            label={floor + ''}
+                                            value={floor}
+                                            checked={selectedFloor == floor}
+                                            form={form}
+                                            onChange={() => form.setValue('floor', floor)}
+                                        />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid container columnSpacing={3}>
+                    <Grid item sm={6}>
+                        <SelectHk2t
+                            form={form}
+                            options={typeRooms.map(tr => ({ label: tr.title, value: tr.id || 0 }))}
+                            label='type room'
+                            name='type_room'
+                            placeholder='select type room'
+                            maxMenuHeight={300}
+                        />
+                    </Grid>
+                </Grid>
+            </div>
+            <div className="bl_btn__submit">
+                <ButtonHk2t
+                    variant="contained"
+                    content={`${typeActionFormRoom} room`}
+                    isUseForm={true}
+                /> 
+            </div>
+        </form>
+    )
+})
+
+export default FormRoom

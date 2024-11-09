@@ -10,6 +10,7 @@ interface propsSelect {
     disabled ?: boolean; 
     placeholder ?: string;
     className ?: string;
+    maxMenuHeight ?: number;
     onChange ?: (value: OptionSelect['value']) => void;
 }
 
@@ -22,6 +23,7 @@ export default function SelectHk2t({
     disabled = false,
     placeholder = '',
     className,
+    maxMenuHeight = 300,
     onChange
 } : propsSelect) {
 
@@ -46,7 +48,7 @@ export default function SelectHk2t({
                     '&:hover': {
                         borderColor: hasError && isSubmitted ? '#ff0000' : provided.borderColor, // Thay đổi viền khi hover
                     }
-                }),
+                })
             };
 
             return (
@@ -57,11 +59,12 @@ export default function SelectHk2t({
                         <>
                             <Select
                                 {...field}
-                                isSearchable={false}
+                                isSearchable
                                 options={options}
                                 placeholder={placeholder}
                                 isDisabled={disabled}
-                                styles={selectStyles}                           
+                                styles={selectStyles}
+                                maxMenuHeight={maxMenuHeight}                   
                             />
                             {errors[name] && (
                                 <p style={{
@@ -78,7 +81,7 @@ export default function SelectHk2t({
             return (
                 <Select
                     name={name}
-                    isSearchable={false}
+                    isSearchable
                     defaultValue={options.find(op => op.value == value)}
                     value={options.find(op => op.value == value)}
                     onChange={handleChange}
@@ -86,6 +89,7 @@ export default function SelectHk2t({
                     isDisabled={disabled}
                     placeholder={placeholder}
                     className={className}
+                    maxMenuHeight={maxMenuHeight}  
                 />
             )
         }

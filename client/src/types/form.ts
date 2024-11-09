@@ -1,5 +1,9 @@
-import { Account, Amenity, User } from "./models";
+import { Account, Amenity, Room, User } from "./models";
 import { OptionSelect } from "./supportUI";
+
+export type ActionForm = 'CREATE' | 'UPDATE'
+
+export type ActionFormBooking = ActionForm | 'BOOKING'
 
 type CustomUser = 
     Omit<
@@ -36,9 +40,9 @@ export interface FormAmenityPayload extends Omit<Amenity , 'type'>{
     type : OptionSelect
 }
 
-export type ActionForm = 'CREATE' | 'UPDATE'
-
-export type ActionFormBooking = ActionForm | 'BOOKING'
+export interface FormRoomPayload extends Pick<Room , 'id' | 'room_number' | 'floor'> {
+    type_room : OptionSelect;
+}
 
 export interface FormBooking {
     email : OptionSelect;

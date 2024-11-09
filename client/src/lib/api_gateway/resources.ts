@@ -33,6 +33,7 @@ export const RESOURCES: { [resourceName : string] : {[action : string] : string}
         // room
         'show-room' : '/admin/room/list',
         'create-room' : '/admin/room/add',
+        'update-room' : '/admin/room/update/:room_id',
         // reservation
         'show-re' : '/admin/reservation/list',
         'update-re': '/admin/reservation/:reservation_id/update',

@@ -22,6 +22,10 @@ export const MESSAGE = {
         'CREATE': getMsgNotification('create', 'type room'),
         'UPDATE': getMsgNotification('update', 'type room'),
     },
+    ROOM : {
+        'CREATE': getMsgNotification('create', 'room'),
+        'UPDATE': getMsgNotification('update', 'room'),
+    },
     REVERSATION : {
         'CREATE': getMsgNotification('create', 'reversation'),
         'UPDATE': getMsgNotification('update', 'reversation'),
