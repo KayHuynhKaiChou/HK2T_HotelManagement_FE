@@ -60,6 +60,7 @@ const FormChangePassword = forwardRef<FormChangePasswordHandle , FormChangePassw
                                 name='oldPassword' 
                                 placeholder='old password' 
                                 form={form} 
+                                typeInput='password'
                             />                        
                         </Grid>
                         <Grid item sm={4}>
@@ -68,6 +69,7 @@ const FormChangePassword = forwardRef<FormChangePasswordHandle , FormChangePassw
                                 name='newPassword' 
                                 placeholder='new password' 
                                 form={form} 
+                                typeInput='password'
                             />                        
                         </Grid>
                         <Grid item sm={4}>
@@ -76,6 +78,7 @@ const FormChangePassword = forwardRef<FormChangePasswordHandle , FormChangePassw
                                 name='confirmPassword' 
                                 placeholder='confirm password' 
                                 form={form} 
+                                typeInput='password'
                             />                        
                         </Grid>
                     </Grid>

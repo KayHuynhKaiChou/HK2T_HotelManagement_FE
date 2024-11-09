@@ -145,7 +145,8 @@ export default function RoomAdmin() {
                     value: foundRoom.type_room.id || 0
                 },
                 room_number: foundRoom.room_number,
-                floor: foundRoom.floor
+                floor: foundRoom.floor,
+                status: foundRoom.status
             })
         }
         setOpen(true);
@@ -190,7 +191,8 @@ export default function RoomAdmin() {
             const payload = {
                 type_room_id : Number(data.type_room.value),
                 room_number : data.room_number,
-                floor : data.floor
+                floor : data.floor,
+                status : data.status
             }
             const gateway = new GateWay('admin' , user.token)
             const response = await gateway.post({action : 'update-room', room_id: selectedRoom?.id + ''} , payload);
@@ -331,23 +333,29 @@ export default function RoomAdmin() {
     const handleSelectDateRange = (startDate: string, endDate: string, resourceId: string) => {
         const handleSelectDateRangeLogic = () => {
             const isCanBooking = dayjs(startDate, 'YYYY-MM-DD').isSame(dayjs(), 'day') || dayjs(startDate, 'YYYY-MM-DD').isAfter(dayjs(), 'day');
-            if (listRooms && isCanBooking) {
+            if (listRooms) {
                 const selectedRoom = listRooms.find(room => room.id === Number(resourceId));
-                if (selectedRoom) {
-                    scrollToForm(formBookingWrapRef)
-                    setSelectedReversation({
-                        ...initReversation,
-                        checkin_at: startDate,
-                        checkout_at: dayjs(endDate).subtract(1, 'day').format('YYYY-MM-DD'),
-                        room: selectedRoom
-                    })
+                if (selectedRoom && selectedRoom.status === 1) {
+                    if (isCanBooking) {
+                        scrollToForm(formBookingWrapRef)
+                        setSelectedReversation({
+                            ...initReversation,
+                            checkin_at: startDate,
+                            checkout_at: dayjs(endDate).subtract(1, 'day').format('YYYY-MM-DD'),
+                            room: selectedRoom
+                        })
+                    } else {
+                        dialog.show(
+                            <p>When create a reservation, the check-in date cannot be in the past, please select date range again.</p>
+                        )
+                    }
+                } else {
+                    dialog.show(
+                        <p>{`Room ${selectedRoom?.room_number} is inactive , please set active to book this room.`}</p>
+                    )
                 }
                 setTypeActionForm("BOOKING")
                 setCountKey(countKey + 1)
-            } else {
-                dialog.show(
-                    <p>When create a reservation, the check-in date cannot be in the past, please select date range again.</p>
-                )
             }
         }
         const isDirtyForm = formBookingRoomRef.current?.form.formState.isDirty;

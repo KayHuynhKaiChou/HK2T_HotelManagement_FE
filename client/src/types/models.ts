@@ -35,7 +35,7 @@ export interface Room extends Timestamp{
     type_room : TypeRoom;
     room_number : string;
     floor : number;
-    status : 0 | 1;
+    status : number;
 }
 
 export interface TypeRoom extends Timestamp{

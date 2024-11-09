@@ -29,7 +29,6 @@ export default function SummaryReport() {
   const fetchSummary = async () => {
     const gateway = new GateWay('admin' , user.token)
     const response = await gateway.get({action : 'summary'});
-    console.log({response})
     if (response.status === 200) {
       const resultReport = response.result as ResultReport
       const valuesMapper = 

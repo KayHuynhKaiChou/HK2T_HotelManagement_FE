@@ -54,7 +54,7 @@ export default function ChartHk2t({
                 [`.${axisClasses.bottom} .${axisClasses.label}`]: {
                     transform: 'translate(0, 10px)', // Adjusts the x-axis label position downwards
                 }
-            }}
+            }}          
         />
     )
 }

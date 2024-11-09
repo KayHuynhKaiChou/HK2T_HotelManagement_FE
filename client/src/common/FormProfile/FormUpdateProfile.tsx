@@ -283,6 +283,7 @@ const FormUpdateProfile = forwardRef<FormUpdateProfileHandle , FormUpdateProfile
                                 name='email' 
                                 placeholder='email' 
                                 form={form} 
+                                disabled
                             />
                         </Grid>
                         <Grid item sm={4}>

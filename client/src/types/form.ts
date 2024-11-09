@@ -40,7 +40,7 @@ export interface FormAmenityPayload extends Omit<Amenity , 'type'>{
     type : OptionSelect
 }
 
-export interface FormRoomPayload extends Pick<Room , 'id' | 'room_number' | 'floor'> {
+export interface FormRoomPayload extends Omit<Room , 'type_room'> {
     type_room : OptionSelect;
 }
 

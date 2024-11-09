@@ -10,6 +10,7 @@ import { forwardRef, useImperativeHandle } from "react";
 import RadioBtnHk2t from "../../../common/RadioBtnHk2t/RadioBtnHk2t";
 import { uuid } from "../../../utils";
 import SelectHk2t from "../../../common/SelectHk2t";
+import { defaultstatus } from "../../../utils/constants";
 
 interface FormRoomProps {
     typeActionFormRoom : ActionForm;
@@ -42,11 +43,18 @@ const FormRoom = forwardRef<FormRoomHandle , FormRoomProps>((props , ref) => {
                 .test(
                     'unique-room-number',
                     'Room number already exists!',
-                    (value) => !listRooms.some(room => room.room_number.toLowerCase() === value.toLowerCase())
+                    (value) => {
+                        if (typeActionFormRoom === 'UPDATE') {
+                            return value === selectedRoom?.room_number || !listRooms.some(room => room.room_number.toLowerCase() === value.toLowerCase())
+                        }
+                        return !listRooms.some(room => room.room_number.toLowerCase() === value.toLowerCase())
+                    }
                 ),
         floor:  yup.number()
                 .oneOf([1,2,3] as const)
                 .required(),
+        status: yup.number()
+                .required()
     });
 
     // hook form
@@ -59,7 +67,8 @@ const FormRoom = forwardRef<FormRoomHandle , FormRoomProps>((props , ref) => {
                 value: typeRooms[0].id || 0
             },
             room_number : selectedRoom ? selectedRoom.room_number : '',
-            floor : selectedRoom ? selectedRoom.floor : 1
+            floor : selectedRoom ? selectedRoom.floor : 1,
+            status : selectedRoom ? selectedRoom.status : 1
         },
         resolver: yupResolver(schema)
     }) as any
@@ -69,6 +78,7 @@ const FormRoom = forwardRef<FormRoomHandle , FormRoomProps>((props , ref) => {
 
     //useWatch
     const selectedFloor = useWatch({ control: form.control, name: "floor"});
+    const selectedStatus = useWatch({ control: form.control, name: "status"});
     
     return (
         <form 
@@ -122,8 +132,36 @@ const FormRoom = forwardRef<FormRoomHandle , FormRoomProps>((props , ref) => {
                             label='type room'
                             name='type_room'
                             placeholder='select type room'
-                            maxMenuHeight={300}
+                            maxMenuHeight={120}
                         />
+                    </Grid>
+                    <Grid item sm={6}>
+                        <Grid
+                            sx={{
+                                color : "#707e9c;" , 
+                                fontWeight : "bold",
+                                marginLeft: "8px"
+                            }}
+                        >
+                            Status
+                        </Grid>
+                        <Grid container columnSpacing={3}>
+                            <Grid container columnSpacing={3} sx={{margin : "16px 0 8px 0"}}>
+                                {defaultstatus.map((status , index) => (
+                                    <Grid item>
+                                        <RadioBtnHk2t
+                                            id={`select-status-${uuid()}`}
+                                            name="status"
+                                            label={status}
+                                            value={index}
+                                            checked={selectedStatus == index}
+                                            form={form}
+                                            onChange={() => form.setValue("status", index)}
+                                        />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </div>
