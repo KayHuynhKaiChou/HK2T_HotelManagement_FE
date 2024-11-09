@@ -6,6 +6,7 @@ import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";
 import FormSignInCustomer from "../components/FormSignInCustomer";
 import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
+import { useLoadingHk2tScreen } from "../../../common/Loading/LoadingHk2tScreen";
 
 export default function SigninPage() {
   const navigate = useNavigate();
@@ -13,8 +14,10 @@ export default function SigninPage() {
   const {response , user} = useSelector<RootState , RootState>(state => state);
   const dispatch = useDispatch();
   const [msgSignin , setMsgSignin] = useState<string>('');
+  const loading = useLoadingHk2tScreen();
 
   const handleSignIn = (formSignin : Account) => {
+    loading.show()
     dispatch(userAction.signInUser(formSignin , 'customer') as any)
   }
 
@@ -31,6 +34,7 @@ export default function SigninPage() {
     }else{
       setMsgSignin(response.message)
     }
+    loading.hide()
   }, [user , response])
 
   return (

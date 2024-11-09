@@ -6,14 +6,17 @@ import { RootState } from "../../../redux/reducers";
 import FormSignUpCustomer from "../components/FormSignUpCustomer";
 import { FormSignup } from "../../../types/form";
 import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
+import { useLoadingHk2tScreen } from "../../../common/Loading/LoadingHk2tScreen";
 
 export default function SignupPage() {
   const navigate = useNavigate();
   const {response , user} = useSelector<RootState , RootState>(state => state);
   const dispatch = useDispatch();
   const [msgSignup , setMsgSignup] = useState<string>('');
+  const loading = useLoadingHk2tScreen();
 
   const handleSignUp = (formSignup : FormSignup) => {
+    loading.show();
     const {confirmPassword , ...formatFormSignup} = formSignup
     dispatch(userAction.signUpUser(formatFormSignup , 'customer') as any)
   }
@@ -31,6 +34,7 @@ export default function SignupPage() {
     }else{
       setMsgSignup(response.message)
     }
+    loading.hide();
   }, [user, response])
 
   return (

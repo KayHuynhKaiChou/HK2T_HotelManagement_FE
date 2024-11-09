@@ -8,14 +8,17 @@ import { userAction } from "../../../redux/actions/user";
 import { RootState } from "../../../redux/reducers";
 import useEffectSkipFirstRender from "../../../hooks/useEffectSkipFirstRender";
 import { POSITION } from "../../../types/enum";
+import { useLoadingHk2tScreen } from "../../../common/Loading/LoadingHk2tScreen";
 
 export default function AdminSigninPage() {
   const navigate = useNavigate();
   const {response , user} = useSelector<RootState , RootState>(state => state);
   const dispatch = useDispatch();
   const [msgSignin , setMsgSignin] = useState<string>('');
+  const loading = useLoadingHk2tScreen();
 
   const handleSignIn = async (formSignin : Account) => {
+    loading.show();
     dispatch(userAction.signInUser(formSignin , 'employee') as any)
   }
 
@@ -38,6 +41,7 @@ export default function AdminSigninPage() {
     }else{
       setMsgSignin(response.message)
     }
+    loading.hide();
   }, [user , response])
 
   return (
