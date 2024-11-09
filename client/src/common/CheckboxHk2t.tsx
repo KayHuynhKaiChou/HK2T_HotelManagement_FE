@@ -35,7 +35,7 @@ export default function CheckboxHk2t({
             <label htmlFor={id}/>
             <label 
                 htmlFor={id}
-                className="un_checkbox_labelText"    
+                className="un_checkbox_labelText ellipsis"    
             >
                 {label}
             </label>

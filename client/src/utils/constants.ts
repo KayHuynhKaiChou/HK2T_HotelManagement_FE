@@ -2,11 +2,14 @@ import HouseIcon from '@mui/icons-material/House';
 import PersonIcon from '@mui/icons-material/Person';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-import { ColumnType, MenuAdmin, OptionSelect, TypeSort } from '../types/supportUI';
-import {STATUS} from "../types/enum.ts";
+import { ChartType, ColumnType, MenuAdmin, OptionSelect, TypeSort } from '../types/supportUI';
+import {CHART_TYPE, STATUS} from "../types/enum.ts";
 import banner1 from "../assets/images/viewHotel.png";
 import banner2 from "../assets/images/roomHotel.png";
 import banner3 from "../assets/images/swimmingPoolHotel.png";
+import BarChartIcon from '@mui/icons-material/BarChart';
+import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 export const listMenuAdmin : MenuAdmin[] = [
     {
@@ -50,33 +53,33 @@ export const listMenuAdmin : MenuAdmin[] = [
 
 export const listReports = [
     {
-        total : 0,
-        title : 'Đăng ký hôm nay',
+        value : 0,
+        title : 'The most booked room type',
         icon : {
-            className : 'fa-caret-square-right'
+            className : 'fa-solid fa-bed'
         }  
     },
     {
-        total : 0,
-        title : 'Trả phòng hôm nay',
+        value : 0,
+        title : 'Number customer',
         icon : {
-            className : 'fa-comments'
+            className : 'fa-solid fa-user'
         }  
     },
     {
-        total : 0,
-        title : 'Công suất hiện nay',
+        value : 0,
+        title : 'Number reservation status END',
         icon : {
-            className : 'fa-sort-amount-desc'
+            className : 'fa-solid fa-registered'
         }  
     },
     {
-        total : 0,
-        title : 'Đăng ký hôm nay',
+        value : 0,
+        title : 'Total revenue',
         icon : {
-            className : 'fa-caret-square-right'
+            className : 'fa-solid fa-money-bill'
         }  
-    },
+    }
 ]
 
 export const drawerWidth = 240;
@@ -291,3 +294,56 @@ export const defaultSteps = [
     'Personal information',
     'Last step'
 ]
+
+export const chartTypes : { Icon: any, name: ChartType, value: number }[] = [
+    {
+        Icon: BarChartIcon,
+        name: 'COLUMNS',
+        value: CHART_TYPE.COLUMNS
+    },
+    {
+        Icon: StackedBarChartIcon,
+        name: 'STACK COLUMNS',
+        value: CHART_TYPE.STACK_COLUMNS
+    },
+    {
+        Icon: ShowChartIcon,
+        name: 'LINES',
+        value: CHART_TYPE.LINES
+    },
+]
+
+export const xAxisOptions = [
+    {
+        label: 'month',
+        value: 1
+    },
+    {
+        label: 'quarter',
+        value: 2
+    }
+]
+
+export const yAxisOptions = [
+    {
+        label: 'reservation',
+        value: 1
+    },
+    {
+        label: 'revenue',
+        value: 2
+    }
+]
+
+export const defaultColors = [
+    "#FF5733", // Màu cam đậm
+    "#33FF57", // Màu xanh lá
+    "#3357FF", // Màu xanh dương
+    "#FF33A6", // Màu hồng
+    "#FFC300", // Màu vàng
+    "#8E44AD", // Màu tím
+    "#1ABC9C", // Màu xanh ngọc
+    "#E74C3C", // Màu đỏ
+    "#3498DB", // Màu xanh da trời
+    "#F39C12"  // Màu cam sáng
+];

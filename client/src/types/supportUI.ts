@@ -46,3 +46,14 @@ export interface BreadCrumbChild {
     label: string;
     icon?: any;
 }
+
+export type ChartType = 'COLUMNS' | 'STACK COLUMNS' | 'LINES'
+
+export interface ChartSetting {
+    chart_type: number;
+    xAxis: number;
+    yAxis: number;
+    type_room_ids: number[];
+}
+
+export type TypeOfKeyChartSetting<T extends keyof ChartSetting> = ChartSetting[T]

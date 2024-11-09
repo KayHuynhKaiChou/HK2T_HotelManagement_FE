@@ -17,3 +17,19 @@ export enum STATUS {
     END = 4,
     CANCEL = 5
 }
+
+export enum CHART_TYPE {
+    COLUMNS = 1,
+    STACK_COLUMNS = 2,
+    LINES = 3
+}
+
+export enum XAXIS_OPTION {
+    MONTH = 1,
+    QUARTER = 2
+}
+
+export enum YAXIS_OPTION {
+    RESERVATION = 1,
+    REVENUE = 2
+}

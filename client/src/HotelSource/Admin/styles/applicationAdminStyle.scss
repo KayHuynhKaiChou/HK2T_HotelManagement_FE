@@ -72,18 +72,20 @@
 
 // scss item report (4 items)
 .un_itemReport{
+    min-height: 118px;
     display: flex;
+
     &_info{
         flex-basis: 70%;
         text-align: left;
         font-weight: 700;
         &__total{
-            font-size: 38px;
+            font-size: 22px;
             line-height: 1;
         }
         &__ttl{
             color: #BAB8B8;
-            font-size: 24px;
+            font-size: 22px;
             margin-top: 10px;
         }
     }
@@ -210,6 +212,96 @@
         .bl_field_name {
             min-width: 100px;
             color: black;
+        }
+    }
+}
+
+// Chart
+.bl_chart_wrap {
+    height: 500px;
+    @include flex-center;
+    gap: 0px;
+
+    .bl_divider {
+        border-width: 3px;
+        border-color: #aee1ff;
+    }
+
+    /* Thay đổi kích thước và hiển thị thanh cuộn */
+    ::-webkit-scrollbar {
+        width: 8px; /* Đặt chiều rộng thanh cuộn dọc */
+        height: 8px; /* Đặt chiều cao thanh cuộn ngang */
+    }
+
+    /* Định kiểu phần kéo của thanh cuộn */
+    ::-webkit-scrollbar-thumb {
+        background-color: #c7c7c7; /* Màu sắc của thanh kéo */
+        border-radius: 10px; /* Bo tròn thanh kéo */
+    }
+
+    /* Định kiểu nền của thanh cuộn */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; /* Màu nền của thanh cuộn */
+    }
+
+    .bl_chart_settings {
+        flex-basis: 35%;
+        @include flex-column;
+        gap: 15px;
+        height: 100%; // ăn theo height: 500 parent ở trên
+        overflow-y: auto;
+
+        .bl_setting_ttl {
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+
+        .bl_setting_comp {
+
+            .bl_label {
+                @include label-input;
+                padding: 15px 0;
+            }
+
+            .bl_options {
+                @include flex-center;
+                gap: 50px;
+
+                .bl_chartType_wrap {
+                    @include flex-column;
+                    align-items: center;
+                    height: 85px;
+                    /* gap: 10px; */
+                    justify-content: space-between;
+
+                    .is_selected {
+                        border: 5px solid $brand-second;
+                    }
+
+                    .is_not_selected {
+                        margin: 5px;
+                    }
+                }
+            }
+
+            .bl_options_grid {
+                display: grid; /* Chuyển chế độ hiển thị thành grid */
+                grid-template-columns: repeat(2, 1fr); /* Tạo 3 cột, mỗi cột chiếm 1 phần bằng nhau */
+                gap: 20px;
+            }
+        }
+    }
+
+    .bl_chartDisplay_wrap {
+        height: inherit;
+        @include flex-column;
+        gap: 20px;
+
+        .bl_chart_ttl {
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
         }
     }
 }
